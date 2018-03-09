@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>About</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../static/js/csrf.js"></script>
+    <link rel="stylesheet" href="../static/css/modal.css">
+    <link rel="stylesheet" href="../static/css/base.css">
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="MyNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="#"><img src="img/w3newbie.png"></a> -->
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">Home</a></li>
+                <li><a href="/recorder">Record</a></li>
+                <!-- <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Team<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Austin</a></li>
+                <li><a href="#">Mehant</a></li>
+                <li><a href="#">Moiz</a></li>
+                <li><a href="#">Shan</a></li>
+              </ul>
+              </li> -->
+                <li><a href="/team">Team</a></li>
+                <li class="active"><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="row">
+    <section class="col-sm-8">
+        <h2>Product Motivation</h2>
+        <p id="string">hello class i has don't faster fasted class class class fast super hard for anyone to rode
+            someone else's mips assembly code the taa and i will only have a few minutes to look at one group's code so
+            the documentation should explain things concisely and clearly here are some suggestions on documenting mips
+            code for full marks 1 the beginning of every function should be clearly identified with several lines of
+            comments all registers that are used to pass arguments parameters should be explicitly stated any registers
+            used internally to store variables should be explicitly stated 2 the end of every function should be clearly
+            identified with a 1 line comment 3 the beginning of every loop should be idenitfied with a 1 line comment
+            the loop counter variable should be clear 4 the end of every loop should be idenitfied with a 1 line comment
+            5 preferably every line of mips code can have a few words of comments on the same line to help explain what
+            it does 6 adding high level c pseudo code to explain what a function does is quite helpful a human can
+            understand c pseudo code easily they can see how many loops there are they can see how many variables are
+            used they can see if loops use up counters or down counters etc best regards teds
+
+
+        </p>
+        <p id="temp">Hello</p>
+
+        <a id="nltk" class="btn btn-default">NLTK</a>
+        <a id="syn" class="btn btn-default">SYN</a>
+
+        <script src="../static/js/createCorpus.js"></script>
+        <script src="../static/js/createSyns.js"></script>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2 id="mhead">Modal Header</h2>
+                </div>
+                <div class="modal-body" id="mbody">
+
+                </div>
+                <div class="modal-footer">
+                    <h3>nltk lib</h3>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+</body>
+</html>

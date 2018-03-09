@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<head>
+	<html lang="en">
+	<title>Speech Buddy</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="../static/js/csrf.js"></script>
+		<link rel="stylesheet" href="../static/css/modal.css">
+
+		<link rel="stylesheet" href="../static/css/base.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+	</script>
+
+</head>
+<body>
+  <nav id="myNavbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button id="hamburger" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a id="homeBtn" class="navbar-brand" href="#main">Speech Buddy</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul id="navCollapsed" class="nav navbar-nav navbar-right">
+          <li id="abtBtn" class="nav-item"> <a href="/" style="width: 80px" >Home</a></li>
+          <li id="portBtn" class="nav-item active"><a href="/recorder" style="width: 80px">Record</a></li>
+          <li id="conBtn" class="nav-item"><a href="/team" style="width: 80px">Team</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<!-- <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="MyNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">Home</a></li>
+                <li class="active"><a href="/recorder">Record</a></li>
+                <li><a href="/team">Team</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </div>
+</nav> -->
+
+<div class="recordPage">
+    <h1>SpeechBuddy.io <br> <br></h1>
+    <h2 id="transcript" style="display:none;align-content:left;"> Transcript. </h2>
+    <h3 id="string">Click "Start" and begin speech. <br> <br>
+        Click "Stop" recording to complete the recording of your audio.</h3>
+    <h3></h3>
+    <h2 id="confidence" style="display:none;align-content:left;"></h2>
+
+    <!-- Draw the action buttons -->
+
+
+    <!-- List item to store the recording files so they can be played in the browser -->
+    <div id="recordingDiv">
+        <button id="start-btn" class="btn btn-success">Start</button>
+        <button id="stop-btn" class="btn btn-danger" disabled>Stop</button>
+        <h2 id="recordingtitle" style="display:none;">Recordings: </h2>
+        <ul id="recordingslist"></ul>
+        <div id="submit"></div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2 id="mhead">Modal Header</h2>
+            </div>
+            <div class="modal-body" id="mbody">
+
+            </div>
+            <div class="modal-footer">
+                <h3>nltk lib</h3>
+            </div>
+        </div>
+
+    </div>
+	
+	<!-- Pitch Detection -->
+	<div id = "fundementals">
+		<h2></h2>
+		<div id = "chart_div"/div>
+	</div>
+	
+	<!-- Go Count -->
+	<div id = "filler count">
+		<div id = "count">
+		
+		</div>
+	</div>
+	
+    <script src="../static/js/recorderWeb.js"></script>
+    <script src="../static/js/googleResponse.js"></script>
+    <script src="../static/js/createCorpus.js"></script>
+    <script src="../static/js/createSyns.js"></script>
+	<script src="../static/js/pitchResponse.js"></script>
+	<script src="../static/js/fillerCountResponse.js"></script>
+
+    <!-- Include the recorder.js library from a local copy -->
+    <script src="../static/js/recorder.js"></script>
+
+
+</div>
+</body>
+</html>
