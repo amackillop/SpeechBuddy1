@@ -17,7 +17,13 @@ pip install --upgrade google-cloud-speech
 pip install numpy
 pip install scipy
 pip install wave
+pip install matplotlib
+pip install --update tensorflow
+pip install keras
+pip install h5py
 ```
+You will also need to install Keras and tensorflow
+
 3. Go to the nltkMethod file located in SpeechBuddy-master > api and run the 3 commented out download commands. Recomment them.
 ```
 import nltk
@@ -37,15 +43,6 @@ python PATH\SpeechBuddy-master\manage.py collectstatic
 ```
 python PATH\SpeechBuddy-master\manage.py runserver
 ```
-
-
-
-
-
-
-
-
-
 
 6. Type the URL of the server (something like http://http://127.0.0.1:8000/) into chrome to see the webpage
 7. Edit this README with whatever steps that I missed or fixes to other errors that you ran into.
