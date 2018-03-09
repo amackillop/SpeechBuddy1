@@ -72,16 +72,16 @@ def googleCall(request):
         # Save the audio file
         dataDict = request.data
         dataDict = dataDict['audio']
-        path = default_storage.save(ROOT+'/SpeechBuddy/audio/output.wav', ContentFile(dataDict.read()))
+        path = default_storage.save(ROOT+'/SpeechBuddy1/audio/output.wav', ContentFile(dataDict.read()))
         
         # Manipulate original audio file
-        convertToMono(ROOT+'/SpeechBuddy/audio/output.wav', ROOT + "/SpeechBuddy/audio/output_mono.wav")
-        convertToFLAC(ROOT+'/SpeechBuddy/audio/output_mono.wav', ROOT + "/SpeechBuddy/audio/output_mono.flac")
+        convertToMono(ROOT+'/SpeechBuddy1/audio/output.wav', ROOT + "/SpeechBuddy1/audio/output_mono.wav")
+        convertToFLAC(ROOT+'/SpeechBuddy1/audio/output_mono.wav', ROOT + "/SpeechBuddy1/audio/output_mono.flac")
         
         # Delete original file
         if default_storage.exists(path):
             default_storage.delete(path)
-        res = googleApiCall(ROOT+'/SpeechBuddy/audio/output_mono.flac')
+        res = googleApiCall(ROOT+'/SpeechBuddy1/audio/output_mono.flac')
         
 #        fundementals = f0.tolist
         if not res == "Empty Response":
@@ -105,7 +105,7 @@ def googleCall(request):
             
         
         # Pitch Tracking
-        f0 = pitchTrackingYIN(ROOT+'/SpeechBuddy/audio/output_mono.wav', freq_range = (40, 300), threshold = 0.1, timestep = 0.25, Fs = 48e3, Fc = 1e3)
+        f0 = pitchTrackingYIN(ROOT+'/SpeechBuddy1/audio/output_mono.wav', freq_range = (40, 300), threshold = 0.1, timestep = 0.25, Fs = 48e3, Fc = 1e3)
         
         # Filler wod detection
 #        global graph
