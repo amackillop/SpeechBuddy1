@@ -8,9 +8,11 @@ Note: You must have Google Cloud Speech to Text API credentials.
 1. Download the zip file and extract it wherever you want. This will be referenced as PATH from now on.
 2. Open a cmd line and install the following packages if you do not have them already:
 
-Use this one command to download all requirements:
+Use these condensed pip installs to download all requirements:
 ```
-pip install django djangorestframework nltk google SpeechRecognition --upgrade google-cloud-speech numpy scipy wave matplotlib --update tensorflow keras h5py
+pip install django djangorestframework nltk google SpeechRecognition numpy scipy wave matplotlib keras h5py
+pip install --upgrade google-cloud-speech
+pip install --update tensorflow 
 ```
 Or select the requirements individually from the ones below:
 ```
