@@ -7,6 +7,14 @@ Note: You must have Google Cloud Speech to Text API credentials.
 ### Here are the steps
 1. Download the zip file and extract it wherever you want. This will be referenced as PATH from now on.
 2. Open a cmd line and install the following packages if you do not have them already:
+
+Use these condensed pip installs to download all requirements:
+```
+pip install django djangorestframework nltk google SpeechRecognition numpy scipy wave matplotlib keras h5py
+pip install --upgrade google-cloud-speech
+pip install --update tensorflow 
+```
+Or select the requirements individually from the ones below:
 ```
 pip install django
 pip install djangorestframework
@@ -22,7 +30,7 @@ pip install --update tensorflow
 pip install keras
 pip install h5py
 ```
-You will also need to install Keras and tensorflow
+You will also need to install Keras and tensorflow. If ```pip install tensorflow``` does not install tensorflow correctly, download Anaconda and run ```conda install tensorflow```. You should only have to do this once.
 
 3. Go to the nltkMethod file located in SpeechBuddy-master > api and run the 3 commented out download commands. Recomment them.
 ```
