@@ -142,32 +142,38 @@ def mostCommon(strData):
         corpus = [];
         indexArray = {}
         # str=expand_contractions(str)
-        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every']
+        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','I','i','for']
         tokenizer = nltk.RegexpTokenizer(r"\w+[']+\w+|\w+")
         tok = tokenizer.tokenize(strData)
         # print(tok)
         filtered_tok = []
-        for i, w in enumerate(tok):
+        index = 0
+        for w in tok:
                 if w.find("'") > -1:
                         if contractions_dict.get(w) is None:
                                 w = w[:-2]
-                if w in indexArray:
-                        indexArray[w] = indexArray[w] + "," + str(i)
+                        # print(w)
+                if w.encode('ascii') in indexArray:
+                        indexArray[w] = indexArray[w][:-1] + "," + str(index)
                 else:
-                        indexArray[w] = str(i)
+                        indexArray[w.encode('ascii')] = str(index)
+                index = index + 1
                 if w not in stopWords:
-                        filtered_tok.append(lemmatiser.lemmatize(w, pos="v"))
+                        filtered_tok.append(lemmatiser.lemmatize(w, pos="v").encode('ascii'))
 
                         # print(lemmatiser.lemmatize(w,pos="v"))
 
         indexArray = json.dumps(indexArray)
         freq = nltk.FreqDist(filtered_tok)
-#        print(freq.most_common(16).__len__())
+        print(freq.most_common(16).__len__())
         listSyn = {}
         for w in freq.most_common(16):
-                w = str(w)
-                w = w[3:w.find(",") - 1]
+                w = w[0]
+                # w = str(w)
+                # w = w[2:w.find(",") - 1]
                 listSyn[w] = synCreate(w)
+                print(w)
+                print(synCreate(w))
         listSyn = json.dumps(listSyn)
         corpus = [indexArray, freq.most_common(16), tok, listSyn]
         return corpus
@@ -180,24 +186,24 @@ def mostCommon(strData):
 
 def synCreate(strData):
         res = {}
-#        strData = strData.encode('ascii')
+        strData = strData.encode('ascii')
         syns = wordnet.synsets(strData)
-        print(syns)
 
         for i in syns:
                 for j in i.lemmas():
-                        if (strData != j.name()):
+                        if (strData != j.name().encode('ascii')):
                                 # print(i.lemmas()[0].name())
                                 examples = i.examples()
                                 for n in range(len(examples)):
-                                        examples[n] = examples[n]
-                                if res.get(j.name()) == None:
-                                        res[j.name()] = i.definition(), i.examples()
+                                        examples[n] = examples[n].encode('ascii')
+                                if res.get(j.name().encode('ascii')) == None:
+                                        res[j.name().encode('ascii')] = i.definition().encode('ascii'), i.examples()
                                 else:
-                                        res[j.name()] = [res[j.name()],
-                                                                         i.definition(),
+                                        res[j.name().encode('ascii')] = [res[j.name().encode('ascii')],
+                                                                         i.definition().encode('ascii'),
                                                                          i.examples()]
         # print(res)
         return res
 
-mostCommon("A string of words")
+
+# mostCommon("stop it right that's basically have an entire generation that has access to an addictive numbing to chemical dopamine through social media and cell phones as they're going to the high stress of adolescence why is this important almost every alcoholic discovered alcohol when they were teenagers when were very very young the only approval we need is the approval of our parents and as we go to adolescence we make this transition what we now need the approval of our peers very frustrating for a parent very important for us that allows us to")

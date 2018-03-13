@@ -50,6 +50,7 @@ def formatResponse(response):
         wordslist = []
         # Holds duration of each sentence based on a 15 words/sentence assumption
         sentence_duration= []
+        wordsperminute=[]
     
         for word_info in alternative.words:
             word = word_info.word
@@ -65,6 +66,7 @@ def formatResponse(response):
 
         #calculate total duration per 15 words
         time_per_sentence = 0
+        speaking_rate=0
         for i in range(0,len(wordslist)):
 
             if (len(wordslist)<15):
@@ -77,12 +79,18 @@ def formatResponse(response):
             else:
                 # print(time_per_sentence)
                 sentence_duration.append(time_per_sentence)
+                speaking_rate=(60*15)/time_per_sentence
+                wordsperminute.append(speaking_rate)
                 time_per_sentence = 0
+                speaking_rate=0
 
 
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nTotal time taken to complete each sentence:")
         print(sentence_duration)
+        print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
+        print("\nWords per Minute based on sentence time:")
+        print(wordsperminute)
         # add more calcs to print here for testing...
         print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
     return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow]
