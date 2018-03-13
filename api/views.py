@@ -95,7 +95,7 @@ def googleCall(request):
             tok = resData[2]
             listSyn = str(resData[3])
         else:
-            transcript = ""
+            transcript = "empty response"
             confidence = 1
             wpm = str(0)
             indexArray = [""]
