@@ -81,7 +81,7 @@ def googleCall(request):
         # Delete original file
         if default_storage.exists(path):
             default_storage.delete(path)
-        res = googleApiCall(ROOT+'/SpeechBuddy1/audio/Simon_Sinek_30.flac')
+        res = googleApiCall(ROOT+'/SpeechBuddy1/audio/output_mono.flac')
         
 #        fundementals = f0.tolist
         if not res == "Empty Response":
@@ -94,6 +94,7 @@ def googleCall(request):
             corpus = str(resData[1])
             tok = resData[2]
             listSyn = str(resData[3])
+            #sentence_duration = str (res[3])
         else:
             transcript = "empty response"
             confidence = 1

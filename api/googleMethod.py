@@ -48,6 +48,8 @@ def formatResponse(response):
 
         # Holds duration of each word from response
         wordslist = []
+        # Holds duration of each sentence based on a 15 words/sentence assumption
+        sentence_duration= []
     
         for word_info in alternative.words:
             word = word_info.word
@@ -71,8 +73,13 @@ def formatResponse(response):
             elif( i % 15 != 0 or i == 0):
                 time_per_sentence = time_per_sentence + wordslist[i]
                 
+                
             else:
                 print(time_per_sentence)
+                sentence_duration.append(time_per_sentence)
                 time_per_sentence = 0
 
+
+       
+        print(sentence_duration)
     return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow]
