@@ -45,10 +45,10 @@ def formatResponse(response):
         stringData = stringData + '"Transcript":"' + str(alternative.transcript.encode('ascii')) + '",'
         stringData = stringData + '"Confidence":' + str(alternative.confidence) + '}'
         movingWindow=[]
+
+        # Holds duration of each word from response
         wordslist = []
     
-
-        # print("about to print word times:")
         for word_info in alternative.words:
             word = word_info.word
             start_time = word_info.start_time
@@ -61,6 +61,7 @@ def formatResponse(response):
                 (end_time.seconds + end_time.nanos * 1e-9) - ( start_time.seconds + start_time.nanos * 1e-9)
                 ))
 
+        #calculate total duration per 15 words
         time_per_sentence = 0
         for i in range(0,len(wordslist)):
             if( i % 15 != 0 or i == 0):
@@ -69,15 +70,4 @@ def formatResponse(response):
                 print(time_per_sentence)
                 time_per_sentence = 0
 
-
-        # indexS = 4
-        # indexE = 0
-        # for index in range(indexS,len(alternative.words)):
-        #     startFrame = alternative.words[indexE].start_time.seconds + alternative.words[indexE].start_time.nanos * 1e-9
-        #     endFrame = alternative.words[indexS].end_time.seconds + alternative.words[indexS].end_time.nanos * 1e-9
-        #     wpm = round(endFrame - startFrame,1)
-        #     movingWindow.append(wpm)
-        #     indexE = indexE + 1
-        #     indexS = indexS + 1
-        # #print movingWindow
     return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow]
