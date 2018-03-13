@@ -56,12 +56,12 @@ def formatResponse(response):
             start_time = word_info.start_time
             end_time = word_info.end_time
             wordslist.append((end_time.seconds + end_time.nanos * 1e-9) - ( start_time.seconds + start_time.nanos * 1e-9))
-            print('Word: {}, start_time: {}, end_time: {}, duration: {}'.format(
-                word,
-                start_time.seconds + start_time.nanos * 1e-9,
-                end_time.seconds + end_time.nanos * 1e-9, 
-                (end_time.seconds + end_time.nanos * 1e-9) - ( start_time.seconds + start_time.nanos * 1e-9)
-                ))
+            # print('Word: {}, start_time: {}, end_time: {}, duration: {}'.format(
+            #     word,
+            #     start_time.seconds + start_time.nanos * 1e-9,
+            #     end_time.seconds + end_time.nanos * 1e-9, 
+            #     (end_time.seconds + end_time.nanos * 1e-9) - ( start_time.seconds + start_time.nanos * 1e-9)
+            #     ))
 
         #calculate total duration per 15 words
         time_per_sentence = 0
@@ -80,9 +80,9 @@ def formatResponse(response):
                 time_per_sentence = 0
 
 
-        print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
-        print("\nTotal time taken to complete each sentence:")
-        print(sentence_duration)
+        # print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
+        # print("\nTotal time taken to complete each sentence:")
+        # print(sentence_duration)
         # add more calcs to print here for testing...
-        print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
+        # print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
     return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow]

@@ -110,8 +110,8 @@ def googleCall(request):
         
         # Filler wod detection
 #        global graph
-        with settings.GRAPH.as_default():
-            filler_count = str(detectFillers(ROOT, settings.MODEL, "output_mono.wav", Fs = 48e3))
+        # with settings.GRAPH.as_default():
+        filler_count = 0 #str(detectFillers(ROOT, settings.MODEL, "output_mono.wav", Fs = 48e3))
         
 #        #Get rid of files
 #        if default_storage.exists(path):
