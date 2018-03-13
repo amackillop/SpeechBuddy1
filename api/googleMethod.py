@@ -64,8 +64,13 @@ def formatResponse(response):
         #calculate total duration per 15 words
         time_per_sentence = 0
         for i in range(0,len(wordslist)):
-            if( i % 15 != 0 or i == 0):
+
+            if (len(wordslist)<15):
+                print('less than 15 words in the Speech')
+
+            elif( i % 15 != 0 or i == 0):
                 time_per_sentence = time_per_sentence + wordslist[i]
+                
             else:
                 print(time_per_sentence)
                 time_per_sentence = 0

@@ -81,7 +81,7 @@ def googleCall(request):
         # Delete original file
         if default_storage.exists(path):
             default_storage.delete(path)
-        res = googleApiCall(ROOT+'/SpeechBuddy1/audio/output_mono.flac')
+        res = googleApiCall(ROOT+'/SpeechBuddy1/audio/Simon_Sinek_30.flac')
         
 #        fundementals = f0.tolist
         if not res == "Empty Response":
