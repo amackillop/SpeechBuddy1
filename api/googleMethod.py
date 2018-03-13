@@ -75,11 +75,14 @@ def formatResponse(response):
                 
                 
             else:
-                print(time_per_sentence)
+                # print(time_per_sentence)
                 sentence_duration.append(time_per_sentence)
                 time_per_sentence = 0
 
 
-       
+        print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
+        print("\nTotal time taken to complete each sentence:")
         print(sentence_duration)
+        # add more calcs to print here for testing...
+        print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
     return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow]
