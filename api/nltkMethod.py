@@ -139,7 +139,7 @@ def mostCommon(strData):
         ps = nltk.stem.PorterStemmer()
         lemmatiser = nltk.WordNetLemmatizer()
         strData = strData.lower()
-        corpus = [];
+        corpus = []
         indexArray = {}
         # str=expand_contractions(str)
         stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','I','i','for']
