@@ -119,10 +119,15 @@ function hover(id, data){
                 modal.style.display = "block";
                 syns = JSON.parse(data.listSyn);
                 console.log(syns);
+<<<<<<< HEAD
 
                 syns = syns[word];
                 console.log(word);
 
+=======
+                console.log(word);
+                syns = syns[word];
+>>>>>>> 500fa1c43c0348b2e7ff6cf88bc3776c13e00f36
                 var keys = Object.keys(syns);
                 var lenExamples;
                 var mbody = document.getElementById("mbody");

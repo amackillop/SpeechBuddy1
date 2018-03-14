@@ -136,7 +136,7 @@
 								nltkCorpus(data);
 								pitchResponse(data);
 								fillerCountResponse(data);
-								console.log(data);
+								//console.log(data);
                             }
                         });
                      })
