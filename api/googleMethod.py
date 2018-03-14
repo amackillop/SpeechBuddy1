@@ -85,18 +85,12 @@ def formatResponse(response):
                 speaking_rate=0
 
 
-<<<<<<< HEAD
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nTotal time taken to complete each sentence:")
         print(sentence_duration)
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nWords per Minute based on sentence time:")
         print(wordsperminute)
-=======
-        # print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
-        # print("\nTotal time taken to complete each sentence:")
-        # print(sentence_duration)
->>>>>>> 500fa1c43c0348b2e7ff6cf88bc3776c13e00f36
         # add more calcs to print here for testing...
-        # print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
+        print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
     return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow]
