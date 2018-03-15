@@ -73,7 +73,7 @@ def googleCall(request):
         # Save the audio file
         dataDict = request.data
         dataDict = dataDict['audio']
-        path = default_storage.save(ROOT+'/SpeechBuddy1/audio/output.wav', ContentFile(dataDict.read()))
+        path = default_storage.save(settings.MEDIA_ROOT + "/output.wav", ContentFile(dataDict.read()))
         
         # Manipulate original audio file
         convertToMono(settings.MEDIA_ROOT + "/output.wav", settings.MEDIA_ROOT + "/output_mono.wav", 48e3)
@@ -111,8 +111,8 @@ def googleCall(request):
         
         # Filler wod detection
 #        global graph
-        with settings.GRAPH.as_default():
-            filler_count = str(detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav", Fs = 48e3))
+       # with settings.GRAPH.as_default():
+        filler_count = 0#str(detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav", Fs = 48e3))
 #            clear_session()
         
 #        #Get rid of files
