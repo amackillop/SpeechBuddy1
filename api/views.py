@@ -29,7 +29,7 @@ from api.capstoneModules.fillerWordDetection import detectFillers
 
 from os import listdir, remove, path
 from django.conf import settings
-from keras.backend import clear_session
+#from keras.backend import clear_session
 
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 ROOT = path.join(path.dirname(BASE_DIR))
@@ -82,11 +82,7 @@ def googleCall(request):
         # Delete original file
         if default_storage.exists(path):
             default_storage.delete(path)
-<<<<<<< HEAD
         res = googleApiCall(settings.MEDIA_ROOT + "/output_mono.flac")
-=======
-        res = googleApiCall(ROOT+'/SpeechBuddy1/audio/Simon_Sinek_30.flac')
->>>>>>> f817362784227480fa9a4f97e9c324cf249776d4
         
 #        fundementals = f0.tolist
         if not res == "Empty Response":
@@ -115,14 +111,9 @@ def googleCall(request):
         
         # Filler wod detection
 #        global graph
-<<<<<<< HEAD
         with settings.GRAPH.as_default():
             filler_count = str(detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav", Fs = 48e3))
 #            clear_session()
-=======
-        # with settings.GRAPH.as_default():
-        filler_count = 0 #str(detectFillers(ROOT, settings.MODEL, "output_mono.wav", Fs = 48e3))
->>>>>>> f817362784227480fa9a4f97e9c324cf249776d4
         
 #        #Get rid of files
 #        if default_storage.exists(path):
