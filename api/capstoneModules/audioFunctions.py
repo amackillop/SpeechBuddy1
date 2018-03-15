@@ -10,7 +10,8 @@ from scipy.signal import butter, lfilter
 import wave
 import numpy as np
 from pydub import AudioSegment
-
+from scipy.signal import resample
+from os import listdir
 
 # GLOBAL VARIABLES
 VOLUME_THRESHOLD = 1000
@@ -101,7 +102,7 @@ def trim(snd_data):
     
     return snd_data
 
-def record():
+def recordToFile(fname):
     """
     This function is where the mic is turned on and sound is recorded
     
@@ -159,62 +160,37 @@ def record():
         if snd_started and num_silent > SILENCE_THRESHOLD:
             break
 
-    sample_width = mic.get_sample_size(FORMAT)
+#    sample_width = mic.get_sample_size(FORMAT)
     stream.stop_stream()
     stream.close()
     mic.terminate()
 
     data = normalize(data)
     data = trim(data)
-    return sample_width, data
-
-def recordToFile(fname):
-    """
-    sdjhsdkjhsdkjfb
-    
-    # Arguments
-        classifier: A classifier object loaded with `keras.models.load_model`
-        or generated with `buildClassifier`
-        fname: Name of the audio file to analyze
-
-    # Returns
-        None
-
-    # Raises
-        Not handled yet
-    """
-    # Start recording
-    sample_width, data = record()
     
     # Write the wav file
-    data = pack('<' + ('h'*len(data)), *data)
-    wf = wave.open(fname, 'wb')
-    wf.setnchannels(1)
-    wf.setsampwidth(sample_width)
-    wf.setframerate(Fs)
-    wf.writeframes(data)
-    wf.close()
+    signalToWav(data, fname)
 
-def loadAudio(fname):
-    """
-    ashdsjdfhs
-
-    # Arguments
-        classifier: A classifier object loaded with `keras.models.load_model`
-        or generated with `buildClassifier`
-        fname: Name of the audio file to analyze
-
-    # Returns
-        None
-
-    # Raises
-        Not handled yet
-    """
-    spf = wave.open(fname,'r')
-    signal = spf.readframes(-1)
-    signal = np.frombuffer(signal, np.int16)
-    spf.close()
-    return signal
+#def loadAudio(fname):
+#    """
+#    ashdsjdfhs
+#
+#    # Arguments
+#        classifier: A classifier object loaded with `keras.models.load_model`
+#        or generated with `buildClassifier`
+#        fname: Name of the audio file to analyze
+#
+#    # Returns
+#        None
+#
+#    # Raises
+#        Not handled yet
+#    """
+#    spf = wave.open(fname,'r')
+#    signal = spf.readframes(-1)
+#    signal = np.frombuffer(signal, np.int16)
+#    spf.close()
+#    return signal
     
 def splitAudio(signal, sample_length):
     """
@@ -309,21 +285,20 @@ def convertToWav(filename):
     # Raises
         Not handled yet
     """
-    extension = filename[filename.find(".")+1:]
-    if extension != "wav":
-        audio = AudioSegment.from_file(file = filename, format = extension)
-        audio.export(filename[0:len(filename)-4] + '.wav', format="wav")
+    i = 0
+    for filename in listdir("C://Users/Austin/Desktop/mehant/"):
+        filename = "C://Users/Austin/Desktop/mehant/" + filename
+        extension = filename[filename.find(".")+1:]
+        if extension != "wav":
+            audio = AudioSegment.from_file(file = filename, format = extension)
+            audio.set_channels(1)
+            audio.export(filename[0:len(filename)-4] + "wavfile" + str(i) + '.wav', format="wav")
+            i += 1
 
-def convertToMono(fname, new_fname):
+def convertToMono(fname, new_fname, Fs):
     audio = getData(fname)
     audio = audio[0::2]
-    data = pack('<' + ('h'*len(audio)), *audio)
-    new_file = wave.open(new_fname, 'wb')
-    new_file.setnchannels(1)
-    new_file.setsampwidth(2)
-    new_file.setframerate(48000)
-    new_file.writeframes(data)
-    new_file.close()
+    signalToWav(audio, new_fname, Fs)
     
 def convertToFLAC(fname, new_fname):
     extension = fname[fname.find(".")+1:]
@@ -331,3 +306,30 @@ def convertToFLAC(fname, new_fname):
         audio = AudioSegment.from_file(file = fname, format = extension)
         audio.set_channels(1)
         audio.export(new_fname, format="flac")
+        
+def signalToWav(signal, fname, Fs):
+    data = pack('<' + ('h'*len(signal)), *signal)
+    wav_file = wave.open(fname, 'wb')
+    wav_file.setnchannels(1)
+    wav_file.setsampwidth(2)
+    wav_file.setframerate(Fs)
+    wav_file.writeframes(data)
+    wav_file.close()
+    
+def addNoise(x, SNR = 10):
+#    recordToFile("demo.wav")
+    SNR = 30
+    x = getData("demo.wav")
+    S = 10*np.log10(np.var(x))
+    N = S - SNR
+    noise = np.random.normal(0, np.sqrt(np.power(10, N/10)), len(x))
+    noise = noise.astype(np.int16)
+    x = np.sum([x, noise], axis = 0, dtype = np.int16)
+    signalToWav(x, "demo_noise.wav", 16e3)
+    return x
+    
+def freqShift(fname, new_fname, shift, Fs):
+    x = getData(fname)
+    x = np.asarray(resample(x, int(len(x)*(1 + shift/100))), np.int16)
+    signalToWav(x, new_fname, 16e3)
+    

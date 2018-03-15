@@ -8,7 +8,7 @@ YIN Algorithm
 """
 from api.capstoneModules.audioFunctions import recordToFile, getData, butterLowpassFilter, downSample, trim
 #from scipy.signal import correlate
-from matplotlib.pyplot import plot, figure, close
+#from matplotlib.pyplot import plot, figure, close
 from numpy import mean, correlate, asarray, zeros, polyfit, poly1d, float32, int32
 from numpy import sum as npsum
 

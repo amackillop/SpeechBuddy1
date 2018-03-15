@@ -2,7 +2,7 @@
 # Importing required modules for using the model
 from api.capstoneModules.audioFunctions import getData, splitAudio, downSample
 from api.capstoneModules.dataGenerator import createMelSpectrogram, createSpectrogram
-# from keras.preprocessing.image import ImageDataGenerator
+#from keras.preprocessing.image import ImageDataGenerator
 #from keras.models import load_model
 
 import numpy as np
@@ -27,7 +27,7 @@ def detectFillers(ROOT, classifier, fname, Fs = 48e3):
     """
     fname = ROOT + "/SpeechBuddy1/audio/" + fname
     # Nueral Network Model
-#    classifier = load_model(ROOT + "/SpeechBuddy1/audio/"+ classifier)
+#    classifier = load_model(ROOT + "/SpeechBuddy/audio/"+ classifier)
     sample_length = 4 # Window length in seconds for input into the network, this model uses 4
     outFolder = ROOT + "/SpeechBuddy1/audio/live/Images/"
     
