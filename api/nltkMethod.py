@@ -142,7 +142,7 @@ def mostCommon(strData):
         corpus = []
         indexArray = {}
         # str=expand_contractions(str)
-        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','I','i','for']
+        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','I','i','for', 'we','as']
         tokenizer = nltk.RegexpTokenizer(r"\w+[']+\w+|\w+")
         tok = tokenizer.tokenize(strData)
         # print(tok)
@@ -151,18 +151,21 @@ def mostCommon(strData):
         for w in tok:
                 if w.find("'") > -1:
                         if contractions_dict.get(w) is None:
+                                print(w)
                                 w = w[:-2]
+                                print(w)
                         # print(w)
-                if w.encode('ascii') in indexArray:
-                        indexArray[w] = indexArray[w][:-1] + "," + str(index)
+                if w in indexArray:
+                        print(w)
+                        indexArray[w] = indexArray[w] + (index,)
                 else:
-                        indexArray[w.encode('ascii')] = str(index)
+                        indexArray[w] = (index,)
                 index = index + 1
                 if w not in stopWords:
-                        filtered_tok.append(lemmatiser.lemmatize(w, pos="v").encode('ascii'))
+                        filtered_tok.append(lemmatiser.lemmatize(w, pos="v"))
 
                         # print(lemmatiser.lemmatize(w,pos="v"))
-
+        print(indexArray)
         indexArray = json.dumps(indexArray)
         freq = nltk.FreqDist(filtered_tok)
         print(freq.most_common(16).__len__())
@@ -186,24 +189,23 @@ def mostCommon(strData):
 
 def synCreate(strData):
         res = {}
-        strData = strData.encode('ascii')
+        strData = strData
         syns = wordnet.synsets(strData)
 
         for i in syns:
                 for j in i.lemmas():
-                        if (strData != j.name().encode('ascii')):
+                        if (strData != j.name()):
                                 # print(i.lemmas()[0].name())
                                 examples = i.examples()
                                 for n in range(len(examples)):
-                                        examples[n] = examples[n].encode('ascii')
-                                if res.get(j.name().encode('ascii')) == None:
-                                        res[j.name().encode('ascii')] = i.definition().encode('ascii'), i.examples()
+                                        examples[n] = examples[n]
+                                if res.get(j.name()) == None:
+                                        res[j.name()] = i.definition(), i.examples()
                                 else:
-                                        res[j.name().encode('ascii')] = [res[j.name().encode('ascii')],
-                                                                         i.definition().encode('ascii'),
+                                        res[j.name()] = [res[j.name()],
+                                                                         i.definition(),
                                                                          i.examples()]
         # print(res)
         return res
 
-
-# mostCommon("stop it right that's basically have an entire generation that has access to an addictive numbing to chemical dopamine through social media and cell phones as they're going to the high stress of adolescence why is this important almost every alcoholic discovered alcohol when they were teenagers when were very very young the only approval we need is the approval of our parents and as we go to adolescence we make this transition what we now need the approval of our peers very frustrating for a parent very important for us that allows us to")
+#mostCommon("don't it right that's basically have an entire generation that has access to an addictive numbing to chemical dopamine through social media and cell phones as they're going to the high stress of adolescence why is this important almost every alcoholic discovered alcohol when they were teenagers when were very very young the only approval we need is the approval of our parents and as we go to adolescence we make this transition what we now need the approval of our peers very frustrating for a parent very important for us that allows us to")
