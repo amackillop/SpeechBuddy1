@@ -139,35 +139,44 @@ def mostCommon(strData):
         ps = nltk.stem.PorterStemmer()
         lemmatiser = nltk.WordNetLemmatizer()
         strData = strData.lower()
-        corpus = [];
+        corpus = []
         indexArray = {}
         # str=expand_contractions(str)
-        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every']
+        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','I','i','for', 'we','as']
         tokenizer = nltk.RegexpTokenizer(r"\w+[']+\w+|\w+")
         tok = tokenizer.tokenize(strData)
         # print(tok)
         filtered_tok = []
-        for i, w in enumerate(tok):
+        index = 0
+        for w in tok:
                 if w.find("'") > -1:
                         if contractions_dict.get(w) is None:
+                                print(w)
                                 w = w[:-2]
+                                print(w)
+                        # print(w)
                 if w in indexArray:
-                        indexArray[w] = indexArray[w] + "," + str(i)
+                        print(w)
+                        indexArray[w] = indexArray[w] + (index,)
                 else:
-                        indexArray[w] = str(i)
+                        indexArray[w] = (index,)
+                index = index + 1
                 if w not in stopWords:
                         filtered_tok.append(lemmatiser.lemmatize(w, pos="v"))
 
                         # print(lemmatiser.lemmatize(w,pos="v"))
-
+        print(indexArray)
         indexArray = json.dumps(indexArray)
         freq = nltk.FreqDist(filtered_tok)
-#        print(freq.most_common(16).__len__())
+        print(freq.most_common(16).__len__())
         listSyn = {}
         for w in freq.most_common(16):
-                w = str(w)
-                w = w[3:w.find(",") - 1]
+                w = w[0]
+                # w = str(w)
+                # w = w[2:w.find(",") - 1]
                 listSyn[w] = synCreate(w)
+                print(w)
+                print(synCreate(w))
         listSyn = json.dumps(listSyn)
         corpus = [indexArray, freq.most_common(16), tok, listSyn]
         return corpus
@@ -180,9 +189,8 @@ def mostCommon(strData):
 
 def synCreate(strData):
         res = {}
-#        strData = strData.encode('ascii')
+        strData = strData
         syns = wordnet.synsets(strData)
-        print(syns)
 
         for i in syns:
                 for j in i.lemmas():
@@ -200,4 +208,4 @@ def synCreate(strData):
         # print(res)
         return res
 
-mostCommon("A string of words")
+#mostCommon("don't it right that's basically have an entire generation that has access to an addictive numbing to chemical dopamine through social media and cell phones as they're going to the high stress of adolescence why is this important almost every alcoholic discovered alcohol when they were teenagers when were very very young the only approval we need is the approval of our parents and as we go to adolescence we make this transition what we now need the approval of our peers very frustrating for a parent very important for us that allows us to")

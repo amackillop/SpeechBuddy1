@@ -38,7 +38,7 @@ def googleApiCall(path):
     return response
 
 def formatResponse(response):
-    stringData="{";
+    stringData="{"
 
     for result in response.results:
         alternative = result.alternatives[0]
@@ -46,14 +46,51 @@ def formatResponse(response):
         stringData = stringData + '"Confidence":' + str(alternative.confidence) + '}'
         movingWindow=[]
 
-        indexS = 4
-        indexE = 0
-        for index in range(indexS,len(alternative.words)):
-            startFrame = alternative.words[indexE].start_time.seconds + alternative.words[indexE].start_time.nanos * 1e-9
-            endFrame = alternative.words[indexS].end_time.seconds + alternative.words[indexS].end_time.nanos * 1e-9
-            wpm = round(endFrame - startFrame,1)
-            movingWindow.append(wpm)
-            indexE = indexE + 1
-            indexS = indexS + 1
-        #print movingWindow
+        # Holds duration of each word from response
+        wordslist = []
+        # Holds duration of each sentence based on a 15 words/sentence assumption
+        sentence_duration= []
+        wordsperminute=[]
+    
+        for word_info in alternative.words:
+            word = word_info.word
+            start_time = word_info.start_time
+            end_time = word_info.end_time
+            wordslist.append((end_time.seconds + end_time.nanos * 1e-9) - ( start_time.seconds + start_time.nanos * 1e-9))
+            # print('Word: {}, start_time: {}, end_time: {}, duration: {}'.format(
+            #     word,
+            #     start_time.seconds + start_time.nanos * 1e-9,
+            #     end_time.seconds + end_time.nanos * 1e-9, 
+            #     (end_time.seconds + end_time.nanos * 1e-9) - ( start_time.seconds + start_time.nanos * 1e-9)
+            #     ))
+
+        #calculate total duration per 15 words
+        time_per_sentence = 0
+        speaking_rate=0
+        for i in range(0,len(wordslist)):
+
+            if (len(wordslist)<15):
+                print('less than 15 words in the Speech')
+
+            elif( i % 15 != 0 or i == 0):
+                time_per_sentence = time_per_sentence + wordslist[i]
+                
+                
+            else:
+                # print(time_per_sentence)
+                sentence_duration.append(time_per_sentence)
+                speaking_rate=(60*15)/time_per_sentence
+                wordsperminute.append(speaking_rate)
+                time_per_sentence = 0
+                speaking_rate=0
+
+
+        print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
+        print("\nTotal time taken to complete each sentence:")
+        print(sentence_duration)
+        print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
+        print("\nWords per Minute based on sentence time:")
+        print(wordsperminute)
+        # add more calcs to print here for testing...
+        print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
     return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow]

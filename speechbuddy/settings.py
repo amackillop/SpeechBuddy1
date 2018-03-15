@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 from os import path
+<<<<<<< HEAD
 from tensorflow import get_default_graph
 from keras.models import load_model
 from joblib import load
+=======
+# from tensorflow import get_default_graph
+# from keras.models import load_model
+>>>>>>> f817362784227480fa9a4f97e9c324cf249776d4
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
@@ -138,8 +143,16 @@ MEDIA_ROOT = path.join(path.dirname(BASE_DIR), 'SpeechBuddy1/audio')
 MEDIA_URL = 'audio/'
 
 # Neural network stuff
+<<<<<<< HEAD
 modelFile = MEDIA_ROOT + '/Model_4_GoNoGo_5.h5'    
 #pipe = load(modelFile.replace('.h5','.pkl'))
 MODEL = load_model(modelFile)
 #pipe.steps.append(('nn', MODEL))
 GRAPH = get_default_graph()
+=======
+# modelFile = MEDIA_ROOT + '/Model_4_GoNoGo_5.h5'    
+# #pipe = load(modelFile.replace('.h5','.pkl'))
+# MODEL = load_model(modelFile)
+# #pipe.steps.append(('nn', model))
+# GRAPH = get_default_graph()
+>>>>>>> f817362784227480fa9a4f97e9c324cf249776d4

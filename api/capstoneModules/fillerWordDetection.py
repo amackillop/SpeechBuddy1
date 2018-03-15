@@ -2,7 +2,7 @@
 # Importing required modules for using the model
 from api.capstoneModules.audioFunctions import getData, splitAudio, downSample
 from api.capstoneModules.dataGenerator import createMelSpectrogram, createSpectrogram
-from keras.preprocessing.image import ImageDataGenerator
+# from keras.preprocessing.image import ImageDataGenerator
 #from keras.models import load_model
 
 import numpy as np
