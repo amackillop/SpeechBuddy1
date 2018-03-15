@@ -25,11 +25,11 @@ def detectFillers(ROOT, classifier, fname, Fs = 48e3):
     # Raises
         Not handled yet
     """
-    fname = ROOT + "/SpeechBuddy1/audio/" + fname
+    fname = ROOT + fname
     # Nueral Network Model
 #    classifier = load_model(ROOT + "/SpeechBuddy1/audio/"+ classifier)
     sample_length = 4 # Window length in seconds for input into the network, this model uses 4
-    outFolder = ROOT + "/SpeechBuddy1/audio/live/Images/"
+    outFolder = ROOT + "/live/Images/"
     
     for file in listdir(outFolder):
         remove(outFolder + file)
@@ -45,7 +45,7 @@ def detectFillers(ROOT, classifier, fname, Fs = 48e3):
 #        createMelSpectrogram(samples[i,:]/1.0, "demo" + str(i) + ".wav", outFolder)
     
     live_datagen = ImageDataGenerator(rescale = 1./255)
-    live_set = live_datagen.flow_from_directory(ROOT + '/SpeechBuddy1/audio/live',
+    live_set = live_datagen.flow_from_directory(ROOT + '/live',
                                             target_size = (IMG_HEIGHT, IMG_WIDTH),
                                             color_mode = "grayscale",
                                             batch_size = 32,
@@ -58,7 +58,7 @@ def detectFillers(ROOT, classifier, fname, Fs = 48e3):
     # Use this to see which clips contained the word
     for ind, x in enumerate(classifier.predict_classes(live_set[0][0])):
         print("Clip ", ind,": ", x[0])
-
+        
     return num_fillers
 
     

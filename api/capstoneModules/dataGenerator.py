@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from api.capstoneModules.audioFunctions import trim
+from api.capstoneModules.audioFunctions import trim, signalToWav, getData
 from os import listdir, remove, makedirs, path
 from random import randint
 import wave
@@ -44,21 +44,15 @@ def zeroPadClip(path, filename, clip_length, Fs):
     # Raises
         Not handled yet
     """
-    spf = wave.open(path + filename, 'r')
-    # Extract Raw Audio from Wav File
-    signal = spf.readframes(-1)
-    signal = np.fromstring(signal, np.int16)
-    clip = np.concatenate([signal, np.zeros(int(Fs*clip_length - signal.size), np.int16)])  # Zero pad up to multiple os our sample window
-    clip = pack('<' + ('h' * len(clip)), *clip)
-    wf = wave.open(path + filename, 'wb')
-    wf.setnchannels(1)
-    wf.setsampwidth(2)
-    wf.setframerate(Fs)
-    wf.writeframes(clip)
-    wf.close()
-    spf.close()
 
-def trimSamples(directory, outFolder, Fs):
+    # Extract Raw Audio from Wav File
+    signal = getData(path + filename)
+    # Zero pad up to multiple os our sample window
+    clip = np.concatenate([signal, np.zeros(int(Fs*clip_length - signal.size), np.int16)])
+    # Write to file
+    signalToWav(clip, path + filename, Fs)
+
+def trimSamples(in_folder, out_folder, target_dir = None, Fs = 16e3, target_Fs = 16e3):
     """
     # Arguments
         classifier: A classifier object loaded with `keras.models.load_model`
@@ -71,29 +65,28 @@ def trimSamples(directory, outFolder, Fs):
     # Raises
         Not handled yet
     """
-    if not path.exists(PATH + outFolder):
-        makedirs(PATH + outFolder)
-        for folder in listdir(directory):
-            makedirs(PATH + outFolder + folder)
-    tfolders = [directory]
-    for x in range(len(tfolders)):
-        tdirs = listdir(tfolders[x])
-        for y in range(len(tdirs)):
-            tfiles = listdir(tfolders[x] + tdirs[y])
-            for z in range(len(tfiles)-1):
-                tfilename = tfolders[x] + tdirs[y] + "/" + tfiles[z]
-                spf = wave.open(tfilename, 'r')
-                signal = spf.readframes(-1)
-                signal = np.frombuffer(signal, np.int16)
-                signal = trim(signal)
-                clip = pack('<' + ('h' * len(signal)), *signal)
-                wf = wave.open(outFolder + tdirs[y] + "/" + tdirs[y] + str(z) + ".wav", 'wb')
-                wf.setnchannels(1)
-                wf.setsampwidth(2)
-                wf.setframerate(Fs)
-                wf.writeframes(clip)
-                wf.close()
-                spf.close()
+    if not path.exists(out_folder):
+        makedirs(out_folder)
+        for folder in listdir(in_folder):
+            makedirs(out_folder + folder)
+            
+    tdirs = listdir(in_folder)
+    for y in range(len(tdirs)):
+        tfiles = listdir(in_folder + tdirs[y])
+        for z in range(len(tfiles)-1):
+            if not target_dir == None:
+                if tdirs[y] == target_dir:
+                    tfilename = in_folder + tdirs[y] + "/" + tfiles[z]
+                    signal = getData(tfilename)
+                    signal = trim(signal)
+                    signalToWav(signal, out_folder + tdirs[y] + "/" + tdirs[y] + str(z) + ".wav", Fs)
+                else:
+                    break
+            else:
+                    tfilename = in_folder + tdirs[y] + "/" + tfiles[z]
+                    signal = getData(tfilename)
+                    signal = trim(signal)
+                    signalToWav(signal, out_folder + tdirs[y] + "/" + tdirs[y] + str(z) + ".wav", Fs)
                 
 def convertToWav(filename):
     """
@@ -135,34 +128,31 @@ def generateClips(dataset_size, in_path, out_path, clip_words, clip_length, Fs):
         sound1 = sound1.append(sound2, crossfade = 0)
         return sound1
         
-#    for file in listdir(out_path):
-#        remove(out_path + file)
-        
     # This loop generates the clips that do not contain the trigger word
-    x = int(len(listdir(out_path))*dataset_split)
-    x2 = int(x)
-    while x < int(dataset_size*dataset_split):
-        for y in range(clip_words):
-            rand_word = randint(0, len(words) - 2)
-            samples = listdir(in_path + words[rand_word] + '/')
-            rand_sample = randint(0, len(samples) - 1)
-            in_file = in_path + words[rand_word] + '/' + samples[rand_sample]
-            if y == 0:
-                sound1 = AudioSegment.from_file(in_file, format="wav").get_sample_slice()
-                sound1 = matchTargetAmplitude(sound1, -30.0)
-            else:
-                sound1 = appendSample(sound1, in_file)
-                
-        if sound1.frame_count() > Fs*(clip_length - 1) and sound1.frame_count() <= Fs*clip_length:
-            padding = AudioSegment.silent(1000*(clip_length - sound1.frame_count()/Fs))
-            sound1 = sound1.append(padding, crossfade = 0)
-            out_file = out_path + "0_" + str(x) + ".wav"
-            sound1.export(out_file, format="wav")
-            x = x + 1        
+#    x = int(len(listdir(out_path))*dataset_split)
+#    x2 = int(x)
+#    while x < int(dataset_size*dataset_split):
+#        for y in range(clip_words):
+#            rand_word = randint(0, len(words) - 2)
+#            samples = listdir(in_path + words[rand_word] + '/')
+#            rand_sample = randint(0, len(samples) - 1)
+#            in_file = in_path + words[rand_word] + '/' + samples[rand_sample]
+#            if y == 0:
+#                sound1 = AudioSegment.from_file(in_file, format="wav").get_sample_slice()
+#                sound1 = matchTargetAmplitude(sound1, -30.0)
+#            else:
+#                sound1 = appendSample(sound1, in_file)
+#                
+#        if sound1.frame_count() > Fs*(clip_length - 1) and sound1.frame_count() <= Fs*clip_length:
+#            padding = AudioSegment.silent(1000*(clip_length - sound1.frame_count()/Fs))
+#            sound1 = sound1.append(padding, crossfade = 0)
+#            out_file = out_path + "0_" + str(x) + ".wav"
+#            sound1.export(out_file, format="wav")
+#            x = x + 1        
     #file_handle.close()       
     
     # These clips do contain the trigger words
-    
+    x2 = 0
     while x2 < int(dataset_size*dataset_split):
         trigger_position = randint(0, clip_words-1) ##%#@$%#@$%@#$%@
         for y in range(clip_words):
@@ -185,6 +175,7 @@ def generateClips(dataset_size, in_path, out_path, clip_words, clip_length, Fs):
                 sound1 = matchTargetAmplitude(sound1, -30.0)
             else:
                 sound1 = appendSample(sound1, in_file)
+            
                 
         if sound1.frame_count() > Fs*(clip_length - 1) and sound1.frame_count() <= Fs*clip_length:
             padding = AudioSegment.silent(1000*(clip_length - sound1.frame_count()/Fs))

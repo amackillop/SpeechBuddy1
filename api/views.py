@@ -29,6 +29,7 @@ from api.capstoneModules.fillerWordDetection import detectFillers
 
 from os import listdir, remove, path
 from django.conf import settings
+from keras.backend import clear_session
 
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 ROOT = path.join(path.dirname(BASE_DIR))
@@ -75,13 +76,13 @@ def googleCall(request):
         path = default_storage.save(ROOT+'/SpeechBuddy1/audio/output.wav', ContentFile(dataDict.read()))
         
         # Manipulate original audio file
-        convertToMono(ROOT+'/SpeechBuddy1/audio/output.wav', ROOT + "/SpeechBuddy1/audio/output_mono.wav")
-        convertToFLAC(ROOT+'/SpeechBuddy1/audio/output_mono.wav', ROOT + "/SpeechBuddy1/audio/output_mono.flac")
+        convertToMono(settings.MEDIA_ROOT + "/output.wav", settings.MEDIA_ROOT + "/output_mono.wav", 48e3)
+        convertToFLAC(settings.MEDIA_ROOT + "/output_mono.wav", settings.MEDIA_ROOT + "/output_mono.flac")
         
         # Delete original file
         if default_storage.exists(path):
             default_storage.delete(path)
-        res = googleApiCall(ROOT+'/SpeechBuddy1/audio/output_mono.flac')
+        res = googleApiCall(settings.MEDIA_ROOT + "/output_mono.flac")
         
 #        fundementals = f0.tolist
         if not res == "Empty Response":
@@ -105,12 +106,13 @@ def googleCall(request):
             
         
         # Pitch Tracking
-        f0 = pitchTrackingYIN(ROOT+'/SpeechBuddy1/audio/output_mono.wav', freq_range = (40, 300), threshold = 0.1, timestep = 0.25, Fs = 48e3, Fc = 1e3)
+        f0 = pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", freq_range = (40, 300), threshold = 0.1, timestep = 0.25, Fs = 48e3, Fc = 1e3)
         
         # Filler wod detection
 #        global graph
         with settings.GRAPH.as_default():
-            filler_count = str(detectFillers(ROOT, settings.MODEL, "output_mono.wav", Fs = 48e3))
+            filler_count = str(detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav", Fs = 48e3))
+#            clear_session()
         
 #        #Get rid of files
 #        if default_storage.exists(path):

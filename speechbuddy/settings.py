@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 from os import path
 from tensorflow import get_default_graph
 from keras.models import load_model
+from joblib import load
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
@@ -140,5 +141,5 @@ MEDIA_URL = 'audio/'
 modelFile = MEDIA_ROOT + '/Model_4_GoNoGo_5.h5'    
 #pipe = load(modelFile.replace('.h5','.pkl'))
 MODEL = load_model(modelFile)
-#pipe.steps.append(('nn', model))
+#pipe.steps.append(('nn', MODEL))
 GRAPH = get_default_graph()
