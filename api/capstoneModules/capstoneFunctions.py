@@ -81,7 +81,7 @@ def normalize(audio_data):
         Not handled yet
     """
     MAXIMUM = 16384
-    times = float(MAXIMUM)/max(abs(i) for i in audio)
+    times = float(MAXIMUM)/max(abs(i) for i in audio_data)
 
     arr = array('h')
     for i in audio_data:
@@ -931,12 +931,20 @@ def crossCorr(x, tau, W, auto = False):
         # Unbias the signals
         x = x_orig[t:W+t] - np.mean(x_orig[t:W+t])
         x_tau = x_orig[t+tau:t+tau+W] - np.mean(x_orig[t+tau:t+tau+W])
+        if len(x_tau) == 0:
+            break
         if (auto == False):
             cross_corr = np.correlate(x, x_tau, 'full')#/npsum(x**2)
             cross_corr_mat[i,:] = cross_corr[cross_corr.shape[0]//2:]
+            
         else:
             cross_corr = np.correlate(x_tau, x_tau, 'full')
-            cross_corr_mat[i,:] = cross_corr[cross_corr.shape[0]//2:]
+            try:
+                cross_corr_mat[i,:] = cross_corr[cross_corr.shape[0]//2:]
+            except:
+                cross_corr_mat[i,:] = np.append(cross_corr[cross_corr.shape[0]//2:], np.zeros((1, W-cross_corr[cross_corr.shape[0]//2:].size), np.float32))
+                
+
     return cross_corr_mat
 
 
@@ -1083,7 +1091,7 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
         Fc: Cutoff frequency of the lowpass filter used in downsampling the signal. Must be less than target_Fs/2.
     
     #Returns
-        f0: A 2-D numpy array formatted as [time, estimate] ie. [...,[2, 138.5],...] for use in google chart api
+        f: A 1-D numpy array containing the frequency esimates
     #Raises
         ValueError: If a silent audio file is used.
     """
@@ -1101,15 +1109,14 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
     signal = signal.astype(np.float32)
 
     # Integration window is dependent on the lowest frequency to be detected
-    W = int(Fs)//freq_range[0]
-
+    W = int(np.ceil(Fs/freq_range[0]))
     # The idea here is to keep only what we need to analyze.
     # If we are going to track frequency every 25ms, then we don't need the information in between
     # these points outside of the integration window.
-    sampled_signal = np.zeros(((signal.size//int(Fs*timestep)),2*W+2), np.float32)
+    sampled_signal = np.zeros(((signal.size//int(Fs*timestep)),2*W), np.float32)
     for i in range((signal.size//int(Fs*timestep))):
         t = int(i*Fs*timestep)
-        sampled_signal[i,:] = signal[t:int(t+2*W+2)]/max(signal[t:int(t+2*W+2)])
+        sampled_signal[i,:] = signal[t:int(t+2*W)]/max(signal[t:int(t+2*W)])
         
     sampled_signal = sampled_signal.flatten()
 
@@ -1125,9 +1132,8 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
     taus = absoluteThresold(signal, freq_range, threshold, Fs)[0]
     diff_mat = diffEquation(signal, W)
     periods = parabolicInterpolation(diff_mat, taus, freq_range, Fs)
-
-    f0 = np.zeros((signal.size//W-2, 2), np.int32)
-    for i in range(signal.size//W-2):
-        f0[i,0] = i
-        f0[i,1] = Fs//periods[i]
-    return f0
+    # Minues 2 because the interpolation throws away two estimates
+    f = np.zeros((int(signal.size/W-2), 1), np.int32)
+    for i in range(int(signal.size/W-2)):
+        f[i] = Fs//periods[i]
+    return f
