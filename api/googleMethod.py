@@ -72,21 +72,20 @@ def formatResponse(response):
             word = word_info.word
             strings_of_words.append(word)
 
-        #getting the words in 15-word based sentence
+        #getting the words in 15-word based sentence based list
         for i in range(0,len(strings_of_words)):
             
             if(i==len(strings_of_words)-1):
                 temp_string= temp_string + str(strings_of_words[i]) + ' '
                 list_of_sentences.append(temp_string)
-                #print(other_list)
+                
 
             elif(i % 15 !=0 or i==0):
                 temp_string= temp_string + str(strings_of_words[i]) + ' '
-                #x= i+1
+               
 
             elif(i % 15 ==0 or i != 0):
                 list_of_sentences.append(temp_string)
-                #x=i+1
                 temp_string= ""
                 temp_string = temp_string + str(strings_of_words[i]) + ' '
         
@@ -94,7 +93,9 @@ def formatResponse(response):
 
         #calculate total duration per 15 words
         time_per_sentence = 0
+        time_per_last_sentence=0
         speaking_rate=0
+        speaking_rate_last_sentence=0
         for i in range(0,len(wordslist)):
 
             if (len(wordslist)<15):
@@ -106,23 +107,27 @@ def formatResponse(response):
             else:
                 # print(time_per_sentence)
                 sentence_duration.append(time_per_sentence)
-                speaking_rate=(60*15)/time_per_sentence
+                speaking_rate=(60*15)/(time_per_sentence)
                 wordsperminute.append(speaking_rate)
                 time_per_sentence = 0
                 speaking_rate=0
 
-        #for i in range(0,len(wordslist));
-           # strings_of_sentence=[]
-
-
+        #taking care of the last few words
+        if((len(wordslist)-1) % 15 !=0):  
+            for i in range(len(wordslist)-15,len(wordslist)):
+                time_per_last_sentence=time_per_last_sentence + wordslist[i]
+        
+            sentence_duration.append(time_per_last_sentence)
+            speaking_rate_last_sentence=(60*15)/(time_per_last_sentence)
+            wordsperminute.append(speaking_rate_last_sentence)
+            speaking_rate_last_sentence=0
 
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nTotal time taken to complete each sentence:")
-        print(sentence_duration)
+        print (["%0.2f" % i for i in sentence_duration])
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nWords per Minute based on sentence time:")
-        print(sentence_duration)
-        print(strings_of_words)
+        print (["%d" % i for i in wordsperminute])
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nList of Sentences:")
         print(list_of_sentences)
