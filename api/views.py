@@ -77,7 +77,7 @@ def googleCall(request):
         path = default_storage.save(settings.MEDIA_ROOT + "/output.wav", ContentFile(dataDict.read()))
         
         # Manipulate original audio file
-        cf.convertToMono(settings.MEDIA_ROOT + "/output.wav", settings.MEDIA_ROOT + "/output_mono.wav", 48e3)
+        cf.convertToMono(settings.MEDIA_ROOT + "/output.wav", settings.MEDIA_ROOT + "/output_mono.wav")
         cf.convertToFLAC(settings.MEDIA_ROOT + "/output_mono.wav", settings.MEDIA_ROOT + "/output_mono.flac")
         
         # Delete original file
@@ -108,8 +108,8 @@ def googleCall(request):
             
         
         # Pitch Tracking
-        f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", freq_range = (40, 500), threshold = 0.1, timestep = 0.25, Fs = 48e3, Fc = 1e3)
-        f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", freq_range = (500, 1000), threshold = 0.1, timestep = 0.25, Fs = 48e3, Fc = 1e3)
+        f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", freq_range = (40, 500), threshold = 0.1, timestep = 0.25, Fc = 1e3)
+        f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", freq_range = (500, 1000), threshold = 0.1, timestep = 0.25, Fc = 1e3)
         f = np.zeros((f0.shape[0], 3))
         for i in range(f.shape[0]):
             f[i, :] = np.asarray([i, f0[i], f1[i]])
@@ -117,7 +117,7 @@ def googleCall(request):
         # Filler wod detection
 #        global graph
        # with settings.GRAPH.as_default():
-        filler_count = 0#str(cf.detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav", Fs = 48e3))
+        filler_count = 0#str(cf.detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav"))
 #            clear_session()
         
 #        #Get rid of files

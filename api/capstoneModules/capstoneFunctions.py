@@ -267,7 +267,7 @@ def getData(fname):
     sound_file.close()
     return data, Fs
 
-def convertToWav(fname, new_fname, Fs = 16000):
+def convertToWav(fname, new_fname):
     """
     # Arguments
         fname: Name of the audio file to convert
@@ -285,7 +285,7 @@ def convertToWav(fname, new_fname, Fs = 16000):
         audio.set_channels(1)
         audio.export(new_fname, format="wav")
 
-def convertToMono(fname, new_fname, Fs):
+def convertToMono(fname, new_fname):
     """
     # Arguments
         fname: Name of the audio file to convert
@@ -296,7 +296,7 @@ def convertToMono(fname, new_fname, Fs):
         None
 
     """
-    audio = getData(fname)
+    audio, Fs = getData(fname)
     audio = audio[0::2]
     signalToWav(audio, new_fname, Fs)
     
@@ -346,7 +346,7 @@ def signalToWav(signal, fname, Fs):
 def addNoise(x, SNR = 10):
 #    recordToFile("demo.wav")
     SNR = 30
-    x = getData("demo.wav")
+    x, Fs = getData("demo.wav")
     S = 10*np.log10(np.var(x))
     N = S - SNR
     noise = np.random.normal(0, np.sqrt(np.power(10, N/10)), len(x))
@@ -355,15 +355,15 @@ def addNoise(x, SNR = 10):
     signalToWav(x, "demo_noise.wav", 16e3)
     return x
     
-def freqShift(fname, new_fname, shift, Fs):
-    x = getData(fname)
+def freqShift(fname, new_fname, shift):
+    x, Fs = getData(fname)
     x = np.asarray(resample(x, int(len(x)*(1 + shift/100))), np.int16)
     signalToWav(x, new_fname, Fs)
     
-def spliceRandWord(signal, words, clip_length, Fs):
+def spliceRandWord(signal, words, clip_length):
     files = listdir(words)
     rand_word = words + files[np.random.randint(0, len(files)-1)]
-    splice = getData(rand_word)
+    splice, Fs = getData(rand_word)
     if not Fs == 16000:
         splice = downSample(splice, 3999, Fs, 16000//Fs)
     start = np.zeros(np.random.randint(0, clip_length*Fs-splice.size), np.int16)
@@ -374,7 +374,24 @@ def spliceRandWord(signal, words, clip_length, Fs):
     new_signal = np.sum([signal, splice], axis = 0, dtype = np.int16)
     return new_signal
    
-def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), Fs = 16000, add_noise = None, freq_shift = None, Mel = None):
+def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), add_noise = None, freq_shift = None, Mel = False):
+    """
+    Generate training data by creating spectrograms from small clips taken from a dataset of spoken lines from audiobooks. 
+    Positive samples have a filler word spliced into the clips.
+    
+    #Arguments
+        size: Size of the dataset to generate
+        clip_length: Length in seconds of the sampled clips
+        image_shape: Size of the spectrogram images to generate
+        add_noise: Add random noise to the clips up. Max power of noise will be this value
+        freq_shift: Apply a random frequency shift to the clips up to this value   
+        Mel: Boolean. If true, generate a mel spectrogram instead
+        
+    #Returns
+        None
+        
+    """
+    
     path = BASE_DIR + "LibriSpeech/train-clean-100/"
     out_path = BASE_DIR + "LibriRecordings/"
     spectrograms = BASE_DIR + "LibriSpectrograms/"
@@ -391,8 +408,8 @@ def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), Fs =
         files = listdir(rand_sub)
         rand_file = rand_sub + listdir(rand_sub)[np.random.randint(1,len(files)-1)]
         new_file = out_path + "sample" + str(i) + ".wav"
-        convertToWav(rand_file, new_file, Fs = Fs)
-        data = getData(new_file)
+        convertToWav(rand_file, new_file)
+        data, Fs = getData(new_file)
         if Fs < 16000:
             data = downSample(data, int(Fs//2)-1, Fs, 16000//Fs)
         samples = splitAudio(data, clip_length, Fs)
@@ -417,7 +434,7 @@ def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), Fs =
         rand_file = rand_sub + listdir(rand_sub)[np.random.randint(1,len(files)-1)]
         new_file = out_path + "sample" + str(i) + ".wav"
         convertToWav(rand_file, new_file, Fs = Fs)
-        data = getData(new_file)
+        data, Fs = getData(new_file)
         data = downSample(data, int(Fs//2)-1, Fs, 16000//Fs)
         samples = splitAudio(data, 2, Fs)
         for i, sample in enumerate(samples):
@@ -436,14 +453,14 @@ def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), Fs =
     recordings0 = listdir(out_path + "0/")
     n = len(listdir(spectrograms + "0/"))
     for i, file in enumerate(recordings0[n:]):
-        sample = getData(out_path + "0/" + file)
+        sample, Fs = getData(out_path + "0/" + file)
 #        createMelSpectrogram(sample, spectrograms + "0/" + file)
         createSpectrogram(sample, spectrograms + "0/" + file, image_shape)
         
     recordings1 = listdir(out_path + "1/")
     n = len(listdir(spectrograms + "1/"))
     for i, file in enumerate(recordings1[n:]):
-        sample = getData(out_path + "1/" + file)
+        sample, Fs = getData(out_path + "1/" + file)
 #        createMelSpectrogram(sample, spectrograms + "1/" + file)
         createSpectrogram(sample, spectrograms + "1/" + file, img_shape = (256, 256))
             
@@ -452,52 +469,50 @@ def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), Fs =
 
 def matchTargetAmplitude(sound, target_dBFS):
     """
+    Adjust volume of a clip
     
     # Arguments
-        classifier: A classifier object loaded with `keras.models.load_model`
-        or generated with `buildClassifier`
-        fname: Name of the audio file to analyze
-
+        sound: An AudioSegment object, see docs for pydub
+        target_dBFS: desired volume in dBs
+        
     # Returns
         None
 
-    # Raises
-        Not handled yet
     """
     change_in_dBFS = target_dBFS - sound.dBFS
     return sound.apply_gain(change_in_dBFS)
 
-def zeroPadClip(path, filename, clip_length, Fs):
+def zeroPadClip(path, filename, clip_length):
     """
+    Use zero padding to a obtain desired clip_length
+    
     # Arguments
-        classifier: A classifier object loaded with `keras.models.load_model`
-        or generated with `buildClassifier`
-        fname: Name of the audio file to analyze
+        path: Path to file location
+        filename: Name of the file to pad zeros
+        clip_length: desired length of clip in seconds
 
     # Returns
         None
 
-    # Raises
-        Not handled yet
     """
 
     # Extract Raw Audio from Wav File
-    signal = getData(path + filename)
+    signal, Fs = getData(path + filename)
     clip = np.concatenate([signal, np.zeros(int(Fs*clip_length - signal.size), np.int16)])  # Zero pad up to multiple os our sample window
     signalToWav(clip, path + filename, Fs)
 
-def trimSamples(in_folder, out_folder, target_dir = None, Fs = 16e3, target_Fs = 16e3):
+def trimSamples(in_folder, out_folder, target_dir = None, target_Fs = 16e3):
     """
+    This function trims an entire folder of clips and saves them somewhere else
     # Arguments
-        classifier: A classifier object loaded with `keras.models.load_model`
-        or generated with `buildClassifier`
-        fname: Name of the audio file to analyze
+        in_folder: Folder containing raw clips
+        out_folder: Folder that will contain the trimmed clips
+        target_dir: Trim only a specific folder within the in_folder if desired
+        target_Fs: Clips will also be downsamples to this rate
 
     # Returns
         None
 
-    # Raises
-        Not handled yet
     """
     if not path.exists(out_folder):
         makedirs(out_folder)
@@ -511,7 +526,7 @@ def trimSamples(in_folder, out_folder, target_dir = None, Fs = 16e3, target_Fs =
             if not target_dir == None:
                 if tdirs[y] == target_dir:
                     tfilename = in_folder + tdirs[y] + "/" + tfiles[z]
-                    signal = getData(tfilename)
+                    signal, Fs = getData(tfilename)
                     signal = downSample(signal, target_Fs/2, Fs, int(Fs//target_Fs))
                     signal = trim(signal)
                     signalToWav(signal, out_folder + tdirs[y] + "/" + tdirs[y] + str(z) + ".wav", target_Fs)
@@ -519,7 +534,7 @@ def trimSamples(in_folder, out_folder, target_dir = None, Fs = 16e3, target_Fs =
                     break
             else:
                     tfilename = in_folder + tdirs[y] + "/" + tfiles[z]
-                    signal = getData(tfilename)
+                    signal, Fs = getData(tfilename)
                     signal = trim(signal)
                     signal = downSample(signal, target_Fs/2, Fs, int(Fs//target_Fs))
                     signalToWav(signal, out_folder + tdirs[y] + "/" + tdirs[y] + str(z) + ".wav", target_Fs)
@@ -536,8 +551,6 @@ def generateClips(dataset_size, in_path, out_path, clip_words, clip_length, Fs):
     # Returns
         None
 
-    # Raises
-        Not handled yet
     """
     words = listdir(in_path)
     dataset_split = 0.5
@@ -646,16 +659,15 @@ def createSpectrogram(data, fname, img_shape):
 
 def createMelSpectrogram(data, fname):
     """
+    Creates a spectrogram using the MFCC's
+    
     # Arguments
-        classifier: A classifier object loaded with `keras.models.load_model`
-        or generated with `buildClassifier`
-        fname: Name of the audio file to analyze
-
+        data: A 1-D array containing sampled audio data
+        fname: Name of the image file to be saved
+        
     # Returns
         None
 
-    # Raises
-        Not handled yet
     """   
     data = data/1.0
     # Key parameters of the spectrogram
@@ -852,6 +864,7 @@ def detectFillers(classifier, fname, img_shape):
         classifier: A classifier object loaded with `keras.models.load_model`
         or generated with `buildClassifier`
         fname: Name of the audio file to analyze
+        img_shape: A tuple containing the image size, (img_height, img_width)
 
     # Returns
         None
@@ -1011,8 +1024,7 @@ def absoluteThresold(x, freq_range = (40, 300), threshold = 0.1, Fs = 16e3):
         taus: A 1-D numpy array containing the candidate period estimates for each sample.\n
         cum_diff_mat: A 2-D numpy array, see documentaion for `cumMeanNormDiffEq`.
     
-    #Raises
-        Not handed yet.
+
     """
     tau_min = int(Fs)//freq_range[1]
     tau_max = int(Fs)//freq_range[0]
@@ -1051,8 +1063,7 @@ def parabolicInterpolation(cum_diff_matrix, taus, freq_range, Fs):
         local_min_abscissae: A 1-D numpy array containing the interpolated period estimates
         for each sample.
     
-    #Raises
-        Not handed yet.
+
     """
     abscissae = np.zeros((len(taus)-2, 3), np.float32)
     ordinates = np.zeros(abscissae.shape, np.float32)
@@ -1080,14 +1091,13 @@ def parabolicInterpolation(cum_diff_matrix, taus, freq_range, Fs):
 
 def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 0.1, target_Fs = 8e3, Fc = 1e3):
     """
-    Putting it all together, this function is my implementation the the YIN pitch detection algorithm. /n
+    Putting it all together, this function is my implementation the the YIN pitch detection algorithm. 
     
     #Arguments
-        fname: The name of a WAV file to be analyzed. \n
-        freq-range: An integer tuple containing the search range ex. (min_freq, max_freq)\n
-        threshold: A float specifying the threshold for step 4\n
-        timestep: Tracking period in milliseconds. \n
-        Fs: Sampling rate of the signal. \n
+        fname: The name of a WAV file to be analyzed.
+        freq-range: An integer tuple containing the search range ex. (min_freq, max_freq)
+        threshold: A float specifying the threshold for step 4
+        timestep: Tracking period in milliseconds.
         target_Fs: Target sampling rate after downsampling. Use Fs for no downsampling. Note that the original sampling rate must
         be a multiple of the target rate. For example, this cannot downsample 44.1k to 16k.
         Fc: Cutoff frequency of the lowpass filter used in downsampling the signal. Must be less than target_Fs/2.
@@ -1141,6 +1151,17 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
     return f
 
 def volumeAnalysis(fname, clip_length = 500):
+    """
+    Examine the change in volume throughout the audio clip
+    
+    #Arguments
+        fname: String, name of the audio file to analyze
+        clip_length: Integer indicating the length of the moving window in milliseconds
+    
+    #Returns
+        clip_powersdB: A 1-D array containing the power of each clip with respect to the whole signal in decibels
+        
+    """
     signal, Fs = getData(fname)
     W = int(Fs*clip_length/1000)
     signal = np.asarray(trim(signal, threshold = 1000), np.float32)
