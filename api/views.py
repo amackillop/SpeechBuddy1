@@ -23,9 +23,10 @@ import numpy as np
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
-from api.capstoneModules.YIN_Algorithm import pitchTrackingYIN
-from api.capstoneModules.audioFunctions import convertToFLAC, convertToMono
-from api.capstoneModules.fillerWordDetection import detectFillers
+from api.capstoneModules import capstoneFunctions as cf
+#from api.capstoneModules.YIN_Algorithm import pitchTrackingYIN
+#from api.capstoneModules.audioFunctions import convertToFLAC, convertToMono
+#from api.capstoneModules.fillerWordDetection import detectFillers
 
 from os import listdir, remove, path
 from django.conf import settings
@@ -76,8 +77,8 @@ def googleCall(request):
         path = default_storage.save(settings.MEDIA_ROOT + "/output.wav", ContentFile(dataDict.read()))
         
         # Manipulate original audio file
-        convertToMono(settings.MEDIA_ROOT + "/output.wav", settings.MEDIA_ROOT + "/output_mono.wav", 48e3)
-        convertToFLAC(settings.MEDIA_ROOT + "/output_mono.wav", settings.MEDIA_ROOT + "/output_mono.flac")
+        cf.convertToMono(settings.MEDIA_ROOT + "/output.wav", settings.MEDIA_ROOT + "/output_mono.wav", 48e3)
+        cf.convertToFLAC(settings.MEDIA_ROOT + "/output_mono.wav", settings.MEDIA_ROOT + "/output_mono.flac")
         
         # Delete original file
         if default_storage.exists(path):
@@ -107,12 +108,12 @@ def googleCall(request):
             
         
         # Pitch Tracking
-        f0 = pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", freq_range = (40, 300), threshold = 0.1, timestep = 0.25, Fs = 48e3, Fc = 1e3)
+        f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", freq_range = (40, 300), threshold = 0.1, timestep = 0.25, Fs = 48e3, Fc = 1e3)
         
         # Filler wod detection
 #        global graph
        # with settings.GRAPH.as_default():
-        filler_count = 0#str(detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav", Fs = 48e3))
+        filler_count = 0#str(cf.detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav", Fs = 48e3))
 #            clear_session()
         
 #        #Get rid of files
