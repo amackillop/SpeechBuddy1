@@ -145,18 +145,19 @@ def mostCommon(strData):
         stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','I','i','for', 'we','as']
         tokenizer = nltk.RegexpTokenizer(r"\w+[']+\w+|\w+")
         tok = tokenizer.tokenize(strData)
-        # print(tok)
+        #print(tok)
+        
         filtered_tok = []
         index = 0
         for w in tok:
                 if w.find("'") > -1:
                         if contractions_dict.get(w) is None:
-                                print(w)
+                                #print(w)
                                 w = w[:-2]
-                                print(w)
+                                #print(w)
                         # print(w)
                 if w in indexArray:
-                        print(w)
+                        #print(w)
                         indexArray[w] = indexArray[w] + (index,)
                 else:
                         indexArray[w] = (index,)
@@ -165,18 +166,18 @@ def mostCommon(strData):
                         filtered_tok.append(lemmatiser.lemmatize(w, pos="v"))
 
                         # print(lemmatiser.lemmatize(w,pos="v"))
-        print(indexArray)
+        #print(indexArray)
         indexArray = json.dumps(indexArray)
         freq = nltk.FreqDist(filtered_tok)
-        print(freq.most_common(16).__len__())
+        #print(freq.most_common(16).__len__())
         listSyn = {}
         for w in freq.most_common(16):
                 w = w[0]
                 # w = str(w)
                 # w = w[2:w.find(",") - 1]
                 listSyn[w] = synCreate(w)
-                print(w)
-                print(synCreate(w))
+                #print(w)
+                #print(synCreate(w))
         listSyn = json.dumps(listSyn)
         corpus = [indexArray, freq.most_common(16), tok, listSyn]
         return corpus
