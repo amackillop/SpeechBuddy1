@@ -256,14 +256,16 @@ def getData(fname):
 
     # Returns
         data: A 1-D int16 numpy array containing the information
+        Fs: The sampling rate of the file
 
     """
      #Extract Raw Audio from Wav File
     sound_file = wave.open(fname, 'r')
+    Fs = sound_file.getframerate()
     data = sound_file.readframes(-1)
     data = np.frombuffer(data, np.int16)
     sound_file.close()
-    return data
+    return data, Fs
 
 def convertToWav(fname, new_fname, Fs = 16000):
     """
@@ -843,7 +845,7 @@ PATH = "C:/Users/Austin/Desktop/School/Capstone/"
 IMG_HEIGHT = 256
 IMG_WIDTH = 512
     # Generate the image data to be fed into the network from the spectrograms.
-def detectFillers(classifier, fname, Fs, img_shape):
+def detectFillers(classifier, fname, img_shape):
     """Detect filler words in an audio file with a conv-net classifier object.
 
     # Arguments
@@ -864,7 +866,7 @@ def detectFillers(classifier, fname, Fs, img_shape):
     for file in listdir(PATH + outFolder):
         remove(PATH + "live/Images/" + file)
         
-    signal = getData(fname)
+    signal, Fs = getData(fname)
     samples = splitAudio(signal, sample_length, Fs)
     
     for i in range(len(samples)):
@@ -1076,7 +1078,7 @@ def parabolicInterpolation(cum_diff_matrix, taus, freq_range, Fs):
         
     return local_min_abscissae
 
-def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 0.1, Fs = 48e3, target_Fs = 8e3, Fc = 1e3):
+def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 0.1, target_Fs = 8e3, Fc = 1e3):
     """
     Putting it all together, this function is my implementation the the YIN pitch detection algorithm. /n
     
@@ -1096,7 +1098,7 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
         ValueError: If a silent audio file is used.
     """
     # Extract signal from audio file
-    signal = getData(fname)
+    signal, Fs = getData(fname)
 
     # Downsample signal if desired to improve speed
     step = int(Fs//target_Fs)
@@ -1137,3 +1139,21 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
     for i in range(int(signal.size/W-2)):
         f[i] = Fs//periods[i]
     return f
+
+def volumeAnalysis(fname, clip_length = 500):
+    signal, Fs = getData(fname)
+    W = int(Fs*clip_length/1000)
+    signal = np.asarray(trim(signal, threshold = 1000), np.float32)
+    signal = signal - np.mean(signal)
+    signal_powerdB = 10*np.log10(np.dot(signal, signal)/signal.size)
+    clip_powersdB = np.zeros((signal.size//W), np.float32)
+    for i in range(clip_powersdB.size):
+        t = i*W
+        clip = signal[t:t+W] - np.mean(signal[t:t+W])
+        clip_power = abs(np.dot(clip, clip)/W)
+        if clip_power%100:
+            clip_powersdB[i] = signal_powerdB - 10*np.log10(clip_power)
+        else:
+            clip_powersdB[i] = -100               
+    return clip_powersdB
+
