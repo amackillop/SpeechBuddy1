@@ -1126,6 +1126,9 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
     # If we are going to track frequency every 25ms, then we don't need the information in between
     # these points outside of the integration window.
     sampled_signal = np.zeros(((signal.size//int(Fs*timestep)),2*W), np.float32)
+    if sampled_signal.shape[0] < 5:
+        raise RuntimeError("Speech is too short or possibly too quiet. Try again and make sure that the original file has been deleted")
+        
     for i in range((signal.size//int(Fs*timestep))):
         t = int(i*Fs*timestep)
         sampled_signal[i,:] = signal[t:int(t+2*W)]/max(signal[t:int(t+2*W)])
@@ -1177,4 +1180,3 @@ def volumeAnalysis(fname, clip_length = 500):
         else:
             clip_powersdB[i] = -100               
     return clip_powersdB
-
