@@ -433,12 +433,12 @@ def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), add_
         files = listdir(rand_sub)
         rand_file = rand_sub + listdir(rand_sub)[np.random.randint(1,len(files)-1)]
         new_file = out_path + "sample" + str(i) + ".wav"
-        convertToWav(rand_file, new_file, Fs = Fs)
+        convertToWav(rand_file, new_file)
         data, Fs = getData(new_file)
         data = downSample(data, int(Fs//2)-1, Fs, 16000//Fs)
         samples = splitAudio(data, 2, Fs)
         for i, sample in enumerate(samples):
-            samples[i] = spliceRandWord(sample, "stores_records/", 2, Fs)
+            samples[i] = spliceRandWord(sample, "stores_records/", 2)
             
         n = len(listdir(out_path + "1/"))
         for j, sample in enumerate(samples):
@@ -1029,11 +1029,12 @@ def absoluteThresold(x, freq_range = (40, 300), threshold = 0.1, Fs = 16e3):
     tau_min = int(Fs)//freq_range[1]
     tau_max = int(Fs)//freq_range[0]-1
 
-    taus = np.zeros(x.size//tau_max, np.int32)
+
     tau_star = 0
     minimum = 1e9
-    cum_diff_mat = cumMeanNormDiffEq(x, tau_max)
-    for i in range(x.size//tau_max):
+    cum_diff_mat = cumMeanNormDiffEq(x, tau_max+1)
+    taus = np.zeros(cum_diff_mat.shape[0], np.int32)
+    for i in range(taus.size):
         cum_diff_eq = cum_diff_mat[i,:]
         for tau in range(tau_min, tau_max):
             if cum_diff_eq[tau] < threshold:
@@ -1046,7 +1047,7 @@ def absoluteThresold(x, freq_range = (40, 300), threshold = 0.1, Fs = 16e3):
             taus[i] = tau_star
     return taus, cum_diff_mat
     
-def parabolicInterpolation(cum_diff_matrix, taus, freq_range, Fs):
+def parabolicInterpolation(diff_matrix, taus, freq_range, Fs):
     """
     Parabolic Interpolation, Step 4\n
     
@@ -1069,7 +1070,7 @@ def parabolicInterpolation(cum_diff_matrix, taus, freq_range, Fs):
     ordinates = np.zeros(abscissae.shape, np.float32)
     #if taus == []:
     for i, tau in enumerate(taus[1:-1]):
-        ordinates[i-1] = cum_diff_matrix[i, tau-1:tau+2]
+        ordinates[i-1] = diff_matrix[i, tau-1:tau+2]
         abscissae[i-1] = np.asarray([tau-1, tau, tau+1], np.float32)
         
     period_min = int(Fs)//freq_range[1]
