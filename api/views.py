@@ -85,7 +85,6 @@ def googleCall(request):
             default_storage.delete(path)
         res = googleApiCall(settings.MEDIA_ROOT + "/output_mono.flac")
         
-#        fundementals = f0.tolist
         if not res == "Empty Response":
             transcript = str(res[0])
             confidence = float(res[1])

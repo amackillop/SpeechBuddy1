@@ -1027,7 +1027,7 @@ def absoluteThresold(x, freq_range = (40, 300), threshold = 0.1, Fs = 16e3):
 
     """
     tau_min = int(Fs)//freq_range[1]
-    tau_max = int(Fs)//freq_range[0]
+    tau_max = int(Fs)//freq_range[0]-1
 
     taus = np.zeros(x.size//tau_max, np.int32)
     tau_star = 0
@@ -1180,3 +1180,5 @@ def volumeAnalysis(fname, clip_length = 500):
         else:
             clip_powersdB[i] = -100               
     return clip_powersdB
+
+#f1 = pitchTrackingYIN("../../audio/output_mono.wav", freq_range = (500, 1000), threshold = 0.1, timestep = 0.25, Fc = 1e3)
