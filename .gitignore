@@ -1,5 +1,6 @@
 __pycache__/*
 *.pyc
 *.cpython-35.pyc
-output_mono.flac
-output_mono.wav
+audio/output.wav
+audio/output_mono.flac
+audio/output_mono.flac
