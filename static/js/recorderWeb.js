@@ -135,6 +135,7 @@
 								googleResponse(data);
 								nltkCorpus(data);
 								pitchResponse(data);
+								volumeResponse(data);
 								fillerCountResponse(data);
 								//console.log(data);
                             }

@@ -15,7 +15,18 @@ function pitchResponse(data) {
 				chartData.addColumn('number', 'f1');
 
 			  chartData.addRows(data.pitch);
-				var options = {'title':'Fundemental Frequency', curveType: 'function'}
+				var options = {'title':'Fundemental Frequency',
+												curveType: 'function',
+												series: {
+													0: {targetAxisIndex: 0},
+													1: {targetAxisIndex: 1}
+												},
+												vAxes: {
+													// Adds titles to each axis.
+													0: {title: 'f0'},
+													1: {title: 'f1'}
+												}
+											};
 				
 
 			  var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
