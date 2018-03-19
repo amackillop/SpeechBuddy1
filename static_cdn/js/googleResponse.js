@@ -1,9 +1,9 @@
 function googleResponse(data) {
-	console.log("google ran")
+    console.log("Google ran")
+    
     transcript = document.getElementById("transcript");
     transcript.style.display = "block";
     content = document.getElementById("string");
-    //content.innerHTML = "\"" + (data.transcript).substr(2,data.transcript.length-3) + "\"";
     content.innerHTML=data.transcript;
     confidence = document.getElementById("confidence");
 
