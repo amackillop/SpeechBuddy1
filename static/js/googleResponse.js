@@ -5,6 +5,10 @@ function googleResponse(data) {
     content = document.getElementById("string");
     //content.innerHTML = "\"" + (data.transcript).substr(2,data.transcript.length-3) + "\"";
     content.innerHTML=data.transcript;
+
+    
+    console.log("hello")
+
     confidence = document.getElementById("confidence");
 
     confidence.innerHTML = "Confidence.    " + data.confidence;
