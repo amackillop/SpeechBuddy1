@@ -1,5 +1,7 @@
-@media screen and (max-width: 768px) { 
-    body { padding-top: 0px; }
+@media screen and (max-width: inherit) { 
+    body { 
+      padding-top: 0px; 
+    }
 }
 
 #myNavbar{ /* Style navbar */
@@ -52,11 +54,78 @@
   color: rgba(255,255,255,1);
 }
 
+/* RECORD PAGE */
+
 .recordPage {
-	padding-top: 60px;
-  	text-align: center;
-  }
+	padding-top: 10px;
+    text-align: center;
+    width: 50%;
+    float: right;
+}
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+}
+
+.left {
+  left: 0;
+  background-color: #111;
   
+}
+
+.right {
+  right: 0;
+  background-color: white;
+  position: absolute;
+}
+
+.info {
+  margin-top: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.btn{
+  margin: 5%;
+}
+
+.centered {
+  
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#recordingDiv {
+   text-align: center;
+}
+
+.record-controls{
+  width: 100%;
+}
+
+#welcome {
+  padding-top: 10px;
+    text-align: center;
+    width: 100%;
+    float: right;
+}
+
+/* resizable webcam */
+#videoElement {
+  text-align: center;
+  width: 100%;
+}
+#recordingDiv {
+  width: 100%;
+}
+
 /*Fundemental Stuff Here*/
 #chart_div {
 	text-align: center;
@@ -64,8 +133,8 @@
 	width: 80%;
 	display: block;
 	margin: 0 auto;
-	
 }
+
 /* Volume stuff */
 #chart_div_volume {
 	text-align: center;
@@ -73,5 +142,5 @@
 	width: 80%;
 	display: block;
 	margin: 0 auto;
-	
 }
+

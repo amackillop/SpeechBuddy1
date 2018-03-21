@@ -17,6 +17,10 @@
 
 					// Store the instance of AudioContext globally
 					audio_context = new AudioContext;
+
+					//hide "submit button" for now
+					var submit_btn = document.getElementById("submit-btn");
+					submit_btn.style.display = "none";
 					console.log('Audio context is ready !');
 					console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
 				} catch (e) {
@@ -69,15 +73,12 @@
 				// Stop the getUserMedia Audio Stream !
 				audio_stream.getAudioTracks()[0].stop();
 				console.log(audio_stream.getAudioTracks());
-
-
-
-
-
-
-				// Disable Stop button and enable Record button !
+				var submit_btn = document.getElementById("submit-btn");
+				submit_btn.style.display = "inline";
+				submit_btn.disabled = "false";
 				document.getElementById("start-btn").disabled = false;
 				document.getElementById("stop-btn").disabled = true;
+				
 
 				// Use the Recorder Library to export the recorder Audio as a .wav file
 				// The callback providen in the stop recording method receives the blob
@@ -91,18 +92,9 @@
 					recorder && recorder.exportWAV(function (blob) {
 						callback(blob);
 						console.log(blob);
-					    var submit = document.getElementById("submit");
-					    if(!submit.hasChildNodes()){
-					        var p = document.createElement('button');
-				            p.setAttribute("type", "button");
-                            p.setAttribute("class", "btn btn-success");
-                            p.setAttribute("id", "submitAPI");
-                            var t = document.createTextNode("Submit");
-                            p.appendChild(t);
-                            submit.appendChild(p);
-					    }
+						 
 
-				     $("#submitAPI").click( function() {
+				     $("#submit-btn").click( function() {
                         var csrftoken = getCookie('csrftoken');
                         console.log(csrftoken);
                         // console.log(typeof($('#string').html()));
@@ -122,8 +114,9 @@
 								}
 								}
 						});
-
-                                // Ajax call here
+						//while processing the api call, disable the submit button
+						//document.getElementById("submit-btn").disabled = "true";
+                    	// Ajax call here
                         $.ajax({
                             url:"/api/google/",
                             data: fd,
@@ -141,8 +134,6 @@
                             }
                         });
                      })
-
-
 						// create WAV download link using audio data blob
 						// createDownloadLink();
 
@@ -180,6 +171,7 @@
 						console.log(url);
 						var li = document.createElement('li');
 						var au = document.createElement('audio');
+						au.setAttribute("class", "record-controls")
 						var hf = document.createElement('a');
 
 						au.controls = true;
@@ -192,19 +184,20 @@
 						hf.download = 'output.wav';
 						hf.setAttribute("id", "audioFileUpload");
 						hf.innerHTML = hf.download;
-						li.appendChild(au);
-						li.appendChild(hf);
+						recording_div = document.getElementById("recordingDiv");
+						recording_div.appendChild(au);
+						//li.appendChild(hf);
 						var file = audio_stream.getAudioTracks()[0];
 				        //fileURL = AudioBLOB.createObjectURL(file);
 				        //console.log(fileURL);
 
-				        var rlist = document.getElementById("recordingslist");
-				        if(rlist.hasChildNodes()){
-				            rlist.removeChild(rlist.firstChild);
-				        }
-						recordingslist.appendChild(li);
-						 var x = document.getElementById("recordingtitle");
-						 x.style.display = "block";
+				        // var rlist = document.getElementById("recordingslist");
+				        // if(rlist.hasChildNodes()){
+				        //     rlist.removeChild(rlist.firstChild);
+				        // }
+						// recordingslist.appendChild(li);
+						//  var x = document.getElementById("recordingtitle");
+						//  x.style.display = "block";
 					}, _AudioFormat);
 				}, false);
 			};

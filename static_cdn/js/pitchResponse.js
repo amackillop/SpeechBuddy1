@@ -1,7 +1,7 @@
 function pitchResponse(data) {
 	
 /*     pitch = document.getElementById("transcript"); */
-	console.log("Pitch ran");
+	console.log("pitch ran-");
 /*     transcript.style.display = "block"; */
 	
 	$( document ).ready(function() {
