@@ -73,12 +73,12 @@
 				// Stop the getUserMedia Audio Stream !
 				audio_stream.getAudioTracks()[0].stop();
 				console.log(audio_stream.getAudioTracks());
-				var submit_btn = document.getElementById("submit-btn");
-				submit_btn.style.display = "inline";
-				submit_btn.disabled = "false";
+
+				// Disable Stop button and enable Record button !
 				document.getElementById("start-btn").disabled = false;
 				document.getElementById("stop-btn").disabled = true;
-				
+				var submit_btn = document.getElementById("submit-btn");
+				submit_btn.style.display = "inline";
 
 				// Use the Recorder Library to export the recorder Audio as a .wav file
 				// The callback providen in the stop recording method receives the blob
@@ -140,7 +140,9 @@
 						// Clear the Recorder to start again !
 						recorder.clear();
 					}, (AudioFormat || "audio/wav"));
+					
 				}
+				//submit_btn.disabled = "false";
 			}
 
 			// Initialize everything once the window loads

@@ -52,25 +52,32 @@
         <div id="recordingDiv">
             <button id="start-btn" class="btn btn-primary btn-lg">Record</button>
             <button id="stop-btn" class="btn btn-danger btn-lg" disabled>Stop</button>
-            <button id="submit-btn" class="btn btn-success btn-lg">Submit</button>
+            <button id="submit-btn" class="btn btn-success btn-lg" onclick="loadingTranscript()">Submit</button>
             <h4 id="recordingtitle" style="display:none;">Recordings: </h4>
         </div>
     </div>
 
-    <div class="split right">
+    <div class="split right" id = "right-split">
         <div class="info">
             <div id= "string">
                 <h1>Welcome to SpeechBuddy.</h1>
                 <h2 id="header-text">Click <span style="color:cornflowerblue"><b>Record</b></span> to begin recording a speech.</h2>
                 <h2></h2>
                 <h2></h2>
-                <h4 id = "transcript-display">SpeechBuddy uses Machine Learning and Cloud APIs to analyze your speech and facial expressions.
-                    We then calculate multiple factors like volume, tone, speed and pronounciation, and display the
-                    results to you in an easily understood fashion. Goodluck!
-                </h4>
-                <h2 id="confidence" style="display:none;align-content:left;"></h2>
+                <div id= "transcript-area">
+                    <div class = "loader" id = "myloader" hidden="true"></div>
+                    <h4 id = "transcript-display">SpeechBuddy uses Machine Learning and Cloud APIs to analyze your speech and facial expressions.
+                        We then calculate multiple factors like volume, tone, speed and pronounciation, and display the
+                        results to you in an easily understood fashion. Goodluck!
+                    </h4>
+                </div>
+                
+                <h3 id="confidence" style="display:none;align-content:right;"></h3>
             </div>
         </div>
+        <!-- <div class="wrapper">
+            <img id="slide" src="http://lorempixel.com/output/cats-q-c-100-100-4.jpg" />
+        </div> -->
     </div>
         
     <!-- The Modal -->
