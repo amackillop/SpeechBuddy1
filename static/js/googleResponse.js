@@ -5,31 +5,29 @@ function googleResponse(data) {
     $("#myloader").hide();
     $("#text-wrapper").show();
     $("#right-split").animate({width:'100%'}, 1500);
-    $("#string").animate({width:'50%'}, 1000);
-
+    $("#string").animate({width:'45%'}, 1000);
    
     $("#title").text("Here's what you said:");
     $("#title").fadeIn( "fast" );
 
     $("#transcript-display").text(data.transcript);
     $("#transcript-display").fadeIn( "slow" );
-
-    
+   
     $('#right-split').prepend('<div class = "split right" id = "data-view"></div>');
     var vol_n_pitch = `
-        <div id = "data-wrapper">
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span class="close">&times;</span>
-                        <h2 id="mhead">Modal Header</h2>
-                    </div>
-                    <div class="modal-body" id="mbody"></div>
-                    <div class="modal-footer">
-                        <h3>nltk lib</h3>
-                    </div>
+         <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2 id="mhead">Modal Header</h2>
+                </div>
+                <div class="modal-body" id="mbody"></div>
+                <div class="modal-footer">
+                    <h3>nltk lib</h3>
                 </div>
             </div>
+        </div>
+        <div id = "data-wrapper">
             <div id="fundementals">
                 <h2></h2>
                 <div id="chart_div" /div>
@@ -45,7 +43,7 @@ function googleResponse(data) {
                     </div>
                 </div>
             </div>
-]       </div>
+        </div>
     `;
 
     $("#data-view").append(vol_n_pitch);

@@ -91,10 +91,15 @@
   height: 100%; 
 }
 
+#data-view{
+  border:2px;
+  border-style:solid;
+  border-color:black;
+}
+
 #data-wrapper{
-  background-color: lightgray;
+  margin-top: 20%;
   margin-left: 10%;
-  padding-left: 10%;
   width: 100%;
 }
 
@@ -209,14 +214,14 @@
 /*Fundemental Stuff Here*/
 #chart_div {
 	text-align: center;
-	width: 100%;
-	display: block;
+  width: 150%;
+  height: 500px;
 }
 
 /* Volume stuff */
 #chart_div_volume {
 	text-align: center;
-	width: 100%;
-	display: block;
+  width: 150%;
+  height: 500px;
 }
 
