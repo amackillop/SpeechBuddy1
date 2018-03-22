@@ -45,8 +45,8 @@
             </div>
         </div>
     </nav>
-    
-    <div class="split left" id = "left-split">
+
+    <div class="split left" id="left-split">
         <video autoplay="true" id="videoElement"></video>
         <div id="recordingslist"></div>
         <div id="recordingDiv">
@@ -57,27 +57,30 @@
         </div>
     </div>
 
-    <div class="split right" id = "right-split">
-        <div class="info" id = "text-wrapper">
-            <h1 id = "title">Welcome to SpeechBuddy.</h1>
-            <h2 id = "header-text">Click <span style="color:cornflowerblue"><b>Record</b></span> to begin recording a speech.</h2>
-            <div id= "string">
+    <div class="split right" id="right-split">
+        <div class="info" id="text-wrapper">
+            <h1 id="title">Welcome to SpeechBuddy.</h1>
+            <h2 id="header-text">Click
+                <span style="color:cornflowerblue">
+                    <b>Record</b>
+                </span> to begin recording a speech.</h2>
+            <div id="string">
                 <h2></h2>
                 <h2></h2>
-                <div id= "transcript-area">
-                    <h4 id = "transcript-display">SpeechBuddy uses Machine Learning and Cloud APIs to analyze your speech and facial expressions.
-                        We then calculate multiple factors like volume, tone, speed and pronounciation, and display the
-                        results to you in an easily understood fashion. Goodluck!
+                <div id="transcript-area">
+                    <h4 id="transcript-display">SpeechBuddy uses Machine Learning and Cloud APIs to analyze your speech and facial expressions. We then
+                        calculate multiple factors like volume, tone, speed and pronounciation, and display the results to
+                        you in an easily understood fashion. Goodluck!
                     </h4>
-                    
-                    
+
+
                 </div>
-                
+
                 <h3 id="confidence" style="display:none;align-content:right;"></h3>
             </div>
         </div>
-      
-        <div id = "data-div" hidden = "true">
+
+        <div id="data-div" hidden="true">
             <div id="myModal" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -98,48 +101,48 @@
                     <h2></h2>
                     <div id="chart_div_volume" /div>
                     </div>
-        
-                <div id="filler count">
-                    <div id="count">
-        
+
+                    <div id="filler count">
+                        <div id="count">
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>   
-        
-        
-        
-    </div>
-        
 
 
-    <script src="../static/js/recorderWeb.js"></script>
-    <script src="../static/js/googleResponse.js"></script>
-    <script src="../static/js/createCorpus.js"></script>
-    <script src="../static/js/createSyns.js"></script>
-    <script src="../static/js/pitchResponse.js"></script>
-    <script src="../static/js/volumeResponse.js"></script>
-    <script src="../static/js/fillerCountResponse.js"></script>
 
-    <!-- Include the recorder.js library from a local copy -->
-    <script src="../static/js/recorder.js"></script>
-    <script>
-        var video = document.querySelector("#videoElement");
+        </div>
 
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
 
-        if (navigator.getUserMedia) {
-            navigator.getUserMedia({ video: true }, handleVideo, videoError);
-        }
 
-        function handleVideo(stream) {
-            video.src = window.URL.createObjectURL(stream);
-        }
+        <script src="../static/js/recorderWeb.js"></script>
+        <script src="../static/js/googleResponse.js"></script>
+        <script src="../static/js/createCorpus.js"></script>
+        <script src="../static/js/createSyns.js"></script>
+        <script src="../static/js/pitchResponse.js"></script>
+        <script src="../static/js/volumeResponse.js"></script>
+        <script src="../static/js/fillerCountResponse.js"></script>
 
-        function videoError(e) {
-            // do something
-        }
-    </script>
+        <!-- Include the recorder.js library from a local copy -->
+        <script src="../static/js/recorder.js"></script>
+        <script>
+            var video = document.querySelector("#videoElement");
+
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+            if (navigator.getUserMedia) {
+                navigator.getUserMedia({ video: true }, handleVideo, videoError);
+            }
+
+            function handleVideo(stream) {
+                video.src = window.URL.createObjectURL(stream);
+            }
+
+            function videoError(e) {
+                // do something
+            }
+        </script>
 </body>
 
 </html>
