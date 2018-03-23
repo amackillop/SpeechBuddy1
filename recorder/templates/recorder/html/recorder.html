@@ -42,7 +42,9 @@
                     <li id="portBtn" class="nav-item active">
                         <a href="/recorder" style="width: 80px">Record</a>
                     </li>
-                    <li class="g-signin2" data-onsuccess="onSignIn()" style="margin:8px"></li>
+                    <li id="sign-in">
+                        <div id="ggl-wrapper" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" style="margin:8px"></div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -126,8 +128,7 @@
         <script src="../static/js/pitchResponse.js"></script>
         <script src="../static/js/volumeResponse.js"></script>
         <script src="../static/js/fillerCountResponse.js"></script>
-
-        <!-- Include the recorder.js library from a local copy -->
+        <script src="../static/js/googleUser.js"></script>
         <script src="../static/js/recorder.js"></script>
         <script>
             var video = document.querySelector("#videoElement");
