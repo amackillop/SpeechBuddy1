@@ -5,6 +5,10 @@
     <title>Speech Buddy</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- GOOGLE SIGN IN CLIENT ID-->
+    <meta name="google-signin-client_id" content="973160032383-s3mnujl40ppck27m530psi208bv7nso5.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- GOOGLE SIGN IN CLIENT ID-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -38,9 +42,7 @@
                     <li id="portBtn" class="nav-item active">
                         <a href="/recorder" style="width: 80px">Record</a>
                     </li>
-                    <li id="conBtn" class="nav-item">
-                        <a href="/team" style="width: 80px">Team</a>
-                    </li>
+                    <li class="g-signin2" data-onsuccess="onSignIn()" style="margin:8px"></li>
                 </ul>
             </div>
         </div>
@@ -59,6 +61,7 @@
 
     <div class="split right" id="right-split">
         <div class="info" id="text-wrapper">
+            <div id="name"></div>
             <h1 id="title">Welcome to SpeechBuddy.</h1>
             <h2 id="header-text">Click
                 <span style="color:cornflowerblue">

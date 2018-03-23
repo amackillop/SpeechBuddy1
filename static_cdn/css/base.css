@@ -80,6 +80,7 @@
 
 .right {
   right: 0;
+  padding-right: 10%;
   background-color: white;
   position: absolute;
 }
@@ -98,8 +99,9 @@
 }
 
 #data-wrapper{
-  margin-top: 20%;
-  margin-left: 10%;
+  padding-top:10%;
+  padding-right: 10%;
+  padding-left: 10%;
   width: 100%;
 }
 

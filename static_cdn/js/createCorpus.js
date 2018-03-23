@@ -38,7 +38,6 @@ function hover(id, data) {
 
 function nltkCorpus(data) {
     str = data.corpus;
-    //console.log(data)
     var res = str.split("), (");
     for (i = 0; i < res.length; i++) {
         res[i] = res[i].replace("(", "");
@@ -47,7 +46,6 @@ function nltkCorpus(data) {
         res[i] = res[i].replace("]", "");
         res[i] = res[i].replace(",", ":           ");
     }
-    //console.log(res);
 
     var x = document.createElement("table");
     x.setAttribute("id", "myTable");
@@ -63,7 +61,6 @@ function nltkCorpus(data) {
             z = document.createElement("TD");
             z.setAttribute("id", "child" + index);
             z.setAttribute("class", "result");
-            //z.setAttribute("onmouseover", 'hover("child'+index+'", data)');
             var t = document.createTextNode(res[index]);
             index = index + 1;
             z.appendChild(t);
@@ -71,9 +68,11 @@ function nltkCorpus(data) {
         }
         tb.appendChild(y);
     }
-    x.appendChild(tb)
-    document.body.appendChild(x);
 
+    x.appendChild(tb)
+
+    $("#data-wrapper").prepend(x);
+    
     $(document).on(
         {
             mouseenter: function () {
@@ -90,11 +89,9 @@ function nltkCorpus(data) {
                     //console.log(word)
                     if (word == data.tok[i]) {
                         tempString = tempString + " <mark>" + data.tok[i] + "</mark> ";
-
                     }
                     else {
                         tempString = tempString + " " + data.tok[i];
-
                     }
                 }
                 $('#string').html(tempString);
@@ -185,10 +182,5 @@ function nltkCorpus(data) {
             }
 
         }, ".result");
-
-
-
-
-
 
 }
