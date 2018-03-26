@@ -108,8 +108,12 @@ function name_of_your_js_file(data) {
 11. If you go back to the javascript file that you made in step 2, you can now access this information by using data.property_name in the js function.
 
 
-## OAuth Authorization for Google Drive Feature
+## Required OAuth Authorization for Google Drive Feature 
 Step 1: Go to Google Developer Console
-Step 2: Go to Credentials > create credentials > Oauth Client ID > Create Client ID > Download the .JSON file 
-Step 3: 
+
+Step 2: Go to Credentials > create credentials > Oauth Client ID > Create Client ID ; Look at the linked screenshot while filling in the details >  ![alt text] https://github.com/amackillop/SpeechBuddy1/blob/master/OAuth.PNG > Download the .JSON file in your speech buddy folder
+
+Step 3:Run the Server > Open Incognito > http://localhost:8000/ > login to Google drive using your gmail credentials
+
+
   
