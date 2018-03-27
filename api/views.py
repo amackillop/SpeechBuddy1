@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_protect
 from api.nltkMethod import mostCommon
 from api.nltkMethod import synCreate
 from api.googleMethod import googleApiCall
+from api.sentimentMethod import sentimentCall
 import json
 import cgi
 import numpy as np
@@ -96,6 +97,12 @@ def googleCall(request):
             corpus = str(resData[1])
             tok = resData[2]
             listSyn = str(resData[3])
+            list_of_sentences = res[3]
+            wordsperminute = res[4]
+            sentimentArray = sentimentCall(list_of_sentences)
+            print sentimentArray
+
+
         else:
             transcript = "empty response"
             confidence = 1
@@ -141,6 +148,8 @@ def googleCall(request):
             "listSyn": listSyn,
             "pitch": f,
             "filler_count": filler_count,
-            "volume": V
+            "volume": V,
+            "list_of_sentences" : list_of_sentences,
+            "wordsperminute" : wordsperminute
         })
-    return Response({"message": "Heo, world!"})
+    return Response({"message": "Hello, world!"})

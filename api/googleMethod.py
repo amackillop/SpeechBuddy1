@@ -134,4 +134,4 @@ def formatResponse(response):
         #print(len(alternative.words))
                 # add more calcs to print here for testing...
         print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
-    return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences]
+    return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences,wordsperminute]
