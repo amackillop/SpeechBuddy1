@@ -38,6 +38,7 @@ def googleApiCall(path):
     return response
 
 def formatResponse(response):
+
     stringData="{"
 
     for result in response.results:
@@ -135,3 +136,17 @@ def formatResponse(response):
                 # add more calcs to print here for testing...
         print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
     return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences]
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

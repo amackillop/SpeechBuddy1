@@ -126,6 +126,7 @@
                             success: function(data) {
 								console.log("SUCCESS");
 								googleResponse(data);
+								//googleDriveMethods(data);
 								nltkCorpus(data);
 								pitchResponse(data);
 								volumeResponse(data);
