@@ -5,3 +5,4 @@ audio/output.wav
 audio/output_mono.flac
 audio/output_mono.flac
 static_cdn/*
+.vscode/settings.json
