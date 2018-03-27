@@ -77,12 +77,16 @@
                         calculate multiple factors like volume, tone, speed and pronounciation, and display the results to
                         you in an easily understood fashion. Goodluck!
                     </h4>
-
+                    
 
                 </div>
 
-                <h3 id="confidence" style="display:none;align-content:right;"></h3>
+                <h2 id="confidence" style="display:none;align-content:right;"></h2>
+                <h2 id="list_of_sentences" style="display:none;align-content:left;"></h2>
+                <h2 id="wordsperminute" style="display:none;align-content:left;"></h2>
+                <p id="Empty Transcript"></p> 
             </div>
+
         </div>
 
         <div id="data-div" hidden="true">
@@ -130,6 +134,8 @@
         <script src="../static/js/fillerCountResponse.js"></script>
         <script src="../static/js/googleUser.js"></script>
         <script src="../static/js/recorder.js"></script>
+        <script src="../static/js/SentenceSpeed.js"></script>
+        
         <script>
             var video = document.querySelector("#videoElement");
 

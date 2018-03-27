@@ -52,6 +52,69 @@ function googleResponse(data) {
     confidence.innerHTML = "Confidence: " + data.confidence;
     confidence.style.display = "block";
 
+    
+    list_of_sentences = document.getElementById("list_of_sentences");
+    //list_of_sentences.innerHTML = data.list_of_sentences[0];
+
+    wordsperminute = document.getElementById("wordsperminute")
+    //wordsperminute.innerHTML = data.wordsperminute[0]
+    //console.log(data.wordsperminute.length);
+    console.log(data.list_of_sentences.length);
+
+    var temp1 = document.getElementById("Empty Transcript");
+    for(i = 0; i < data.wordsperminute.length+1 ; i++){
+        if(data.wordsperminute[i]<=120){
+            var temp3 = document.createElement("div"); 
+            temp3.setAttribute("class","too_slow");
+            // temp3.setAttribute("id","sen" + i);
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            // $(temp3).append(node);
+            // $(temp1).append(temp3);
+            temp1.appendChild(temp3);
+        }
+         else if(data.wordsperminute[i] > 120 && data.wordsperminute[i]<= 140){
+            var temp3 = document.createElement("div"); 
+            temp3.setAttribute("class","slow");
+            // temp3.setAttribute("id","sen" + i);
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            // $(temp3).append(node);
+            // $(temp1).append(temp3);
+            temp1.appendChild(temp3);
+
+         }
+        else if(data.wordsperminute[i] > 140 && data.wordsperminute[i] <= 170){
+            var temp3 = document.createElement("div"); 
+            temp3.setAttribute("class","good");
+            // temp3.setAttribute("id","sen" + i);
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            // $(temp3).append(node);
+            // $(temp1).append(temp3);
+            temp1.appendChild(temp3);
+ }
+         else if(data.wordsperminute[i] > 170 && data.wordsperminute[i] <= 190){
+            var temp3 = document.createElement("div"); 
+            temp3.setAttribute("class","fast");
+            // temp3.setAttribute("id","sen" + i);
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            // $(temp3).append(node);
+            // $(temp1).append(temp3);
+            temp1.appendChild(temp3);
+        }
+         else if(data.wordsperminute[i] > 190){
+            var temp3 = document.createElement("div"); 
+            temp3.setAttribute("class","too_fast");
+            // temp3.setAttribute("id","sen" + i);
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            // $(temp3).append(node);
+            // $(temp1).append(temp3);
+            temp1.appendChild(temp3);
+        }
+     }
 }
 
 function loadingTranscript(){
@@ -65,6 +128,46 @@ function loadingTranscript(){
 
     
     //$("#transcript-display").hide();
-    
-
 }
+
+// function SentenceSpeed(data){
+//     //console.log("Testingtesting");
+//     //console.log(string(data.wordsperminute[0]));
+//     for(i = 0; i < data.wordsperminute.length ; i++){
+//         console.log(data.wordsperminute.length);
+//         if(data.wordsperminute[i]<=120){
+//             var temp=data.list_of_sentences[i];
+//             var temp2=document.getElementById("Empty Transcript").textContent;
+//             document.getElementById("Empty Transcript").textContent=temp2 + temp
+//             console.log("Temp is nOOOOOt");
+//         }
+//          else if(data.wordsperminute[i] > 120 && data.wordsperminute[i]<= 140){
+//             var temp=data.list_of_sentences[i];
+//             var temp2=document.getElementById("Empty Transcript").textContent;
+//             document.getElementById("Empty Transcript").textContent=temp2 + temp
+//             console.log("Temp is nOOOOOt2");
+
+//          }
+//         else if(data.wordsperminute[i] > 140 && data.wordsperminute[i] <= 170){
+//             var temp=data.list_of_sentences[i];
+//             var temp2=document.getElementById("Empty Transcript").textContent;
+//             document.getElementById("Empty Transcript").textContent=temp2 + temp
+//             console.log("Temp is nOOOOOt3");
+
+//  }
+//          else if(data.wordsperminute[i] > 170 && data.wordsperminute[i] <= 190){
+//             var temp=data.list_of_sentences[i];
+//             var temp2=document.getElementById("Empty Transcript").textContent;
+//             document.getElementById("Empty Transcript").textContent=temp2 + temp
+//             console.log("Temp is nOOOOOt4");
+
+//         }
+//          else if(data.wordsperminute[i] > 190){
+//             var temp=data.list_of_sentences[i];
+//             var temp2=document.getElementById("Empty Transcript").textContent;
+//             document.getElementById("Empty Transcript").textContent=temp2 + temp
+//             console.log("Temp is nOOOOOt5");
+
+//         }
+
+//      }}

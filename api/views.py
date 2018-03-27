@@ -87,7 +87,7 @@ def googleCall(request):
         
         if not res == "Empty Response":
             transcript = str(res[0])
-            sentences = str (res[3])
+            sentences = str(res[3])
             confidence = float(res[1])
             confidence = round(confidence, 4)*100
             wpm = str(res[2])
@@ -95,15 +95,21 @@ def googleCall(request):
             indexArray = str(resData[0])
             corpus = str(resData[1])
             tok = resData[2]
+            list_of_sentences = res[3]
             listSyn = str(resData[3])
+            wordsperminute = res[4]
+            
         else:
             transcript = "empty response"
+            sentences = "empty response"
             confidence = 1
             wpm = str(0)
             indexArray = [""]
             corpus = ""
             tok = ""
             listSyn = ""
+            list_of_sentences="empty response"
+            wordsperminute="empty response"
             
         
         # Pitch Tracking
@@ -141,6 +147,9 @@ def googleCall(request):
             "listSyn": listSyn,
             "pitch": f,
             "filler_count": filler_count,
-            "volume": V
+            "volume": V,
+            "list_of_sentences" : list_of_sentences,
+            "wordsperminute": wordsperminute
         })
+        ##return Response({"transcript": transcript, "confidence": confidence, "wpm": wpm, "indexArray": indexArray, "corpus": corpus, "tok": tok, "listSyn": listSyn, "pitch": f, "filler_count": filler_count, "list_of_sentences":list_of_sentences,"wordsperminute":wordsperminute})
     return Response({"message": "Hello, world!"})
