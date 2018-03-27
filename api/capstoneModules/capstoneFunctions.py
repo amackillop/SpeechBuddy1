@@ -11,7 +11,8 @@ import wave
 import numpy as np
 from pydub import AudioSegment
 from scipy.signal import resample
-from os import listdir, remove, makedirs, path
+from os import listdir, remove, makedirs
+from os import path as ospath
 from random import randint
 import matplotlib.pyplot as plt
 import matplotlib.colors as clr
@@ -29,12 +30,13 @@ import librosa.display
 #from keras.preprocessing.image import ImageDataGenerator
 #from keras.models import load_model
 #from keras.applications import mobilenet
+#from keras.callbacks import EarlyStopping
 
 from scipy.stats import bernoulli
 from shutil import copyfile
 
 
-BASE_DIR = path.dirname(path.dirname(path.abspath(__file__))) + "/"
+BASE_DIR = ospath.dirname(ospath.dirname(ospath.abspath(__file__))) + "/"
 
 """
 ####################################################################################################################
@@ -184,7 +186,7 @@ def recordToFile(fname, Fs):
     stream.stop_stream()
     stream.close()
     mic.terminate()
-
+    print("Finished.")
     data = normalize(data)
     data = trim(data)
     
@@ -281,7 +283,7 @@ def convertToWav(fname, new_fname):
         
     extension = fname[fname.find(".")+1:]
     if extension != "wav":
-        audio = AudioSegment.from_file(file = fname, format = "flac")
+        audio = AudioSegment.from_file(file = fname, format = extension)
         audio.set_channels(1)
         audio.export(new_fname, format="wav")
 
@@ -360,21 +362,26 @@ def freqShift(fname, new_fname, shift):
     x = np.asarray(resample(x, int(len(x)*(1 + shift/100))), np.int16)
     signalToWav(x, new_fname, Fs)
     
-def spliceRandWord(signal, words, clip_length):
+def spliceRandWord(signal, words, clip_length, set_Fs = 8000):
+    signal.flags.writeable = True
     files = listdir(words)
     rand_word = words + files[np.random.randint(0, len(files)-1)]
+    audio = AudioSegment.from_file(rand_word, format = "wav")
+    matchTargetAmplitude(audio, -30)
+    audio.export(rand_word, format = "wav")
     splice, Fs = getData(rand_word)
-    if not Fs == 16000:
-        splice = downSample(splice, 3999, Fs, 16000//Fs)
-    start = np.zeros(np.random.randint(0, clip_length*Fs-splice.size), np.int16)
+    if not Fs == set_Fs:
+        step = Fs//set_Fs
+        splice = downSample(splice, set_Fs//2, Fs, step)
+    start = np.zeros(np.random.randint(0, clip_length*set_Fs-splice.size), np.int16)
     cut = splice.size
     splice = np.append(start, splice)
-    splice = np.append(splice, np.zeros(clip_length*Fs - splice.size, np.int16))
+    splice = np.append(splice, np.zeros(clip_length*set_Fs - splice.size, np.int16))
     signal[start.size:start.size+cut] = np.zeros(cut, np.int16)
     new_signal = np.sum([signal, splice], axis = 0, dtype = np.int16)
     return new_signal
    
-def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), add_noise = None, freq_shift = None, Mel = False):
+def generateDataset(path, out_path, spectrograms, size = 1000, clip_length = 2, set_Fs = 8000, image_shape = (256, 256), add_noise = None, freq_shift = None, mel = False, use_negatives = False):
     """
     Generate training data by creating spectrograms from small clips taken from a dataset of spoken lines from audiobooks. 
     Positive samples have a filler word spliced into the clips.
@@ -392,10 +399,6 @@ def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), add_
         
     """
     
-    path = BASE_DIR + "LibriSpeech/train-clean-100/"
-    out_path = BASE_DIR + "LibriRecordings/"
-    spectrograms = BASE_DIR + "LibriSpectrograms/"
-    
     dirs = listdir(path)
     i = 0
     while len(listdir(out_path + "0/")) < size//2:
@@ -409,9 +412,14 @@ def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), add_
         rand_file = rand_sub + listdir(rand_sub)[np.random.randint(1,len(files)-1)]
         new_file = out_path + "sample" + str(i) + ".wav"
         convertToWav(rand_file, new_file)
+        audio = AudioSegment.from_file(new_file, format = "wav")
+        matchTargetAmplitude(audio, -30)
+        audio.export(new_file, format = "wav")
         data, Fs = getData(new_file)
-        if Fs < 16000:
-            data = downSample(data, int(Fs//2)-1, Fs, 16000//Fs)
+        if set_Fs != Fs:
+            step = Fs//set_Fs
+            data = downSample(data, int(set_Fs//2), Fs, step)
+            Fs = int(set_Fs)
         samples = splitAudio(data, clip_length, Fs)
         n = len(listdir(out_path + "0/"))
         for j, sample in enumerate(samples):
@@ -424,28 +432,41 @@ def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), add_
         
     i = 0
     while len(listdir(out_path + "1/")) < size//2:
-        rand_folder = path + dirs[np.random.randint(0, len(dirs)-1)] + "/"
-        subs = listdir(rand_folder)
-        if len(subs) == 1:
-            rand_sub = rand_folder + subs[0] + "/"
+        if use_negatives == False:
+            rand_folder = path + dirs[np.random.randint(0, len(dirs)-1)] + "/"
+            subs = listdir(rand_folder)
+            if len(subs) == 1:
+                rand_sub = rand_folder + subs[0] + "/"
+            else:
+                rand_sub = rand_folder + subs[np.random.randint(0, len(subs)-1)] + "/"
+            files = listdir(rand_sub)
+            rand_file = rand_sub + listdir(rand_sub)[np.random.randint(1,len(files)-1)]
+            new_file = out_path + "sample" + str(i) + ".wav"
+            convertToWav(rand_file, new_file)
+            audio = AudioSegment.from_file(new_file, format = "wav")
+            matchTargetAmplitude(audio, -30)
+            audio.export(new_file, format = "wav")
+            data, Fs = getData(new_file)
+            if set_Fs < Fs:
+                step = Fs//set_Fs
+                data = downSample(data, int(set_Fs//2), Fs, step)
+                Fs = int(set_Fs)
+            samples = splitAudio(data, 2, Fs)
+            for i, sample in enumerate(samples):
+                samples[i] = spliceRandWord(sample, "stores_records/", 2)
+                
+            n = len(listdir(out_path + "1/"))
+            for j, sample in enumerate(samples):
+                sample_file = out_path + "1/" + str(n + j) + ".wav"
+                signalToWav(sample,  sample_file, Fs)
+            i += 1
         else:
-            rand_sub = rand_folder + subs[np.random.randint(0, len(subs)-1)] + "/"
-        files = listdir(rand_sub)
-        rand_file = rand_sub + listdir(rand_sub)[np.random.randint(1,len(files)-1)]
-        new_file = out_path + "sample" + str(i) + ".wav"
-        convertToWav(rand_file, new_file)
-        data, Fs = getData(new_file)
-        data = downSample(data, int(Fs//2)-1, Fs, 16000//Fs)
-        samples = splitAudio(data, 2, Fs)
-        for i, sample in enumerate(samples):
-            samples[i] = spliceRandWord(sample, "stores_records/", 2)
-            
-        n = len(listdir(out_path + "1/"))
-        for j, sample in enumerate(samples):
-            sample_file = out_path + "1/" + str(n + j) + ".wav"
-            signalToWav(sample,  sample_file, Fs)
-        i += 1
-        
+            for file in listdir(out_path + "0/"):
+                sample_file = out_path + "1/" + file
+                file = out_path + "0/" + file
+                sample, Fs = getData(file)
+                sample = spliceRandWord(sample, "stores_records/", 2, set_Fs = set_Fs)
+                signalToWav(sample, sample_file, Fs)
     for file in listdir(out_path)[2:]:
         remove(out_path + file)
 
@@ -454,18 +475,22 @@ def generateDataset(size = 1000, clip_length = 2, image_shape = (256, 256), add_
     n = len(listdir(spectrograms + "0/"))
     for i, file in enumerate(recordings0[n:]):
         sample, Fs = getData(out_path + "0/" + file)
-#        createMelSpectrogram(sample, spectrograms + "0/" + file)
-        createSpectrogram(sample, spectrograms + "0/" + file, image_shape)
+        if mel == True:
+            createMelSpectrogram(sample, spectrograms + "0/" + file)
+        else:
+            createSpectrogram(sample, spectrograms + "0/" + file, image_shape)
         
     recordings1 = listdir(out_path + "1/")
     n = len(listdir(spectrograms + "1/"))
     for i, file in enumerate(recordings1[n:]):
         sample, Fs = getData(out_path + "1/" + file)
-#        createMelSpectrogram(sample, spectrograms + "1/" + file)
-        createSpectrogram(sample, spectrograms + "1/" + file, img_shape = (256, 256))
+        if mel == True:
+            createMelSpectrogram(sample, spectrograms + "1/" + file)
+        else:
+            createSpectrogram(sample, spectrograms + "1/" + file, img_shape = (256, 256))
             
-    splitDataset(spectrograms + "0/", 0)
-    splitDataset(spectrograms + "1/", 1)
+    splitDataset(BASE_DIR + "capstoneModules/", spectrograms + "0/", 0)
+    splitDataset(BASE_DIR + "capstoneModules/", spectrograms + "1/", 1)
 
 def matchTargetAmplitude(sound, target_dBFS):
     """
@@ -641,7 +666,7 @@ def createSpectrogram(data, fname, img_shape):
     noverlap = NFFT/2
     padding = NFFT*1
     window = np.blackman(NFFT)
-#    cmap = clr.LinearSegmentedColormap.from_list('mycmap', ['black', '#101010', 'white'])
+    cmap = clr.LinearSegmentedColormap.from_list('mycmap', ['black', '#222222', 'white'])
 #    img_height = 128
 #    img_width = 256
     
@@ -651,13 +676,13 @@ def createSpectrogram(data, fname, img_shape):
     fig, ax = plt.subplots(1, figsize = (img_shape[1]/256, img_shape[0]/256), dpi = 256)
     fig.subplots_adjust(left = 0, right = 1, bottom = 0, top = 1)
     ax.axis('off')
-    (spectrum, freqs, t, _) = ax.specgram(data, NFFT = NFFT, Fs = Fs, window = window, noverlap = noverlap, pad_to = padding, vmin = vmin) #cmap after overlap
+    (spectrum, freqs, t, _) = ax.specgram(data, NFFT = NFFT, Fs = Fs, window = window, noverlap = noverlap, cmap = cmap, pad_to = padding, vmin = vmin) #cmap after overlap
     ax.axis('off')
     fig.savefig(fname[:-4], frameon = 'false')
     plt.close(fig)
     return (spectrum, t)
 
-def createMelSpectrogram(data, fname):
+def createMelSpectrogram(data, fname, img_shape = (256, 256)):
     """
     Creates a spectrogram using the MFCC's
     
@@ -676,8 +701,8 @@ def createMelSpectrogram(data, fname):
     spectrogram = np.abs(stft(data))**2
     S = feature.melspectrogram(S = spectrogram)
 
-#    plt.figure(figsize=(10, 4))
-#     fig, ax = plt.subplots(1, figsize = (img_width/128, img_height/128), dpi = 128)
+    plt.figure(figsize=(1, 1))
+    fig, ax = plt.subplots(1, figsize = (img_shape[1]/256, img_shape[0]/256), dpi = 256)
     pylab.axis('off') # no axis
     pylab.axes([0., 0., 1., 1.], frameon=False, xticks=[], yticks=[]) 
     librosa.display.specshow(power_to_db(S, ref=np.max), cmap = cmap)
@@ -707,7 +732,7 @@ img_height = 512
 batch_size = 8
 epochs = 5
 
-def splitDataset(folder, cat):
+def splitDataset(directory, folder, cat):
     """
     # Arguments
         classifier: A classifier object loaded with `keras.models.load_model`
@@ -723,17 +748,17 @@ def splitDataset(folder, cat):
 #    clips = listdir(audioFolder)
 #    images = listdir(imageFolder)
     # Forming the test and training sets
-    if not path.exists(PATH + "training_set"):
-        makedirs(PATH + "training_set")
-        makedirs(PATH + "test_set")
+    if not ospath.exists(directory + "training_set"):
+        makedirs(directory + "training_set")
+        makedirs(directory + "test_set")
         for i in range(categories):
-            makedirs(PATH + "training_set/" + str(i))
-            makedirs(PATH + "test_set/" + str(i))
+            makedirs(directory + "training_set/" + str(i))
+            makedirs(directory + "test_set/" + str(i))
     else:
-        for file in listdir(PATH + "training_set/" + str(cat)):
-            remove(PATH + "training_set/" + str(cat) + "/" + file)
-        for file in listdir(PATH + "test_set/" + str(cat)):
-            remove(PATH + "test_set/" + str(cat) + "/" + file)
+        for file in listdir(directory + "training_set/" + str(cat)):
+            remove(directory + "training_set/" + str(cat) + "/" + file)
+        for file in listdir(directory + "test_set/" + str(cat)):
+            remove(directory + "test_set/" + str(cat) + "/" + file)
 
 #    if len(images) == 0:  
 #        for file in clips:
@@ -746,9 +771,9 @@ def splitDataset(folder, cat):
     ber = bernoulli.rvs(split, size = len(listdir(folder)))
     for i, filename in enumerate(listdir(folder)):
         if ber[i] == 1:
-            copyfile(folder + filename, PATH + "test_set/" + str(cat) + "/" + filename)
+            copyfile(folder + filename, directory + "test_set/" + str(cat) + "/" + filename)
         else:
-            copyfile(folder + filename, PATH + "training_set/" + str(cat) + "/" + filename)
+            copyfile(folder + filename, directory + "training_set/" + str(cat) + "/" + filename)
 
 def buildClassifier(model_name, img_shape):
     """
@@ -767,16 +792,24 @@ def buildClassifier(model_name, img_shape):
     classifier = Sequential()
     
     # First Layer
-    classifier.add(Conv2D(filters = 8, kernel_size = (3, 3), strides = 1, padding = "same", input_shape = (img_shape[0], img_shape[1], 3), activation = "relu")) # 64 kernals of 3x3
-    classifier.add(MaxPooling2D(pool_size = (2, 2), strides = 2))
+    classifier.add(Conv2D(filters = 8, kernel_size = (3, 3), strides = 1, padding = "same", input_shape = (img_shape[0], img_shape[1], 1), activation = "relu")) # 64 kernals of 3x3
+#    classifier.add(MaxPooling2D(pool_size = (2, 2), strides = 2))
+    classifier.add(Dropout(rate = 0.25))
     
     ## Second Layer
     classifier.add(Conv2D(filters = 8, kernel_size = (3, 3), strides = 1, padding = "same", activation = "relu"))
     classifier.add(MaxPooling2D(pool_size = (2, 2), strides = 2))
+    classifier.add(Dropout(rate = 0.25))
 #    
     ## Third Layer
     classifier.add(Conv2D(filters = 16, kernel_size = (3, 3), strides = 1, padding = "same", activation = "relu"))
+#    classifier.add(MaxPooling2D(pool_size = (2, 2), strides = 2))
+    classifier.add(Dropout(rate = 0.25))
+    
+    ## Fourth Layer
+    classifier.add(Conv2D(filters = 16, kernel_size = (3, 3), strides = 1, padding = "same", activation = "relu"))
     classifier.add(MaxPooling2D(pool_size = (2, 2), strides = 2))
+    classifier.add(Dropout(rate = 0.25))
     
     # Flattening
     classifier.add(Flatten())
@@ -793,7 +826,7 @@ def buildClassifier(model_name, img_shape):
     classifier.save(model_name)
     return classifier
 
-def fitClassifier(classifier, model_name, epochs, img_shape, batch_size):
+def fitClassifier(classifier, model_name, epochs, img_shape, batch_size, data_folder):
     """
     # Arguments
         classifier: A classifier object loaded with `keras.models.load_model`
@@ -806,42 +839,34 @@ def fitClassifier(classifier, model_name, epochs, img_shape, batch_size):
     # Raises
         Not handled yet
     """
-#    classifier = mobilenet.MobileNet(input_shape=(img_shape[0], img_shape[1], 1),
-#                                alpha=1.0, 
-#                                depth_multiplier=1, 
-#                                dropout=1e-3, 
-#                                include_top=True, 
-#                                weights=None, 
-#                                input_tensor=None, 
-#                                pooling=None, 
-#                                classes=1)
-#    classifier.compile(optimizer = "adam", loss = "binary_crossentropy", metrics = ["accuracy"])
 
-    train_samples = len(listdir(PATH + "training_set/0")) + len(listdir(PATH + "training_set/1"))
-    test_samples = len(listdir(PATH + "test_set/0")) + len(listdir(PATH + "test_set/1"))
+    train_samples = len(listdir(BASE_DIR + "capstoneModules/training_set/0")) + len(listdir(BASE_DIR + "capstoneModules/training_set/1"))
+    test_samples = len(listdir(BASE_DIR + "capstoneModules/test_set/0")) + len(listdir(BASE_DIR + "capstoneModules/test_set/1"))
     
 #    train_samples = 4000
 #    test_samples = 1000
     
     # Fitting the CNN
     train_datagen = ImageDataGenerator(rescale = 1./255,
-                                       )
+                                       width_shift_range = 0.3)
     test_datagen = ImageDataGenerator(rescale = 1./255)
-    training_set = train_datagen.flow_from_directory(PATH + 'training_set',
+    training_set = train_datagen.flow_from_directory(BASE_DIR + "capstoneModules/training_set",
                                                         target_size = (img_shape[0], img_shape[1]), 
-#                                                        color_mode = "grayscale",
+                                                        color_mode = "grayscale",
                                                         batch_size = batch_size,
                                                         class_mode = 'binary')
-    test_set = test_datagen.flow_from_directory(PATH + 'test_set',
+    test_set = test_datagen.flow_from_directory(BASE_DIR + "capstoneModules/test_set",
                                                 target_size = (img_shape[0], img_shape[1]),
-#                                                color_mode = "grayscale",
+                                                color_mode = "grayscale",
                                                 batch_size = batch_size,
                                                 class_mode = 'binary')
+    early_stopping = EarlyStopping(monitor = 'val_accuracy', patience = 3)
     classifier.fit_generator(training_set,
                              steps_per_epoch = train_samples//batch_size,
                              epochs = epochs,
                              validation_data = test_set,
-                             validation_steps = test_samples//batch_size)
+                             validation_steps = test_samples//batch_size,
+                             callbacks = [early_stopping])
     classifier.save(model_name)
     
 """
@@ -857,7 +882,7 @@ PATH = "C:/Users/Austin/Desktop/School/Capstone/"
 IMG_HEIGHT = 256
 IMG_WIDTH = 512
     # Generate the image data to be fed into the network from the spectrograms.
-def detectFillers(classifier, fname, img_shape):
+def detectFillers(classifier, fname, img_shape, mel = False):
     """Detect filler words in an audio file with a conv-net classifier object.
 
     # Arguments
@@ -874,22 +899,24 @@ def detectFillers(classifier, fname, img_shape):
     """
     # Nueral Network Model
     sample_length = 2 # Window length in seconds for input into the network, this model uses 4
-    outFolder = "live/Images/"
+    outFolder = "capstoneModules/live/Images/"
     
-    for file in listdir(PATH + outFolder):
-        remove(PATH + "live/Images/" + file)
+    for file in listdir(BASE_DIR + outFolder):
+        remove(BASE_DIR + outFolder + file)
         
     signal, Fs = getData(fname)
     samples = splitAudio(signal, sample_length, Fs)
     
     for i in range(len(samples)):
-#        createMelSpectrogram(samples[i,:]/1.0, PATH + "live/Images/demo" + str(i) + ".wav")
-        createSpectrogram(samples[i,:]/1.0, PATH + "live/Images/demo" + str(i) + ".wav", img_shape = (256, 256))
+        if mel == True:
+            createMelSpectrogram(samples[i,:]/1.0, BASE_DIR + outFolder + "demo" + str(i) + ".wav", img_shape = (256, 256))
+        else:
+            createSpectrogram(samples[i,:]/1.0, BASE_DIR + outFolder + "demo" + str(i) + ".wav", img_shape = (256, 256))
     
     live_datagen = ImageDataGenerator(rescale = 1./255)
     live_set = live_datagen.flow_from_directory('live',
                                             target_size = (img_shape[0], img_shape[1]),
-#                                            color_mode = "grayscale",
+                                            color_mode = "grayscale",
                                             batch_size = 32,
                                             shuffle = False,
                                             class_mode = 'binary')
@@ -1179,7 +1206,50 @@ def volumeAnalysis(fname, clip_length = 500):
         if clip_power%100:
             clip_powersdB[i] = signal_powerdB - 10*np.log10(clip_power)
         else:
-            clip_powersdB[i] = -100               
+            clip_powersdB[i] = -100  
+             
     return clip_powersdB
 
-#f1 = pitchTrackingYIN("../../audio/output_mono.wav", freq_range = (500, 1000), threshold = 0.1, timestep = 0.25, Fc = 1e3)
+"""
+DO TESTING HERE
+
+DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
+"""
+#path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/"
+#out_path = BASE_DIR + "capstoneModules/recordings/"
+#spectrograms = BASE_DIR + "capstoneModules/spectrograms/"
+#splitAudio()
+#for i, file in enumerate(listdir("ds_recordings/")):
+#    file = "ds_recordings/" + file
+#    audio = AudioSegment.from_file(file, format = "wav")
+#    matchTargetAmplitude(audio, -30)
+#    audio.export(file, format = "wav")
+#    data, Fs = getData(file)
+#    data = data[:-32000]
+#    data = downSample(data, 4000, 16000, 2)
+#    samples = splitAudio(data, 2, 8000)
+#    for j, sample in enumerate(samples):
+#            sample_file = "clips/0/add_" + str(i) + "_" + str(j) + ".wav"
+#            signalToWav(sample,  sample_file, 8000)
+#            data, Fs = getData(sample_file)
+#            data = spliceRandWord(data, "stores_records/", 2, Fs)
+#            sample_file = "clips/1/add_" + str(i) + "_" + str(j) + ".wav"
+#            signalToWav(data, sample_file, Fs)
+
+#for folder in listdir("clips/"):
+#    folder = "clips/" + folder + "/"
+#    for file in listdir(folder):
+#        data, Fs = getData(folder + file)
+#        createSpectrogram(data, spectrograms + folder[-2:] + file, img_shape = (256, 256))
+##    
+#generateDataset(path, out_path, spectrograms, 10000, use_negatives = True, mel = True)
+#convertToWav()
+#classifier = buildClassifier("filler_detector_less_pool3.h5", (256, 256))
+#file = "audio.wav"
+#recordToFile(file, 16000)
+#data, Fs = getData(file)
+#data = downSample(data, 4000, Fs, 2)
+#signalToWav(data, file, 8000)
+#classifier = load_model("filler_detector_less_pool.h5")
+#fitClassifier(classifier, "filler_detector_less_pool3.h5", 20, (256, 256), 32, BASE_DIR)
+#detectFillers(classifier, "audio.wav", (256, 256), mel = True)
