@@ -1,9 +1,24 @@
 __pycache__/*
 *.pyc
 *.cpython-35.pyc
+*.cpython-36.pyc
 audio/output.wav
 audio/output_mono.flac
 audio/output_mono.flac
 static_cdn/*
+<<<<<<< HEAD
 .vscode/settings.json
 
+=======
+api/capstoneModules/audio
+api/capstoneModules/clips
+api/capstoneModules/ds_recordings
+api/capstoneModules/live
+api/capstoneModules/recordings
+api/capstoneModules/spectrograms
+api/capstoneModules/stores_records
+api/capstoneModules/test_set
+api/capstoneModules/training_set
+api/capstoneModules/wav_recordings
+env/Lib/encodings/__pycache__/*
+>>>>>>> d6fc64f547e2161266f4d788dc0c26dc067eff16
