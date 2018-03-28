@@ -56,7 +56,10 @@
         <div id="recordingDiv">
             <button id="start-btn" class="btn btn-primary btn-lg">Record</button>
             <button id="stop-btn" class="btn btn-danger btn-lg" disabled> Stop </button>
-            <button id="submit-btn" class="btn btn-success btn-lg" onclick="loadingTranscript()">Submit</button>
+            <button id="submit-btn" class="btn btn-success btn-lg" onclick="loadingTranscript()" style="display:none">Submit</button>
+            <button id="upload-btn" class="btn btn-default btn-lg" onclick="saveToDrive()" style="display:none">
+                <img  width = "32px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Google_Drive_Logo.svg/2000px-Google_Drive_Logo.svg.png"/>
+            </button>
             <h4 id="recordingtitle" style="display:none;">Recordings: </h4>
         </div>
     </div>

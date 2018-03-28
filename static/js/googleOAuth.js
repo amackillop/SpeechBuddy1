@@ -15,17 +15,33 @@ function onSignIn(googleUser) {
 
     // The ID token you need to pass to your backend:
     var id_token = googleUser.getAuthResponse().id_token;
+    console.log("User signed in.");
 
     //send token to backend
+    // $.ajax({
+    //     type: 'POST',
+    //     url: '/api/googleOAuth/',
+    //     data: {user_token:id_token},
+    //     success: function(){
+    //         console.log("OAuth post success!");
+    //     }, 
+    //     error: function(){
+    //         alert('error saving token');
+    //     }
+    // });
+};
+
+function saveToDrive(){
     $.ajax({
         type: 'POST',
         url: '/api/googleOAuth/',
-        data: {user_token:id_token},
+        data: {command:'save'},
         success: function(){
-            console.log("OAuth post success!")
+            console.log("Recording uploaded to your google drive.");
         }, 
         error: function(){
-            alert('error saving token');
+            alert('Error saving file.');
         }
     });
-};
+
+}

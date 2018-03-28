@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_protect
 from api.nltkMethod import mostCommon
 from api.nltkMethod import synCreate
 from api.googleMethod import googleApiCall
+from api.googleDrive import saveFileInDrive
 from api.sentimentMethod import sentimentCall
 import json
 import cgi
@@ -37,7 +38,6 @@ BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 ROOT = path.join(path.dirname(BASE_DIR))
 
 
-
 # Create your views here.
 #class ViewAPI(APIView):
 
@@ -56,12 +56,16 @@ def nltkCall(request):
         return Response({"indexArray": indexArray, "corpus": corpus, "tok": tok, "listSyn": listSyn})
     return Response({"message": "Hello, world!"})
 
+
 @api_view(['GET', 'POST'])
 def googleOAuthCall(request):
     if request.method == 'POST':
         dictData = request.data
-        print(dictData)
-    return Response({"message": "User Authenticated"})
+        if(request.data['command'] == 'save'):
+            print("User wants to save recording to drive.")
+            saveFileInDrive()
+    return Response({"message": "google post success"})
+
 
 @api_view(['GET', 'POST'])
 def googleCall(request):
@@ -69,17 +73,20 @@ def googleCall(request):
         # Save the audio file
         dataDict = request.data
         dataDict = dataDict['audio']
-        path = default_storage.save(settings.MEDIA_ROOT + "/output.wav", ContentFile(dataDict.read()))
-        
+        path = default_storage.save(
+            settings.MEDIA_ROOT + "/output.wav", ContentFile(dataDict.read()))
+
         # Manipulate original audio file
-        cf.convertToMono(settings.MEDIA_ROOT + "/output.wav", settings.MEDIA_ROOT + "/output_mono.wav")
-        cf.convertToFLAC(settings.MEDIA_ROOT + "/output_mono.wav", settings.MEDIA_ROOT + "/output_mono.flac")
-        
+        cf.convertToMono(settings.MEDIA_ROOT + "/output.wav",
+                         settings.MEDIA_ROOT + "/output_mono.wav")
+        cf.convertToFLAC(settings.MEDIA_ROOT + "/output_mono.wav",
+                         settings.MEDIA_ROOT + "/output_mono.flac")
+
         # Delete original file
         if default_storage.exists(path):
             default_storage.delete(path)
         res = googleApiCall(settings.MEDIA_ROOT + "/Simon_Sinek_30.flac")
-        
+
         if not res == "Empty Response":
             transcript = str(res[0])
             sentences = str(res[3])
@@ -97,7 +104,6 @@ def googleCall(request):
             sentimentArray = sentimentCall(list_of_sentences)
             print(sentimentArray)
 
-
         else:
             transcript = "empty response"
             sentences = "empty response"
@@ -107,13 +113,14 @@ def googleCall(request):
             corpus = ""
             tok = ""
             listSyn = ""
-            list_of_sentences="empty response"
-            wordsperminute="empty response"
-            
-        
+            list_of_sentences = "empty response"
+            wordsperminute = "empty response"
+
         # Pitch Tracking
-        f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", freq_range = (40, 500), threshold = 0.1, timestep = 0.25, Fc = 1e3)
-        f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", freq_range = (500, 1000), threshold = 0.1, timestep = 0.25, Fc = 1e3)
+        f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
+                                 freq_range=(40, 500), threshold=0.1, timestep=0.25, Fc=1e3)
+        f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
+                                 freq_range=(500, 1000), threshold=0.1, timestep=0.25, Fc=1e3)
         f = np.zeros((f0.shape[0], 3))
         for i in range(f.shape[0]):
             f[i, :] = np.asarray([i, f0[i], f1[i]])
@@ -140,7 +147,7 @@ def googleCall(request):
             "pitch": f,
             "filler_count": filler_count,
             "volume": V,
-            "list_of_sentences" : list_of_sentences,
-            "wordsperminute" : wordsperminute
+            "list_of_sentences": list_of_sentences,
+            "wordsperminute": wordsperminute
         })
     return Response({"message": "Hello, world!"})
