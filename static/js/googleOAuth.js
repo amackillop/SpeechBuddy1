@@ -1,7 +1,7 @@
 function onSignIn(googleUser) {
     // Useful data for your client-side scripts:
     var profile = googleUser.getBasicProfile();
-    
+
     $("#title").text("Welcome to SpeechBuddy, " + profile.getGivenName() + ".");
     $("#sign-in").remove();
     $("#navCollapsed").append('<li id="signedin" class="nav-item"></li>');
@@ -17,41 +17,35 @@ function onSignIn(googleUser) {
 
     // The ID token you need to pass to your backend:
     var id_token = googleUser.getAuthResponse().id_token;
-    console.log("ID Token: " + id_token);
+    5
+    console.log(typeof(id_token));
 
-
-    // $("#submit-btn").click( function() {
-    //     console.log("Before Ajax");
-    //     $.ajaxSetup({
-    //         beforeSend: function(xhr, settings) {
-    //             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-    //                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
-    //             }
-    //             }
-    //     });
-    //     //while processing the api call, disable the submit button
-    //     //document.getElementById("submit-btn").disabled = "true";
-    //     // Ajax call here
-    //     $.ajax({
-    //         url:"/api/google/",
-    //         data: fd,
-    //         processData: false,
-    //         contentType: false,
-    //         type: 'POST',
-    //         success: function(data) {
-    //             console.log("SUCCESS");
-    //             // googleResponse(data);
-    //             //googleDriveMethods(data);
-    //             //console.log(data);
-    //         }
-    //     });
-    //  })
-    
-
-
-
-
-
+    var csrftoken = getCookie('csrftoken');
+    console.log("Before OAUTH Ajax");
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    //while processing the api call, disable the submit button
+    //document.getElementById("submit-btn").disabled = "true";
+    // Ajax call here
+    $.ajax({
+        headers: { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' 
+        },
+        url: "/api/googleOAuth/",
+        data: JSON.stringify("{'token':" + id_token + "}"),
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function (data) {
+            console.log("OAUTH SUCCESS");
+        }
+    });
 
 
 

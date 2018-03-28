@@ -70,6 +70,12 @@ def synCall(request):
     return Response({"message": "Hello, world!"})
 
 @api_view(['GET', 'POST'])
+def googleOAuthCall(request):
+    if request.method == 'POST':
+        dictData = request.data
+        print(dictData)
+
+@api_view(['GET', 'POST'])
 def googleCall(request):
     if request.method == 'POST':
         # Save the audio file
@@ -100,7 +106,7 @@ def googleCall(request):
             list_of_sentences = res[3]
             wordsperminute = res[4]
             sentimentArray = sentimentCall(list_of_sentences)
-            print sentimentArray
+            print(sentimentArray)
 
 
         else:
