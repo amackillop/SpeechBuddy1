@@ -225,3 +225,44 @@
   height: 500px;
 }
 
+
+/* FOR WPM */
+.too_slow {
+  background-color: #AED6F1;
+  /* float: left; */
+  font-size: 14px;
+  font-weight: normal;
+  display: inline;
+}
+
+.slow{
+  background-color: #2471A3;
+  /* float: left; */
+  font-size: 14px;
+  font-weight: normal;
+  display: inline;
+}
+
+.good{
+  background-color: #27AE60;
+  /* float: left; */
+  font-size: 14px;
+  font-weight: normal;
+  display: inline;
+}
+
+.fast{
+  background-color: #E67E22;
+  /* float: left; */
+  font-size: 14px;
+  font-weight: normal;
+  display: inline;
+}
+
+.too_fast{
+  background-color: rgb(241, 38, 11);
+  /* float: left; */
+  font-size: 14px;
+  font-weight: normal;
+  display: inline;
+}

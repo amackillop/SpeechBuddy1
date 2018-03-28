@@ -131,6 +131,7 @@
 								pitchResponse(data);
 								volumeResponse(data);
 								fillerCountResponse(data);
+								SentenceSpeed(data);
 								//console.log(data);
                             }
                         });

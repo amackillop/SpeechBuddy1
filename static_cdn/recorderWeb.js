@@ -134,6 +134,7 @@
 								googleResponse(data);
 								pitchResponse();
 								nltkCorpus(data);
+								SentenceSpeed(data);
 								console.log(data);
                             }
                         });
