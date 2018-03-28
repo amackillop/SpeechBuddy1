@@ -57,23 +57,11 @@ def nltkCall(request):
     return Response({"message": "Hello, world!"})
 
 @api_view(['GET', 'POST'])
-def synCall(request):
-    if request.method == 'POST':
-        dictData = request.data
-        data = dictData['string']
-        data = data.encode('ascii')
-        print(type(data))
-        resData = synCreate(data)
-        resData=str(resData)
-
-        return Response({"message": "Got some data!", "resData": resData})
-    return Response({"message": "Hello, world!"})
-
-@api_view(['GET', 'POST'])
 def googleOAuthCall(request):
     if request.method == 'POST':
         dictData = request.data
         print(dictData)
+    return Response({"message": "User Authenticated"})
 
 @api_view(['GET', 'POST'])
 def googleCall(request):
@@ -104,17 +92,12 @@ def googleCall(request):
             tok = resData[2]
             list_of_sentences = res[3]
             listSyn = str(resData[3])
-<<<<<<< HEAD
-            wordsperminute = res[4]
-            
-=======
             list_of_sentences = res[3]
             wordsperminute = res[4]
             sentimentArray = sentimentCall(list_of_sentences)
             print(sentimentArray)
 
 
->>>>>>> d6fc64f547e2161266f4d788dc0c26dc067eff16
         else:
             transcript = "empty response"
             sentences = "empty response"
@@ -144,14 +127,7 @@ def googleCall(request):
         # Filler wod detection
 #        global graph
        # with settings.GRAPH.as_default():
-        filler_count = 0#str(cf.detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav"))
-#            clear_session()
-        
-#        #Get rid of files
-#        if default_storage.exists(path):
-#            default_storage.delete(path)
-        #res = '''{"Transcript": "my problem has been resolved thanks to colleague Brian call at text up the problem is that before the PIP I try to install Google Cloud manually by downloading the source and running setup talk to you why","Confidence": 0.931040287018,"Words": [["my", 0.0, 1.2],["problem", 1.2, 1.7],["has", 1.7, 1.9],["been", 1.9, 2.0],["resolved", 2.0, 2.6],["thanks", 2.6, 3.0],["to", 3.0, 3.2],["colleague", 3.2, 3.7],["Brian", 3.7, 4.1],["call", 4.1, 4.5],["at", 4.5, 4.9],["text", 4.9, 5.4],["up", 5.4, 5.6],["the", 5.6, 6.7],["problem", 6.7, 7.0],["is", 7.0, 7.6],["that", 7.6, 8.2],["before", 8.2, 8.6],["the", 8.6, 9.1],["PIP", 9.1, 9.4],["I", 9.4, 10.1],["try", 10.1, 10.6],["to", 10.6, 10.9],["install", 10.9, 11.1],["Google", 11.1, 11.6],	["Cloud", 11.6, 12.0],["manually", 12.0, 12.7],["by", 12.7, 12.9],["downloading", 12.9, 13.5],["the", 13.5, 13.7],["source", 13.7, 14.1],	["and", 14.1, 14.3],["running", 14.3, 14.8],["setup", 14.8, 15.8],["talk", 15.8, 16.1],	["to", 16.1, 16.2], ["you", 16.2, 16.3],["why", 16.3, 16.5]]}'''
-        #print(res)
+        filler_count = 0
         return Response({
             "transcript": transcript,
             "sentences": sentences,
@@ -165,11 +141,6 @@ def googleCall(request):
             "filler_count": filler_count,
             "volume": V,
             "list_of_sentences" : list_of_sentences,
-<<<<<<< HEAD
-            "wordsperminute": wordsperminute
-=======
             "wordsperminute" : wordsperminute
->>>>>>> d6fc64f547e2161266f4d788dc0c26dc067eff16
         })
-        ##return Response({"transcript": transcript, "confidence": confidence, "wpm": wpm, "indexArray": indexArray, "corpus": corpus, "tok": tok, "listSyn": listSyn, "pitch": f, "filler_count": filler_count, "list_of_sentences":list_of_sentences,"wordsperminute":wordsperminute})
     return Response({"message": "Hello, world!"})
