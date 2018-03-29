@@ -25,8 +25,21 @@ function pitchResponse(data) {
 													// Adds titles to each axis.
 													0: {title: 'f0'},
 													1: {title: 'f1'}
-												}
-											};
+												},
+//												vAxis: {
+//													0: {viewWindow: {
+//																min: 0,
+//																max: 100
+//															},
+//														},
+//													1: {viewWindow: {
+//																min: 500,
+//																max: 1000
+//																}
+//															}
+//														}
+//													}
+												};
 				
 
 			  var chart = new google.visualization.LineChart(document.getElementById('chart_div'));

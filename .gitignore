@@ -3,11 +3,8 @@ __pycache__/*
 *.cpython-35.pyc
 *.cpython-36.pyc
 audio/output.wav
-audio/output_mono.flac
-audio/output_mono.flac
 static_cdn/*
 .vscode/settings.json
-
 api/capstoneModules/audio
 api/capstoneModules/clips
 api/capstoneModules/ds_recordings
@@ -18,5 +15,8 @@ api/capstoneModules/stores_records
 api/capstoneModules/test_set
 api/capstoneModules/training_set
 api/capstoneModules/wav_recordings
+api/capstoneModules/ConvNets/*
 env/Lib/encodings/__pycache__/*
+audio/output_mono.flac
+audio/output_mono.wav
 client_secrets.json
