@@ -12,7 +12,7 @@ Note: You must have Google Cloud Speech to Text API credentials.
 
 Use these condensed pip installs to download all requirements:
 ```
-pip install django djangorestframework nltk google SpeechRecognition numpy scipy wave matplotlib keras h5py
+pip install django djangorestframework nltk google SpeechRecognition numpy scipy wave matplotlib keras h5py PyDrive
 pip install --upgrade google-cloud-speech
 pip install --update tensorflow 
 ```
@@ -31,6 +31,7 @@ pip install matplotlib
 pip install --update tensorflow
 pip install keras
 pip install h5py
+pip install PyDrive
 ```
 You will also need to install Keras and tensorflow. If ```pip install tensorflow``` does not install tensorflow correctly, download Anaconda and run ```conda install tensorflow```. You should only have to do this once.
 
