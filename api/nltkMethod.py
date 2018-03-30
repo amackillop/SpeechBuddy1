@@ -154,15 +154,15 @@ def mostCommon(strData):
                         if contractions_dict.get(w) is None:
                                 w = w[:-2]
                         # print(w)
-                if w.encode('ascii') in indexArray:
-                        indexArray[w] = indexArray[w][:-1] + "," + str(index)
+                if w in indexArray:
+                        indexArray[w] = indexArray[w] + (index,)
                 else:
-                        indexArray[w.encode('ascii')] = str(index)
+                        indexArray[w] = (index,)
                 index = index + 1
                 if w in fillerWords:
                         fillerWords[w] = fillerWords[w] + 1
                 if w not in stopWords:
-                        filtered_tok.append(lemmatiser.lemmatize(w, pos="v").encode('ascii'))
+                        filtered_tok.append(lemmatiser.lemmatize(w, pos="v"))
 
                         # print(lemmatiser.lemmatize(w,pos="v"))
 
@@ -188,22 +188,20 @@ def mostCommon(strData):
 
 def synCreate(strData):
         res = {}
-        strData = strData.encode('ascii')
+        strData = strData
         syns = wordnet.synsets(strData)
 
         for i in syns:
                 for j in i.lemmas():
-                        if (strData != j.name().encode('ascii')):
+                        if (strData != j.name()):
                                 # print(i.lemmas()[0].name())
                                 examples = i.examples()
                                 for n in range(len(examples)):
-                                        examples[n] = examples[n].encode('ascii')
-                                if res.get(j.name().encode('ascii')) == None:
-                                        res[j.name().encode('ascii')] = i.definition().encode('ascii'), i.examples()
+                                        examples[n] = examples[n]
+                                if res.get(j.name()) == None:
+                                        res[j.name()] = i.definition(), i.examples()
                                 else:
-                                        res[j.name().encode('ascii')] = [res[j.name().encode('ascii')],
-                                                                         i.definition().encode('ascii'),
-                                                                         i.examples()]
+                                        res[j.name()] = [res[j.name()], i.definition(), i.examples()]
         # print(res)
         return res
 #text = 'Hello and you are my hello and i am and like like drunk'
