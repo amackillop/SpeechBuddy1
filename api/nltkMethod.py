@@ -168,14 +168,14 @@ def mostCommon(strData):
 
         indexArray = json.dumps(indexArray)
         freq = nltk.FreqDist(filtered_tok)
-        print(freq.most_common(16).__len__())
+        #print(freq.most_common(16).__len__())
         listSyn = {}
         for w in freq.most_common(16):
                 w = str(w)
                 w = w[2:w.find(",") - 1]
                 listSyn[w] = synCreate(w)
-                print(w)
-                print(synCreate(w))
+                #print(w)
+                #print(synCreate(w))
         listSyn = json.dumps(listSyn)
         corpus = [indexArray, freq.most_common(16), tok, listSyn, fillerWords]
         return corpus
