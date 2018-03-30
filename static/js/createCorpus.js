@@ -32,7 +32,7 @@ function hover(id, data) {
 
         }
     }
-    $('#string').html(tempString);
+    $('#transcript-display').html(tempString);
     //console.log(tempString);
 }
 
@@ -94,7 +94,7 @@ function nltkCorpus(data) {
                         tempString = tempString + " " + data.tok[i];
                     }
                 }
-                $('#string').html(tempString);
+                $('#transcript-display').html(tempString);
             },
             mouseleave: function () {
                 $(this).css("background", "white");

@@ -49,7 +49,7 @@ This collection of functions is used for manipulating audio signal data and file
 # GLOBAL VARIABLES
 VOLUME_THRESHOLD = 1000
 CHUNK_SIZE = 1024
-FORMAT = pyaudio.paInt16
+# FORMAT = pyaudio.paInt16
 #Fs = 16000
 SILENCE_THRESHOLD = 50
 
