@@ -1181,40 +1181,69 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
         f[i] = Fs//periods[i]
     return f
 
-def volumeAnalysis(fname, clip_length = 500):
+def volumeAnalysis(fname, window  = 500, threshold = -20):
     """
     Examine the change in volume throughout the audio clip
     
     #Arguments
         fname: String, name of the audio file to analyze
-        clip_length: Integer indicating the length of the moving window in milliseconds
+        window: Integer indicating the length of the moving window in milliseconds
     
     #Returns
         clip_powersdB: A 1-D array containing the power of each clip with respect to the whole signal in decibels
         
     """
     signal, Fs = getData(fname)
-    W = int(Fs*clip_length/1000)
+    
+    def countPauses(power_vector, threshold = threshold, window = window):
+        pauses = []
+        num_silent = 0
+        is_paused = False
+        i = 0
+        while i < power_vector.size:
+            x = power_vector[i]
+            if x < threshold:
+                is_paused = True
+                num_silent += 1
+            else:
+                is_paused = False
+            if not is_paused and num_silent:
+                # Append [start index, duration] 
+                pauses.append([window*(i-num_silent)/1000, window*num_silent/1000])
+                num_silent = 0
+            i += 1
+        return pauses
+
+    W = int(Fs*window/1000)
     signal = np.asarray(trim(signal, threshold = 1000), np.float32)
     signal = signal - np.mean(signal)
-    signal_powerdB = 10*np.log10(np.dot(signal, signal)/signal.size)
+    signal_powerdB = 10*np.log10(np.dot(signal, signal)/signal.size**2)
     clip_powersdB = np.zeros((signal.size//W), np.float32)
     for i in range(clip_powersdB.size):
         t = i*W
         clip = signal[t:t+W] - np.mean(signal[t:t+W])
-        clip_power = abs(np.dot(clip, clip)/W)
+        clip_power = abs(np.dot(clip, clip)/W**2)
         if clip_power%100:
-            clip_powersdB[i] = signal_powerdB - 10*np.log10(clip_power)
+            clip_powersdB[i] = 10*np.log10(clip_power) - signal_powerdB
         else:
             clip_powersdB[i] = -100  
+            
+    pauses = countPauses(clip_powersdB)
              
-    return clip_powersdB
+    return clip_powersdB, pauses
+
 
 """
 DO TESTING HERE
 
 DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 """
+
+##### Testing new pause detection
+#power_vector, pauses = volumeAnalysis("../../audio/output_mono.wav", 100)
+#plt.plot(power_vector)
+#pauses = countPauses(power_vector, threshold = -10)
+#### ConvNet stuff
 #path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/"
 #out_path = BASE_DIR + "capstoneModules/recordings/"
 #spectrograms = BASE_DIR + "capstoneModules/spectrograms/"
