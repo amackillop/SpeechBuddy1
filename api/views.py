@@ -134,12 +134,14 @@ def googleCall(request):
             pitch[i, :] = np.asarray([i, f0[i], f1[i]])
 
         # Volume Tracking
-        V = cf.volumeAnalysis(settings.MEDIA_ROOT + "/output_mono.wav", 100)
+        V, pauses = cf.volumeAnalysis(settings.MEDIA_ROOT + "/output_mono.wav", 100)
         volume = np.zeros((V.shape[0], 2))
         for i in range(volume.shape[0]):
-            volume[i, :] = np.asarray([i, -V[i]])
-
-        # Filler wod detection
+            volume[i, :] = np.asarray([i, V[i]])
+        
+        # Adjust wpm
+        print(wpm)
+        # Filler word detection
 #        global graph
        # with settings.GRAPH.as_default():
         filler_count = 0#str(cf.detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav"))
@@ -163,6 +165,7 @@ def googleCall(request):
             "filler_count": filler_count,
             "volume": volume,
             "list_of_sentences": list_of_sentences,
-            "wordsperminute": wordsperminute
+            "wordsperminute": wordsperminute,
+            "pauses": pauses
         })
     return Response({"message": "Hello, world!"})
