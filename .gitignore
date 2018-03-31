@@ -21,3 +21,5 @@ audio/output_mono.flac
 audio/output_mono.wav
 client_secrets.json
 api/capstoneModules/16k_clips/
+api/capstoneModules/16k_mel_spectrograms/
+api/capstoneModules/uhm's/
