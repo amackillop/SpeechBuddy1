@@ -139,7 +139,8 @@ def googleCall(request):
         for i in range(volume.shape[0]):
             volume[i, :] = np.asarray([i, V[i]])
         
-
+        # Adjust wpm
+        print(wpm)
         # Filler word detection
 #        global graph
        # with settings.GRAPH.as_default():
@@ -164,7 +165,7 @@ def googleCall(request):
             "filler_count": filler_count,
             "volume": volume,
             "list_of_sentences": list_of_sentences,
-            "wordsperminute": wordsperminute
+            "wordsperminute": wordsperminute,
             "pauses": pauses
         })
     return Response({"message": "Hello, world!"})

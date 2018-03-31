@@ -1245,41 +1245,41 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 
 #### ConvNet stuff
 #path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/"
-#out_path = BASE_DIR + "capstoneModules/recordings/"
-spectrograms = BASE_DIR + "capstoneModules/16k_mel_spectrograms/"
-#generateDataset(path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/",
-#                out_path = BASE_DIR + "capstoneModules/16k_clips/",
-#                spectrograms = BASE_DIR + "capstoneModules/16k_mel_spectrograms/",
-#                size = 10000,
-#                clip_length = 2,
-#                set_Fs = 16000,
-#                image_shape = (256, 256),
-#                add_noise = None,
-#                freq_shift = None,
-#                mel = True,
-#                use_negatives = True)
-for i, file in enumerate(listdir("ds_recordings/")):
-    file = "ds_recordings/" + file
-    audio = AudioSegment.from_file(file, format = "wav")
-    matchTargetAmplitude(audio, -30)
-    audio.export(file, format = "wav")
-    data, Fs = getData(file)
-    data = data[:-32000]
-#    data = downSample(data, 4000, 16000, 2)
-    samples = splitAudio(data, 2, 8000)
-    for j, sample in enumerate(samples):
-            sample_file = "16k_clips/0/add_" + str(i) + "_" + str(j) + ".wav"
-            signalToWav(sample,  sample_file, 16000)
-            data, Fs = getData(sample_file)
-            data = spliceRandWord(data, "uhm's/", 2, Fs)
-            sample_file = "16k_clips/1/add_" + str(i) + "_" + str(j) + ".wav"
-            signalToWav(data, sample_file, Fs)
-
-for folder in listdir("16k_clips/"):
-    folder = "16k_clips/" + folder + "/"
-    for file in listdir(folder):
-        data, Fs = getData(folder + file)
-        createMelSpectrogram(data, spectrograms + folder[-2:] + file, img_shape = (256, 256))
+##out_path = BASE_DIR + "capstoneModules/recordings/"
+#spectrograms = BASE_DIR + "capstoneModules/16k_mel_spectrograms/"
+##generateDataset(path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/",
+##                out_path = BASE_DIR + "capstoneModules/16k_clips/",
+##                spectrograms = BASE_DIR + "capstoneModules/16k_mel_spectrograms/",
+##                size = 10000,
+##                clip_length = 2,
+##                set_Fs = 16000,
+##                image_shape = (256, 256),
+##                add_noise = None,
+##                freq_shift = None,
+##                mel = True,
+##                use_negatives = True)
+#for i, file in enumerate(listdir("ds_recordings/")):
+#    file = "ds_recordings/" + file
+#    audio = AudioSegment.from_file(file, format = "wav")
+#    matchTargetAmplitude(audio, -30)
+#    audio.export(file, format = "wav")
+#    data, Fs = getData(file)
+#    data = data[:-32000]
+##    data = downSample(data, 4000, 16000, 2)
+#    samples = splitAudio(data, 2, 8000)
+#    for j, sample in enumerate(samples):
+#            sample_file = "16k_clips/0/add_" + str(i) + "_" + str(j) + ".wav"
+#            signalToWav(sample,  sample_file, 16000)
+#            data, Fs = getData(sample_file)
+#            data = spliceRandWord(data, "uhm's/", 2, Fs)
+#            sample_file = "16k_clips/1/add_" + str(i) + "_" + str(j) + ".wav"
+#            signalToWav(data, sample_file, Fs)
+#
+#for folder in listdir("16k_clips/"):
+#    folder = "16k_clips/" + folder + "/"
+#    for file in listdir(folder):
+#        data, Fs = getData(folder + file)
+#        createMelSpectrogram(data, spectrograms + folder[-2:] + file, img_shape = (256, 256))
 ##    
 #generateDataset(path, out_path, spectrograms, 10000, use_negatives = True, mel = True)
 #convertToWav()
