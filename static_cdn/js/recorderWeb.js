@@ -134,7 +134,7 @@ function stopRecording(callback, AudioFormat) {
 						pitchResponse(data);
 						volumeResponse(data);
 						fillerCountResponse(data);
-						SentenceSpeed(data);
+						//SentenceSpeed(data);
 						//console.log(data);
 					}
 				});

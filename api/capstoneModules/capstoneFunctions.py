@@ -1180,7 +1180,7 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
         f[i] = Fs//periods[i]
     return f
 
-def volumeAnalysis(fname, window  = 500, threshold = -20):
+def volumeAnalysis(fname, window  = 500, threshold = -10):
     """
     Examine the change in volume throughout the audio clip
     
@@ -1195,7 +1195,7 @@ def volumeAnalysis(fname, window  = 500, threshold = -20):
     signal, Fs = getData(fname)
     
     def countPauses(power_vector, threshold = threshold, window = window):
-        pauses = []
+        pauses = np.zeros((1, 2))
         num_silent = 0
         is_paused = False
         i = 0
@@ -1207,11 +1207,12 @@ def volumeAnalysis(fname, window  = 500, threshold = -20):
             else:
                 is_paused = False
             if not is_paused and num_silent:
-                # Append [start index, duration] 
-                pauses.append([window*(i-num_silent)/1000, window*num_silent/1000])
+                # Append [start index, duration]
+                pause = np.asarray([window*(i-num_silent)/1000, window*num_silent/1000]).reshape(1,-1)
+                pauses = np.append(pauses, pause, axis = 0)
                 num_silent = 0
             i += 1
-        return pauses
+        return pauses[1:]
 
     W = int(Fs*window/1000)
     signal = np.asarray(trim(signal, threshold = 1000), np.float32)
@@ -1239,7 +1240,7 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 """
 
 ##### Testing new pause detection
-#power_vector, pauses = volumeAnalysis("../../audio/output_mono.wav", 100)
+#power_vector, pauses = volumeAnalysis("../../audio/output_mono.wav", 100, -10)
 #plt.plot(power_vector)
 #pauses = countPauses(power_vector, threshold = -10)
 

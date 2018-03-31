@@ -86,7 +86,16 @@ def googleCall(request):
         # Delete original file
         if default_storage.exists(path):
             default_storage.delete(path)
-        res = googleApiCall(settings.MEDIA_ROOT + "/Simon_Sinek_30.flac")
+        
+        # Volume Tracking
+        V, pauses = cf.volumeAnalysis(settings.MEDIA_ROOT + "/output_mono.wav", 100)
+        volume = np.zeros((V.shape[0], 2))
+        for i in range(volume.shape[0]):
+            volume[i, :] = np.asarray([i, V[i]])
+        
+        # Get and format response from google cloud api
+        res = googleApiCall(settings.MEDIA_ROOT + "/Simon_Sinek_30.flac", pauses)
+        
         
         if not res == "Empty Response":
             transcript = str(res[0])
@@ -120,12 +129,12 @@ def googleCall(request):
         
         # Pitch Tracking
         f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav", 
-                                freq_range = (40, 500), 
+                                freq_range = (40, 300), 
                                 threshold = 0.1, 
                                 timestep = 0.25, 
                                 Fc = 1e3)
         f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
-                                freq_range = (500, 1000), 
+                                freq_range = (300, 600), 
                                 threshold = 0.1, 
                                 timestep = 0.25, 
                                 Fc = 1e3)
@@ -133,14 +142,10 @@ def googleCall(request):
         for i in range(pitch.shape[0]):
             pitch[i, :] = np.asarray([i, f0[i], f1[i]])
 
-        # Volume Tracking
-        V, pauses = cf.volumeAnalysis(settings.MEDIA_ROOT + "/output_mono.wav", 100)
-        volume = np.zeros((V.shape[0], 2))
-        for i in range(volume.shape[0]):
-            volume[i, :] = np.asarray([i, V[i]])
+
         
         # Adjust wpm
-        print(wpm)
+
         # Filler word detection
 #        global graph
        # with settings.GRAPH.as_default():
