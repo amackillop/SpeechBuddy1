@@ -381,7 +381,7 @@ def spliceRandWord(signal, words, clip_length, set_Fs = 8000):
     new_signal = np.sum([signal, splice], axis = 0, dtype = np.int16)
     return new_signal
    
-def generateDataset(path, out_path, spectrograms, size = 1000, clip_length = 2, set_Fs = 8000, image_shape = (256, 256), add_noise = None, freq_shift = None, mel = False, use_negatives = False):
+def generateDataset(path, out_path, spectrograms, size = 1000, clip_length = 2, set_Fs = 16000, image_shape = (256, 256), add_noise = None, freq_shift = None, mel = False, use_negatives = False):
     """
     Generate training data by creating spectrograms from small clips taken from a dataset of spoken lines from audiobooks. 
     Positive samples have a filler word spliced into the clips.
@@ -453,7 +453,7 @@ def generateDataset(path, out_path, spectrograms, size = 1000, clip_length = 2, 
                 Fs = int(set_Fs)
             samples = splitAudio(data, 2, Fs)
             for i, sample in enumerate(samples):
-                samples[i] = spliceRandWord(sample, "stores_records/", 2)
+                samples[i] = spliceRandWord(sample, "uhm's/", 2)
                 
             n = len(listdir(out_path + "1/"))
             for j, sample in enumerate(samples):
@@ -465,7 +465,7 @@ def generateDataset(path, out_path, spectrograms, size = 1000, clip_length = 2, 
                 sample_file = out_path + "1/" + file
                 file = out_path + "0/" + file
                 sample, Fs = getData(file)
-                sample = spliceRandWord(sample, "stores_records/", 2, set_Fs = set_Fs)
+                sample = spliceRandWord(sample, "uhm's/", 2, set_Fs = set_Fs)
                 signalToWav(sample, sample_file, Fs)
     for file in listdir(out_path)[2:]:
         remove(out_path + file)
@@ -701,13 +701,12 @@ def createMelSpectrogram(data, fname, img_shape = (256, 256)):
     spectrogram = np.abs(stft(data))**2
     S = feature.melspectrogram(S = spectrogram)
 
-    plt.figure(figsize=(1, 1))
     fig, ax = plt.subplots(1, figsize = (img_shape[1]/256, img_shape[0]/256), dpi = 256)
     pylab.axis('off') # no axis
     pylab.axes([0., 0., 1., 1.], frameon=False, xticks=[], yticks=[]) 
     librosa.display.specshow(power_to_db(S, ref=np.max), cmap = cmap)
     pylab.savefig(fname[:-4], bbox_inches=None, pad_inches=0)
-    pylab.close()
+    pylab.close(fig)
     
 def melCoeffs(signal, Fs):
 #    recordToFile("demo6.wav", 16000)
@@ -1243,38 +1242,49 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 #power_vector, pauses = volumeAnalysis("../../audio/output_mono.wav", 100)
 #plt.plot(power_vector)
 #pauses = countPauses(power_vector, threshold = -10)
+
 #### ConvNet stuff
 #path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/"
 #out_path = BASE_DIR + "capstoneModules/recordings/"
-#spectrograms = BASE_DIR + "capstoneModules/spectrograms/"
-#splitAudio()
-#for i, file in enumerate(listdir("ds_recordings/")):
-#    file = "ds_recordings/" + file
-#    audio = AudioSegment.from_file(file, format = "wav")
-#    matchTargetAmplitude(audio, -30)
-#    audio.export(file, format = "wav")
-#    data, Fs = getData(file)
-#    data = data[:-32000]
+spectrograms = BASE_DIR + "capstoneModules/16k_mel_spectrograms/"
+#generateDataset(path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/",
+#                out_path = BASE_DIR + "capstoneModules/16k_clips/",
+#                spectrograms = BASE_DIR + "capstoneModules/16k_mel_spectrograms/",
+#                size = 10000,
+#                clip_length = 2,
+#                set_Fs = 16000,
+#                image_shape = (256, 256),
+#                add_noise = None,
+#                freq_shift = None,
+#                mel = True,
+#                use_negatives = True)
+for i, file in enumerate(listdir("ds_recordings/")):
+    file = "ds_recordings/" + file
+    audio = AudioSegment.from_file(file, format = "wav")
+    matchTargetAmplitude(audio, -30)
+    audio.export(file, format = "wav")
+    data, Fs = getData(file)
+    data = data[:-32000]
 #    data = downSample(data, 4000, 16000, 2)
-#    samples = splitAudio(data, 2, 8000)
-#    for j, sample in enumerate(samples):
-#            sample_file = "clips/0/add_" + str(i) + "_" + str(j) + ".wav"
-#            signalToWav(sample,  sample_file, 8000)
-#            data, Fs = getData(sample_file)
-#            data = spliceRandWord(data, "stores_records/", 2, Fs)
-#            sample_file = "clips/1/add_" + str(i) + "_" + str(j) + ".wav"
-#            signalToWav(data, sample_file, Fs)
+    samples = splitAudio(data, 2, 8000)
+    for j, sample in enumerate(samples):
+            sample_file = "16k_clips/0/add_" + str(i) + "_" + str(j) + ".wav"
+            signalToWav(sample,  sample_file, 16000)
+            data, Fs = getData(sample_file)
+            data = spliceRandWord(data, "uhm's/", 2, Fs)
+            sample_file = "16k_clips/1/add_" + str(i) + "_" + str(j) + ".wav"
+            signalToWav(data, sample_file, Fs)
 
-#for folder in listdir("clips/"):
-#    folder = "clips/" + folder + "/"
-#    for file in listdir(folder):
-#        data, Fs = getData(folder + file)
-#        createSpectrogram(data, spectrograms + folder[-2:] + file, img_shape = (256, 256))
+for folder in listdir("16k_clips/"):
+    folder = "16k_clips/" + folder + "/"
+    for file in listdir(folder):
+        data, Fs = getData(folder + file)
+        createMelSpectrogram(data, spectrograms + folder[-2:] + file, img_shape = (256, 256))
 ##    
 #generateDataset(path, out_path, spectrograms, 10000, use_negatives = True, mel = True)
 #convertToWav()
 #classifier = buildClassifier("filler_detector_less_pool3.h5", (256, 256))
-#file = "audio.wav"
+#file = "audio2.wav"
 #recordToFile(file, 16000)
 #data, Fs = getData(file)
 #data = downSample(data, 4000, Fs, 2)
@@ -1282,3 +1292,11 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 #classifier = load_model("filler_detector_less_pool.h5")
 #fitClassifier(classifier, "filler_detector_less_pool3.h5", 20, (256, 256), 32, BASE_DIR)
 #detectFillers(classifier, "audio.wav", (256, 256), mel = True)
+
+## Generating new uhms
+#folder = "uhm's/"
+#for file in listdir(folder):
+#    for i in range(1, 10):
+#        freqShift(folder + file, folder + str(i) + file, 2*i)
+#        freqShift(folder + file, folder + "-" + str(i) + file, -1*i)
+    
