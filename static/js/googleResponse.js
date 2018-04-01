@@ -98,6 +98,15 @@ var analytics_page = `
                         ontimeupdate="document.getElementById('tracktime').innerHTML = 'Track time: ' + Math.floor(this.currentTime) + ' / ' + Math.floor(this.duration);">
                     </audio>
                 </div>
+                <div class="well well-sm" style="text-align:left">
+                <ul class="legend">
+                <li><span class="too_slow"></span> Too Slow</li>
+                <li><span class="slow"></span> Slow</li>
+                <li><span class="good"></span> Good</li>
+                <li><span class="fast"></span> Fast</li>
+                <li><span class="too_fast"></span> Too Fast</li>
+                </ul>
+                </div>
             </div>
         </div>
     </div>

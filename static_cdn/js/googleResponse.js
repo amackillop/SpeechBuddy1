@@ -6,16 +6,8 @@ function googleResponse(data) {
     loadAnalyticsPage();
     $("#right-split").animate({ width: '100%' }, 1500);
     displayTranscriptWPM(data);
-
-    // $("#transcript-display").text(data.transcript);
-    // $("#transcript-display").fadeIn( "slow" );
-
-    // $("#data-view").append(vol_n_pitch);
-
-    // confidence = document.getElementById("confidence");
-    // confidence.innerHTML = "Confidence: " + data.confidence;
-    // confidence.style.display = "block";
-
+    updateQuickData(data);
+    displayGraphs(data);
 }
 
 function loadingTranscript() {
@@ -47,7 +39,7 @@ var analytics_page = `
                     <div class="col-sm-6" >
                         <div class="well" style="height: 34vw;overflow-y: scroll">
                             <h2>Here's what you said:</h2>
-                            <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px">...</h4>
+                            <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
                         </div>
                     </div>   
 
@@ -105,6 +97,15 @@ var analytics_page = `
                     <audio controls style="width: 95%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
                         ontimeupdate="document.getElementById('tracktime').innerHTML = 'Track time: ' + Math.floor(this.currentTime) + ' / ' + Math.floor(this.duration);">
                     </audio>
+                </div>
+                <div class="well well-sm" style="text-align:left">
+                <ul class="legend">
+                <li><span class="too_slow"></span> Too Slow</li>
+                <li><span class="slow"></span> Slow</li>
+                <li><span class="good"></span> Good</li>
+                <li><span class="fast"></span> Fast</li>
+                <li><span class="too_fast"></span> Too Fast</li>
+                </ul>
                 </div>
             </div>
         </div>
