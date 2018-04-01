@@ -1,7 +1,11 @@
 @media screen and (max-width: inherit) { 
-    body { 
-      padding-top: 0px; 
+    .body { 
+      padding-top: 35px; 
     }
+}
+
+.body { 
+  padding-top: 55px; 
 }
 
 #myNavbar{ /* Style navbar */
@@ -69,6 +73,7 @@
   position: fixed;
   z-index: 1;
   top: 0;
+  padding-top: 45px;
   overflow-x: hidden;
 }
 
@@ -80,7 +85,6 @@
 
 .right {
   right: 0;
-  padding-right: 10%;
   background-color: white;
   position: absolute;
 }
@@ -224,45 +228,23 @@
   width: 150%;
   height: 500px;
 }
-
-
-/* FOR WPM */
-.too_slow {
-  background-color: #AED6F1;
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
+/*  color styles for quick data cards */
+.very-low {
+  color: #AED6F1;
 }
 
-.slow{
-  background-color: #2471A3;
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
+.low{
+  color: #2471A3;
 }
 
-.good{
-  background-color: #27AE60;
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
+.med{
+  color: #27AE60;
 }
 
-.fast{
-  background-color: #E67E22;
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
+.high{
+  color: #E67E22;
 }
 
-.too_fast{
-  background-color: rgb(241, 38, 11);
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
+.very-high{
+  color: #E67E22;
 }

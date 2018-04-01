@@ -1,35 +1,45 @@
-
+/* FOR WPM DYNAMIC SENTENCE STYLING*/
 .too_slow {
-    background-color: #AED6F1;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.slow{
-    background-color: #2471A3;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-good{
-    background-color: #27AE60;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.fast{
-    background-color: #E67E22;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.too_fast{
-    background-color: #F1190B;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
+    background-color: rgba(11, 26, 241, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.4;
+    font-size: 20px;
+  }
+  
+  .slow{
+    background-color: rgba(11, 176, 241, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.4;
+    font-size: 20px;
+  }
+  
+  .good{
+    background-color: rgba(49, 241, 11, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.4;
+    font-size: 20px;
+  }
+  
+  .fast{
+    background-color: rgba(231, 172, 63, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.4;
+    font-size: 20px;
+  }
+  
+  .too_fast{
+    background-color: rgba(231, 63, 63, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.4;
+    font-size: 20px;
+  }
