@@ -6,13 +6,8 @@ function googleResponse(data) {
     loadAnalyticsPage();
     $("#right-split").animate({ width: '100%' }, 1500);
     displayTranscriptWPM(data);
-<<<<<<< HEAD
     displayGraphs(data);
     displayQuickData(data);
-=======
-    updateQuickData(data);
-    displayGraphs(data);
->>>>>>> 7b3a95439da1bcc5c041f55c51e5948120e62b0d
 }
 
 function loadingTranscript() {
@@ -130,16 +125,16 @@ var analytics_page = `
                 <div id="random"></div>
                 <div class="well well-sm" style="text-align:left">
                     <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
-                        onload="document.getElementById('track-time').innerHTML = Math.floor(this.duration);">
+                        ontimeupdate="document.getElementById('track-time').innerHTML = Math.floor(this.duration);">
                     </audio>
                 </div>
                 <div class="well well-sm" style="text-align:left">
                 <ul class="legend">
-                <li><span class="too_slow"></span> Too Slow</li>
-                <li><span class="slow"></span> Slow</li>
-                <li><span class="good"></span> Good</li>
-                <li><span class="fast"></span> Fast</li>
-                <li><span class="too_fast"></span> Too Fast</li>
+                    <li><span class="too_slow"></span> Too Slow</li>
+                    <li><span class="slow"></span> Slow</li>
+                    <li><span class="good"></span> Good</li>
+                    <li><span class="fast"></span> Fast</li>
+                    <li><span class="too_fast"></span> Too Fast</li>
                 </ul>
                 </div>
             </div>

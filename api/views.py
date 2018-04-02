@@ -5,7 +5,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework import generics
 import io
-from PIL import Image
+# from PIL import Image
 import base64
 import re
 #from serializers import nltkPostSerializer
@@ -40,7 +40,6 @@ from django.conf import settings
 
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 ROOT = path.join(path.dirname(BASE_DIR))
-
 
 # Create your views here.
 # class ViewAPI(APIView):
@@ -184,30 +183,11 @@ def screenshotCall(request):
         # Save the audio file
         dataDict = request.data
         dataDict = dataDict['image']
-        #print(dataDict.read())
+        
+        dataDict.seek(22)   # skip the first 22 bytes
 
-
-        # image_data = re.sub('^data:image/.+;base64,', '', dataDict['image']).decode('base64')
-        # print(image_data)
-        # image = Image.open(io.StringIO(image_data))
-
-
-        # with open("img.png", "wb") as fh:
-        #     fh.write(base64.decodebytes(image))
-      
-
-        # import base64
-        # image_binary=base64.decodestring('image')
-
-        # with open('img.png','wb') as f:
-        #     f.write(image_binary)
-
+        rest = dataDict.read()
+        decode = base64.standard_b64decode(rest)
         path = default_storage.save(
-            settings.MEDIA_ROOT + "/img.png", ContentFile(dataDict.read()))
-        #      # Delete original file
-        # if default_storage.exists(path):
-        #     default_storage.delete(path)
-
-
-
+            settings.MEDIA_ROOT + "/img.png", ContentFile(decode))
     return Response({"message": "image saved"})

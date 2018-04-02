@@ -130,11 +130,11 @@ var analytics_page = `
                 </div>
                 <div class="well well-sm" style="text-align:left">
                 <ul class="legend">
-                <li><span class="too_slow"></span> Too Slow</li>
-                <li><span class="slow"></span> Slow</li>
-                <li><span class="good"></span> Good</li>
-                <li><span class="fast"></span> Fast</li>
-                <li><span class="too_fast"></span> Too Fast</li>
+                    <li><span class="too_slow"></span> Too Slow</li>
+                    <li><span class="slow"></span> Slow</li>
+                    <li><span class="good"></span> Good</li>
+                    <li><span class="fast"></span> Fast</li>
+                    <li><span class="too_fast"></span> Too Fast</li>
                 </ul>
                 </div>
             </div>
