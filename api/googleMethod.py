@@ -66,10 +66,6 @@ def formatResponse(response, pauses):
 #                if start_time < pause[0] and end_time > pause[0]:
 #                    end_time -= pause[1]
             wordslist.append((end_time.seconds + end_time.nanos * 1e-9) - ( start_time.seconds + start_time.nanos * 1e-9))
-            print('Word: {}, start_time: {}, end_time: {}'.format(
-                word,
-                start_time.seconds + start_time.nanos * 1e-9,
-                end_time.seconds + end_time.nanos * 1e-9,))
 
         #alternate way to get the words in the list
         for word_info in alternative.words:
@@ -93,8 +89,6 @@ def formatResponse(response, pauses):
                 temp_string= ""
                 temp_string = temp_string + str(strings_of_words[i]) + ' '
         
-            
-
         #calculate total duration per 15 words
         time_per_sentence = 0
         time_per_last_sentence=0
