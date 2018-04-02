@@ -19,7 +19,8 @@ from . import views
 urlpatterns = [
      url(r'^nltk/', views.nltkCall, name='nltk'),
      url(r'^google/', views.googleCall, name='google'),
-     url(r'^googleOAuth/', views.googleOAuthCall, name='googleOAuth')
+     url(r'^googleOAuth/', views.googleOAuthCall, name='googleOAuth'),
+     url(r'^screenshot/', views.screenshotCall, name='screenshot')
 
 
 ]

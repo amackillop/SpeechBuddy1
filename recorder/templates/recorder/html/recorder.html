@@ -16,6 +16,7 @@
     <script src="../static/js/csrf.js"></script>
     <link rel="stylesheet" href="../static/css/modal.css">
     <link rel="stylesheet" href="../static/css/base.css">
+    <link rel="stylesheet" href="../static/css/wpm.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript"></script>
@@ -54,13 +55,15 @@
         <video autoplay="true" id="videoElement"></video>
         <div id="recordingslist"></div>
         <div id="recordingDiv">
-            <button id="start-btn" class="btn btn-primary btn-lg">Record</button>
-            <button id="stop-btn" class="btn btn-danger btn-lg" disabled> Stop </button>
+            <button id="start-btn" class="btn btn-primary btn-lg" onclick="StartImages()">Record</button>
+            <button id="stop-btn" class="btn btn-danger btn-lg" disabled onclick="StopScrnShot()"> Stop </button>
             <button id="submit-btn" class="btn btn-success btn-lg" onclick="loadingTranscript()" style="display:none">Submit</button>
             <button id="upload-btn" class="btn btn-default btn-lg" onclick="saveToDrive()" style="display:none">
-                <img  width = "32px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Google_Drive_Logo.svg/2000px-Google_Drive_Logo.svg.png"/>
+                <img width="32px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Google_Drive_Logo.svg/2000px-Google_Drive_Logo.svg.png"
+                />
             </button>
             <h4 id="recordingtitle" style="display:none;">Recordings: </h4>
+
         </div>
     </div>
 
@@ -68,6 +71,7 @@
         <div class="info" id="text-wrapper">
             <div id="name"></div>
             <h1 id="title">Welcome to SpeechBuddy.</h1>
+            <img id="screenshot-img" hidden>
             <h2 id="header-text">Click
                 <span style="color:cornflowerblue">
                     <b>Record</b>
@@ -80,14 +84,15 @@
                         calculate multiple factors like volume, tone, speed and pronounciation, and display the results to
                         you in an easily understood fashion. Goodluck!
                     </h4>
-                    
+
 
                 </div>
 
                 <h2 id="confidence" style="display:none;align-content:right;"></h2>
                 <h2 id="list_of_sentences" style="display:none;align-content:left;"></h2>
                 <h2 id="wordsperminute" style="display:none;align-content:left;"></h2>
-                <p id="Empty Transcript"></p> 
+                <p id="Empty Transcript"></p>
+
             </div>
 
         </div>
@@ -138,7 +143,8 @@
         <script src="../static/js/googleOAuth.js"></script>
         <script src="../static/js/recorder.js"></script>
         <script src="../static/js/SentenceSpeed.js"></script>
-        
+        <!-- <script src="../static/js/camera.js"></script> -->
+
         <script>
             var video = document.querySelector("#videoElement");
 
@@ -154,6 +160,84 @@
 
             function videoError(e) {
                 // do something
+            }
+        </script>
+
+        <script>
+            var scr_shot = 0;
+            function StartImages() {
+                 scr_shot = setInterval(oneSecondFunction, 1000);
+            }
+
+            function StopScrnShot() {
+                clearInterval(scr_shot);
+            }
+
+            function oneSecondFunction() {
+
+                // var video = document.querySelector("#videoElement");
+                const img = document.querySelector('#screenshot-img');
+                // const video = document.querySelector('#screenshot-video');
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                // Other browsers will fall back to image/png
+                img.src = canvas.toDataURL('image/png');
+                // img.src=img.src.replace('/^data:image\/(png|jpg);base64,/',"");
+                // img.href = document.getElementById('canvas').toDataURL();
+                // img.download = 'test.png';
+
+
+                var blob = new Blob([img.src], { type: 'image/png' });
+                console.log("blob from start button:");
+                console.log(blob);
+
+                // downloadCanvas(this, 'canvas', 'test.png');
+
+                function handleSuccess(stream) {
+                    video.srcObject = stream;
+                }
+                ImageSaved(blob);
+
+            }
+
+        </script>
+
+        <script>
+            function ImageSaved(blob) {
+                console.log("imagesaved function entered");
+                var csrftoken = getCookie('csrftoken');
+                // console.log(typeof($('#string').html()));
+                var fd = new FormData();
+                var reader = new FileReader();
+                console.log(reader.readAsDataURL(blob));
+                var fileType = 'image';
+                var fileName = 'img.png';
+                fd.append(fileType, blob, fileName);
+                // set csrf header
+                console.log("file from img blob");
+                console.log(fd);
+                $.ajaxSetup({
+                    beforeSend: function (xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+                //while processing the api call, disable the submit button
+                //document.getElementById("submit-btn").disabled = "true";
+                // Ajax call here
+                $.ajax({
+                    url: "/api/screenshot/",
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function (data) {
+                        console.log("Image sent to server");
+                    }
+                });
             }
         </script>
 </body>

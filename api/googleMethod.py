@@ -8,7 +8,7 @@ from google.cloud.speech import enums
 from google.cloud.speech import types
 import wave
 
-def googleApiCall(path):
+def googleApiCall(path, pauses):
 #    path = "C:/Users/Austin/Desktop/school/capstone/speechbuddy/audio/output_mono.flac"
     # Instantiates a client
     client = speech.SpeechClient()
@@ -31,13 +31,13 @@ def googleApiCall(path):
     # Detects speech in the audio file
     response = client.recognize(config, audio)
     try:
-        response = formatResponse(response)
+        response = formatResponse(response, pauses)
     except:
         return "Empty Response"
 #    print(response)
     return response
 
-def formatResponse(response):
+def formatResponse(response, pauses):
 
     stringData="{"
 
@@ -62,11 +62,10 @@ def formatResponse(response):
             word = word_info.word
             start_time = word_info.start_time
             end_time = word_info.end_time
+#            for pause in pauses:
+#                if start_time < pause[0] and end_time > pause[0]:
+#                    end_time -= pause[1]
             wordslist.append((end_time.seconds + end_time.nanos * 1e-9) - ( start_time.seconds + start_time.nanos * 1e-9))
-            print('Word: {}, start_time: {}, end_time: {}'.format(
-                word,
-                start_time.seconds + start_time.nanos * 1e-9,
-                end_time.seconds + end_time.nanos * 1e-9,))
 
         #alternate way to get the words in the list
         for word_info in alternative.words:
@@ -90,8 +89,6 @@ def formatResponse(response):
                 temp_string= ""
                 temp_string = temp_string + str(strings_of_words[i]) + ' '
         
-            
-
         #calculate total duration per 15 words
         time_per_sentence = 0
         time_per_last_sentence=0
@@ -135,5 +132,7 @@ def formatResponse(response):
         print(len(list_of_sentences))
         #print(len(alternative.words))
                 # add more calcs to print here for testing...
+        print("###############################~~~~~~~LOOK HERE~~~~~~~~~########################")
+        print(movingWindow, list_of_sentences, wordsperminute)
         print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
     return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences, wordsperminute]
