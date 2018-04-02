@@ -4,6 +4,10 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework import generics
+import io
+from PIL import Image
+import base64
+import re
 #from serializers import nltkPostSerializer
 from rest_framework.response import Response
 #from models import nltkModel
@@ -180,14 +184,30 @@ def screenshotCall(request):
         # Save the audio file
         dataDict = request.data
         dataDict = dataDict['image']
-        
-        # import base64
+        #print(dataDict.read())
+
+
+        # image_data = re.sub('^data:image/.+;base64,', '', dataDict['image']).decode('base64')
+        # print(image_data)
+        # image = Image.open(io.StringIO(image_data))
+
+
         # with open("img.png", "wb") as fh:
-        #     fh.write(base64.decodebytes(dataDict))       
+        #     fh.write(base64.decodebytes(image))
+      
+
+        # import base64
+        # image_binary=base64.decodestring('image')
+
+        # with open('img.png','wb') as f:
+        #     f.write(image_binary)
+
         path = default_storage.save(
             settings.MEDIA_ROOT + "/img.png", ContentFile(dataDict.read()))
         #      # Delete original file
         # if default_storage.exists(path):
         #     default_storage.delete(path)
+
+
 
     return Response({"message": "image saved"})
