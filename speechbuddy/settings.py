@@ -134,7 +134,9 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = path.join(path.dirname(BASE_DIR),'SpeechBuddy1/static_cdn')
 MEDIA_ROOT = path.join(path.dirname(BASE_DIR), 'SpeechBuddy1/audio')
+IMAGE_ROOT = path.join(path.dirname(BASE_DIR), 'SpeechBuddy1/audio/image')
 MEDIA_URL = 'audio/'
+IMAGE_URL = 'image/'
 
 # Neural network stuff
 # modelFile = MEDIA_ROOT + '/Model_4_GoNoGo_5.h5'    

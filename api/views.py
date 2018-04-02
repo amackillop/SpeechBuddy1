@@ -189,5 +189,5 @@ def screenshotCall(request):
         rest = dataDict.read()
         decode = base64.standard_b64decode(rest)
         path = default_storage.save(
-            settings.MEDIA_ROOT + "/img.png", ContentFile(decode))
+            settings.IMAGE_ROOT + "/img.png", ContentFile(decode))
     return Response({"message": "image saved"})
