@@ -177,17 +177,23 @@ def googleCall(request):
     return Response({"message": "Hello, world!"})
 
 
+number=0
+
 @api_view(['POST'])
 def screenshotCall(request):
+    global number
     if request.method == 'POST':
         # Save the audio file
         dataDict = request.data
         dataDict = dataDict['image']
-        
+        number=number+1
         dataDict.seek(22)   # skip the first 22 bytes
-
         rest = dataDict.read()
         decode = base64.standard_b64decode(rest)
         path = default_storage.save(
-            settings.MEDIA_ROOT + "/img.png", ContentFile(decode))
+            settings.IMAGE_ROOT + "/img" +str(number)+".png", ContentFile(decode))
+
+    else:
+        number=0
+
     return Response({"message": "image saved"})
