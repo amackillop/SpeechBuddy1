@@ -218,15 +218,11 @@
 /*Fundemental Stuff Here*/
 #chart_div {
 	text-align: center;
-  width: 150%;
-  height: 500px;
 }
 
 /* Volume stuff */
 #chart_div_volume {
 	text-align: center;
-  width: 150%;
-  height: 500px;
 }
 /*  color styles for quick data cards */
 .very-low {

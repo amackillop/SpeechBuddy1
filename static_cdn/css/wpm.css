@@ -4,8 +4,8 @@
     /* float: left; */
     font-weight: normal;
     display: inline;
-    line-height: 2.4;
-    font-size: 20px;
+    line-height: 2.2;
+    font-size: 18px;
   }
   
   .slow{
@@ -13,8 +13,8 @@
     /* float: left; */
     font-weight: normal;
     display: inline;
-    line-height: 2.4;
-    font-size: 20px;
+    line-height: 2.2;
+    font-size: 18px;
   }
   
   .good{
@@ -22,8 +22,8 @@
     /* float: left; */
     font-weight: normal;
     display: inline;
-    line-height: 2.4;
-    font-size: 20px;
+    line-height: 2.2;
+    font-size: 18px;
   }
   
   .fast{
@@ -31,8 +31,8 @@
     /* float: left; */
     font-weight: normal;
     display: inline;
-    line-height: 2.4;
-    font-size: 20px;
+    line-height: 2.2;
+    font-size: 18px;
   }
   
   .too_fast{
@@ -40,8 +40,8 @@
     /* float: left; */
     font-weight: normal;
     display: inline;
-    line-height: 2.4;
-    font-size: 20px;
+    line-height: 2.2;
+    font-size: 18px;
   }
 
   /* Legend Positioning */
@@ -50,7 +50,7 @@
 }
 .legend li 
 { float: left; 
-  margin-right: 10px; 
+  margin-right: 18px; 
 }
 .legend span { 
   border: 1px solid #ccc; 

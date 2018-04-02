@@ -80,31 +80,29 @@ var analytics_page = `
                     </div>
                     <div class="col-sm-6">
                         <div class="well">
-                        <div class="container">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#home">Tone</a></li>
-                            <li><a data-toggle="tab" href="#menu1">Volume</a></li>
-                            <li><a data-toggle="tab" href="#menu2">Corpus</a></li>
-                            <li><a data-toggle="tab" href="#menu3">Emotion</a></li>
-                        </ul>
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#home">Tone</a></li>
+                                <li><a data-toggle="tab" href="#menu1">Volume</a></li>
+                                <li><a data-toggle="tab" href="#menu2">Corpus</a></li>
+                                <li><a data-toggle="tab" href="#menu3">Emotion</a></li>
+                            </ul>
 
-                        <div class="tab-content">
-                            <div id="home" class="tab-pane fade in active">
-                                <div id="chart_div" style="height:20vw;width:45vw">
+                            <div class="tab-content">
+                                <div id="home" class="tab-pane fade in active">
+                                    <div id="chart_div" style="height:20vw;width:42vw">
+                                    </div>
+                                </div>
+                                <div id="menu1" class="tab-pane fade">
+                                    <div id="chart_div_volume">
+                                    </div>
+                                </div>
+                                <div id="menu2" class="tab-pane fade">
+                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                                </div>
+                                <div id="menu3" class="tab-pane fade">
+                                    <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
                                 </div>
                             </div>
-                            <div id="menu1" class="tab-pane fade">
-                                <div id="chart_div_volume" style="height:20vw;width:45vw">
-                                </div>
-                            </div>
-                            <div id="menu2" class="tab-pane fade">
-                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-                            </div>
-                            <div id="menu3" class="tab-pane fade">
-                                <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                            </div>
-                        </div>
-                    </div>
                         </div>
                     </div>
                     </div>
@@ -115,7 +113,7 @@ var analytics_page = `
             </div>
             <div class="well well-sm" style="text-align:left">
                 <ul class="legend">
-                    <li><span class="too_slow"></span> Too Slow</li>
+                    <li><span class="legend too_slow"></span> Too Slow</li>
                     <li><span class="slow"></span> Slow</li>
                     <li><span class="good"></span> Good</li>
                     <li><span class="fast"></span> Fast</li>
