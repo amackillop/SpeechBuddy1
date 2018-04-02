@@ -60,8 +60,23 @@
   margin: 2px; 
 }
 /* Legend Colors colors */
-.legend .too_slow { background-color: rgba(11, 26, 241, 0.3); }
-.legend .slow { background-color: rgba(11, 176, 241, 0.3); }
-.legend .good {background-color: rgba(49, 241, 11, 0.3); }
-.legend .fast { background-color: rgba(231, 172, 63, 0.3); }
-.legend .too_fast{background-color: rgba(231, 63, 63, 0.3); }
+.legend .too_slow {
+  background-color: rgba(11, 26, 241, 0.3); 
+  font-size: 15px;
+}
+.legend .slow { 
+  background-color: rgba(11, 176, 241, 0.3); 
+  font-size: 15px;
+}
+.legend .good {
+  background-color: rgba(49, 241, 11, 0.3); 
+  font-size: 15px;
+}
+.legend .fast {
+  background-color: rgba(231, 172, 63, 0.3);
+  font-size: 15px;
+}
+.legend .too_fast{
+  background-color: rgba(231, 63, 63, 0.3);
+  font-size: 15px;
+}

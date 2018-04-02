@@ -80,55 +80,40 @@ var analytics_page = `
                     </div>
                     <div class="col-sm-6">
                         <div class="well">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Tone</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Volume</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Corpus</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="emotions-tab" data-toggle="tab" href="#emotions" role="tab" aria-controls="emotions" aria-selected="false">Emotions</a>
-                            </li>
+                        <div class="container">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#home">Tone</a></li>
+                            <li><a data-toggle="tab" href="#menu1">Volume</a></li>
+                            <li><a data-toggle="tab" href="#menu2">Corpus</a></li>
+                            <li><a data-toggle="tab" href="#menu3">Emotion</a></li>
                         </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane show active fade in" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <img style="height: 20vw;width:45vw" src="https://www.mathworks.com/matlabcentral/mlc-downloads/downloads/submissions/22214/versions/1/screenshot.jpg">
-                            </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                { Volume graph goes here }
-                            </div>
-                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                <div id="myModal" class="modal">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <span class="close">&times;</span>
-                                            <h2 id="mhead">Modal Header</h2>
-                                        </div>
-                                        <div class="modal-body" id="mbody"></div>
-                                        <div class="modal-footer">
-                                            <h3>nltk lib</h3>
-                                        </div>
-                                    </div>
+
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane fade in active">
+                                <div id="chart_div" style="height:20vw;width:45vw">
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="emotions" role="tabpanel" aria-labelledby="emotions-tab">
-                                { Emotion data goes here }
+                            <div id="menu1" class="tab-pane fade">
+                                <div id="chart_div_volume" style="height:20vw;width:45vw">
+                                </div>
                             </div>
+                            <div id="menu2" class="tab-pane fade">
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                            </div>
+                            <div id="menu3" class="tab-pane fade">
+                                <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                            </div>
+                        </div>
+                    </div>
                         </div>
                     </div>
                     </div>
                 </div>
                 <div id="random"></div>
-                <div class="well well-sm" style="text-align:left">
-                    <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
-                        ontimeupdate="document.getElementById('track-time').innerHTML = Math.floor(this.duration);">
-                    </audio>
-                </div>
-                <div class="well well-sm" style="text-align:left">
+                
+                
+            </div>
+            <div class="well well-sm" style="text-align:left">
                 <ul class="legend">
                     <li><span class="too_slow"></span> Too Slow</li>
                     <li><span class="slow"></span> Slow</li>
@@ -136,8 +121,13 @@ var analytics_page = `
                     <li><span class="fast"></span> Fast</li>
                     <li><span class="too_fast"></span> Too Fast</li>
                 </ul>
-                </div>
             </div>
+            <div class="well well-sm" style="text-align:left">
+                    <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
+                        ontimeupdate="document.getElementById('track-time').innerHTML = Math.floor(this.duration);">
+                    </audio>
+                </div>
+            
         </div>
     </div>
     `;
