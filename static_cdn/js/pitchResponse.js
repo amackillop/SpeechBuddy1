@@ -16,6 +16,9 @@ function pitchResponse(data) {
 
 			chartData.addRows(data.pitch);
 			var options = {
+				
+				width: 720,
+				height: 350,
 				'title': 'Fundemental Frequency',
 				curveType: 'function',
 				series: {

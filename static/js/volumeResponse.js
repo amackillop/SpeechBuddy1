@@ -33,16 +33,3 @@ function volumeResponse(data) {
 	})
 
 }
-
-function resizeChart() {
-	chart.draw(data, options);
-}
-if (document.addEventListener) {
-	window.addEventListener('resize', resizeChart);
-}
-else if (document.attachEvent) {
-	window.attachEvent('onresize', resizeChart);
-}
-else {
-	window.resize = resizeChart;
-}
