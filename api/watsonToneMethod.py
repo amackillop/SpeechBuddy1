@@ -1,12 +1,12 @@
 from __future__ import print_function
 import json
 from watson_developer_cloud import ToneAnalyzerV3
-from watson import AzureKeys
+from api.keys import ApiKeys
 
 tone_analyzer = ToneAnalyzerV3(
-    username=AzureKeys['username'],
-    password=AzureKeys['password'],
-    version=AzureKeys['version'])
+    username=ApiKeys['username'],
+    password=ApiKeys['password'],
+    version=ApiKeys['version'])
 
 
 # print("\ntone() example 1:\n")
@@ -29,12 +29,12 @@ def watsontoneCall(sentencesLIST):
     # print(emotion)
     arrayEmo = json.loads(emotionLIST)
     emotions = arrayEmo['document_tone']['tone_categories'][0]['tones']
-    EmotionalAVG = [0] * 5
-    Sadness = [0] * 5
-    Joy = [0] * 5
-    Anger = [0] * 5
-    Disgust = [0] * 5
-    Fear = [0] * 5
+    EmotionalAVG = [0] * len(arrayEmo['sentences_tone'])
+    Sadness = [0] * len(arrayEmo['sentences_tone'])
+    Joy = [0] * len(arrayEmo['sentences_tone'])
+    Anger = [0] * len(arrayEmo['sentences_tone'])
+    Disgust = [0] * len(arrayEmo['sentences_tone'])
+    Fear = [0] * len(arrayEmo['sentences_tone'])
 
     for i in range(len(emotions)):
         # print(emotions[i])
@@ -67,16 +67,16 @@ def watsontoneCall(sentencesLIST):
             if emotions[j]['tone_id'] == 'fear':
                 Fear[arrayEmo['sentences_tone'][i]['sentence_id']] = emotions[j]['score']
 
-    return [EmotionalAVG, Sadness, Joy, Anger, Fear,social]
+    return [Sadness, Joy, Anger,Disgust, Fear,EmotionalAVG, social]
 
 
-arraylist = ['Here, statements may be a single statement or a block of statements',
-             'The condition may be any expression, and true is any non-zero value',
-             'I am having an amazing day because I had the best food ever',
-             'I just missed my exam and now I am going to fail and drop out of school',
-             'I just got an interview for at EY']
+# arraylist = ['Here, statements may be a single statement or a block of statements',
+#              'The condition may be any expression, and true is any non-zero value',
+#              'I am having an amazing day because I had the best food ever',
+#              'I just missed my exam and now I am going to fail and drop out of school',
+#              'I just got an interview for at EY']
 
-arrayEmo = watsontoneCall(arraylist)
+# arrayEmo = watsontoneCall(arraylist)
 
 # print(arrayEmo[1])
 
