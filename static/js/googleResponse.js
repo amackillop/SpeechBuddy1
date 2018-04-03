@@ -50,7 +50,7 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>WPM</b></h4>
-                            <h4 style="font-size: 1.5vw" class="med">145</h4>
+                             <h4 id="WPM" style="font-size: 1.5vw" class = "med"></h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -259,6 +259,7 @@ function displayGraphs(data) {
 function displayQuickData(data) {
     //set confidence level
     $("#score-data").text(data.confidence);
+    $("#WPM").text(data.average_wpm);
 
     //set track duration
     // var track_time = Math.floor($("#audioplayer").duration);
