@@ -128,11 +128,11 @@ var analytics_page = `
         </div>
         <div class="well well-sm" style="text-align:left; margin:10px">
             <ul class="legend">
-                <li><span class="legend too_slow"></span> Too Slow</li>
-                <li><span class="slow"></span> Slow</li>
-                <li><span class="good"></span> Good</li>
-                <li><span class="fast"></span> Fast</li>
-                <li><span class="too_fast"></span> Too Fast</li>
+                <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
+                <li><span class="slow"></span> Slow(>120 WPM ≤140)(</li>
+                <li><span class="good"></span> Good(>140 WPM ≤170)</li>
+                <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
+                <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
             </ul>
         </div>
         <div class="well well-sm" style="text-align:left; margin:10px">
@@ -188,8 +188,9 @@ function displayTranscriptWPM(data) {
 }
 
 function displayGraphs(data) {
-    $("#corpusTranscript").text(data.transcript);
-
+    var transcript_split = data.transcript.split("\"");
+    var corpusTranscript = transcript_split[1];
+    $("#corpusTranscript").text(corpusTranscript);
 
     var fillerData = `
         <div id="filler count">
@@ -211,14 +212,14 @@ function displayQuickData(data) {
 
 function corpusTranscript(data) {
     if (!$("#corpusTranscript").is(":visible")) {
-        $("#empty-transcript").fadeOut("slow");
-        $("#corpusTranscript").fadeIn("slow");
+        $("#empty-transcript").hide();
+        $("#corpusTranscript").show();
     }
 }
 
 function wpmTranscript() {
     if ($("#corpusTranscript").is(":visible")) {
-        $("#corpusTranscript").fadeOut("slow");
-        $("#empty-transcript").fadeIn("slow");
+        $("#corpusTranscript").hide();
+        $("#empty-transcript").show();
     }
 }

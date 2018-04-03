@@ -128,11 +128,11 @@ var analytics_page = `
         </div>
         <div class="well well-sm" style="text-align:left; margin:10px">
             <ul class="legend">
-                <li><span class="legend too_slow"></span> Too Slow</li>
-                <li><span class="slow"></span> Slow</li>
-                <li><span class="good"></span> Good</li>
-                <li><span class="fast"></span> Fast</li>
-                <li><span class="too_fast"></span> Too Fast</li>
+                <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
+                <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
+                <li><span class="good"></span> Good(>140 WPM ≤170)</li>
+                <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
+                <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
             </ul>
         </div>
         <div class="well well-sm" style="text-align:left; margin:10px">
