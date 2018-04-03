@@ -188,6 +188,25 @@ def googleCall(request):
         FearT = emotionText[4]
         AvgT = emotionText[5]
 
+        print(len(SadnessT),len(SadnessI))
+        print(len(JoyT),len(JoyI))
+        print(len(AngerT),len(AngerI))
+        print(len(DisgustT),len(DisgustI))
+        print(len(FearT),len(FearI))
+
+        SadnessC = np.corrcoef(SadnessI,SadnessT)[0][1]
+        JoyC = np.corrcoef(JoyI,JoyT)[0][1]
+        AngerC = np.corrcoef(AngerI, AngerT)[0][1]
+        DisgustC = np.corrcoef(DisgustI, DisgustT)[0][1]
+        FearC = np.corrcoef(FearI, FearT)[0][1]
+
+        print("Sadness", SadnessC, SadnessI, SadnessT)
+        print("JoyC", JoyC, JoyI, JoyT)
+        print("AngerC", AngerC, AngerI, AngerT)
+        print("DisgustC", DisgustC, DisgustI, DisgustT)
+        print("FearC", FearC, FearI, FearT)
+
+
 
 
 
