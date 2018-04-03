@@ -17,7 +17,7 @@ def pick4oflist(listofImages):
 def stichImagesCall(sentencesEnd):
     # print("Sentences: ", sentencesEnd)
     start = 0
-    folder = '/home/sanghs3/Capstone/SpeechBuddy1/audio/image/'
+    folder = 'C:/Users/Gladiator/Desktop/Capestone/Updated UI/SpeechBuddy1/audio/image/'
     SentenceofImages = [0]*len(sentencesEnd)
     listofImages = os.listdir(folder)
     for i in range(len(sentencesEnd)):
@@ -113,4 +113,4 @@ def creatImage(listofImages,counter):
                 x_offset += temp.size[0]
 
     #new_im.save('/home/sanghs3/Capstone/SpeechBuddy1/audio/finalImages/' + stringFile + '.jpg')
-    new_im.save('/home/sanghs3/Capstone/SpeechBuddy1/audio/finalImages/' + str(counter) + '.jpg')
+    new_im.save('C:/Users/Gladiator/Desktop/Capestone/Updated UI/SpeechBuddy1/audio/finalimages/' + str(counter) + '.jpg')
