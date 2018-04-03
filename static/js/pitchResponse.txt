@@ -1,2 +1,0 @@
-gcloud auth activate-service-account --key-file=C:\Users\Austin\Desktop\My First Project-82e45f8644e9.json
-gcloud auth application-default print-access-token
