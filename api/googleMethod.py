@@ -45,7 +45,6 @@ def formatResponse(response, pauses):
         alternative = result.alternatives[0]
         stringData = stringData + '"Transcript":"' + str(alternative.transcript.encode('ascii')) + '",'
         stringData = stringData + '"Confidence":' + str(alternative.confidence) + '}'
-        movingWindow=[]
 
         # Holds duration of each word from response
         wordslist = []
@@ -120,6 +119,17 @@ def formatResponse(response, pauses):
             wordsperminute.append(speaking_rate_last_sentence)
             speaking_rate_last_sentence=0
 
+        sentenceEnds=[0] * len(sentence_duration)
+
+        for i in range(len(sentence_duration)):
+            if i == 0:
+                sentenceEnds[i] = sentence_duration[i]
+            else:
+                sentenceEnds[i] = round(sentence_duration[i]+sentenceEnds[i-1],2)
+
+        print(sentenceEnds)
+
+
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nTotal time taken to complete each sentence:")
         print (["%0.2f" % i for i in sentence_duration])
@@ -133,6 +143,6 @@ def formatResponse(response, pauses):
         #print(len(alternative.words))
                 # add more calcs to print here for testing...
         print("###############################~~~~~~~LOOK HERE~~~~~~~~~########################")
-        print(movingWindow, list_of_sentences, wordsperminute)
+        print(sentenceEnds, list_of_sentences, wordsperminute)
         print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
-    return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences, wordsperminute]
+    return [alternative.transcript.encode('ascii'),alternative.confidence, sentenceEnds, list_of_sentences, wordsperminute]
