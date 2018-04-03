@@ -56,6 +56,7 @@ def formatResponse(response, pauses):
         temp_string = ""
         list_of_sentences=[]
 
+
          
 
         for word_info in alternative.words:
@@ -94,6 +95,7 @@ def formatResponse(response, pauses):
         time_per_last_sentence=0
         speaking_rate=0
         speaking_rate_last_sentence=0
+        total_words=len(strings_of_words)
         for i in range(0,len(wordslist)):
 
             if (len(wordslist)<15):
@@ -131,20 +133,22 @@ def formatResponse(response, pauses):
             average_wpm=int(average_wpm)
 
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
+        print("\nTotal words spoken")
+        print (total_words)
         print("\nTotal time taken to complete each sentence:")
         print (["%0.2f" % i for i in sentence_duration])
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nWords per Minute based on sentence time:")
         print (["%d" % i for i in wordsperminute])
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
-        print("\nList of Sentences:")
-        print(list_of_sentences)
-        print(len(list_of_sentences))
-        print("\nAverage Words Per Minute for whole speech:")
-        print("%0.2f" % average_wpm)
+        # print("\nList of Sentences:")
+        # print(list_of_sentences)
+        # print(len(list_of_sentences))
+        # print("\nAverage Words Per Minute for whole speech:")
+        # print("%0.2f" % average_wpm)
         #print(len(alternative.words))
                 # add more calcs to print here for testing...
         print("###############################~~~~~~~LOOK HERE~~~~~~~~~########################")
         print(movingWindow, list_of_sentences, wordsperminute)
         print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
-    return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences, wordsperminute,average_wpm]
+    return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences, wordsperminute,average_wpm,total_words]

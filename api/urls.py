@@ -21,6 +21,4 @@ urlpatterns = [
      url(r'^google/', views.googleCall, name='google'),
      url(r'^googleOAuth/', views.googleOAuthCall, name='googleOAuth'),
      url(r'^screenshot/', views.screenshotCall, name='screenshot')
-
-
 ]

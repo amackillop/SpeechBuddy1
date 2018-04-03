@@ -116,6 +116,7 @@ def googleCall(request):
             wordsperminute = res[4]
             sentimentArray = sentimentCall(list_of_sentences)
             average_wpm = res[5]
+            total_words = res[6]
             print(sentimentArray)
 
         else:
@@ -130,6 +131,7 @@ def googleCall(request):
             list_of_sentences = "empty response"
             wordsperminute = "empty response"
             average_wpm = "empty response"
+            total_words = "rempty response"
 
         # Pitch Tracking
         f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
@@ -175,6 +177,7 @@ def googleCall(request):
             "list_of_sentences": list_of_sentences,
             "wordsperminute": wordsperminute,
             "average_wpm": average_wpm,
+            "total_words": total_words,
             "pauses": pauses
         })
     return Response({"message": "Hello, world!"})

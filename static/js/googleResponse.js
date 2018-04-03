@@ -51,13 +51,13 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>WPM</b></h4>
-                             <h4 id="WPM" style="font-size: 1.5vw" class = "med"></h4>
+                            <h4 id="WPM" style="font-size: 1.5vw" class = "med"></h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Words</b></h4>
-                            <h4 style="font-size: 1.5vw"  class="low">323</h4>
+                            <h4 id="Words" style="font-size: 1.5vw" class = "med"></h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -253,7 +253,7 @@ function displayQuickData(data) {
     //set confidence level
     $("#score-data").text(data.confidence);
     $("#WPM").text(data.average_wpm);
-
+    $("#Words").text(data.total_words);
     //set track duration
     // var track_time = Math.floor($("#audioplayer").duration);
     // $("#track-time").text(track_time);
