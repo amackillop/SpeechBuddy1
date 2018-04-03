@@ -20,6 +20,7 @@ env/Lib/encodings/__pycache__
 audio/output_mono.flac
 audio/output_mono.wav
 audio/*.png
+audio/image/*.png
 client_secrets.json
 api/capstoneModules/16k_clips/
 api/capstoneModules/16k_mel_spectrograms/

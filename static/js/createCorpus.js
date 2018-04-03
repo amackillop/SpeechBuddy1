@@ -12,28 +12,20 @@ function jsUcfirst(string) {
 }
 
 function hover(id, data) {
-    //console.log(data);
     var word = $(this).attr("id")
-    console.log(word);
-    console.log($(this));
     word = word.slice(1, word.indexOf(":") - 1);
     indices = data.indexArray;
     indices = JSON.parse(indices);
-    //console.log(indices[word]);
     tempString = "";
-    for (i = 0; i < data.tok.length; i++) {
-        //console.log(word)
+    for (i = 1; i < data.tok.length; i++) {
         if (word == data.tok[i]) {
-            tempString = tempString + " <mark>" + data.tok[i] + "</mark> ";
-
+            tempString = tempString + " <mark class = 'too_fast'>" + data.tok[i] + "</mark> ";
         }
         else {
             tempString = tempString + " " + data.tok[i];
-
         }
     }
     $('#transcript-display').html(tempString);
-    //console.log(tempString);
 }
 
 function nltkCorpus(data) {
@@ -60,7 +52,8 @@ function nltkCorpus(data) {
         for (col = 0; col < 4; col++) {
             z = document.createElement("TD");
             z.setAttribute("id", "child" + index);
-            z.setAttribute("class", "result");
+            z.setAttribute("class", "result");        
+            
             var t = document.createTextNode(res[index]);
             index = index + 1;
             z.appendChild(t);
@@ -69,36 +62,31 @@ function nltkCorpus(data) {
         tb.appendChild(y);
     }
 
-    x.appendChild(tb)
+    x.appendChild(tb);
 
     $("#data-wrapper").prepend(x);
-    
+
     $(document).on(
         {
             mouseenter: function () {
                 var word = $(this).text()
-                //console.log(word);
-                //console.log($(this));
                 word = word.slice(1, word.indexOf(":") - 1);
-
                 indices = data.indexArray;
                 indices = JSON.parse(indices);
-                //console.log(indices[word]);
                 tempString = "";
-                for (i = 0; i < data.tok.length; i++) {
-                    //console.log(word)
+                for (i = 1; i < data.tok.length; i++) {
                     if (word == data.tok[i]) {
-                        tempString = tempString + " <mark>" + data.tok[i] + "</mark> ";
+                        tempString = tempString + " <mark class = 'too_fast'>" + data.tok[i] + "</mark> ";
                     }
                     else {
                         tempString = tempString + " " + data.tok[i];
                     }
                 }
-                $('#transcript-display').html(tempString);
+                $('#corpusTranscript').html(tempString);
             },
             mouseleave: function () {
                 $(this).css("background", "white");
-                $("#results").children().css("opacity", 1);
+                // $("#results").children().css("opacity", 1);
             },
             click: function () {
                 var modal = document.getElementById('myModal');
@@ -111,10 +99,8 @@ function nltkCorpus(data) {
                 //btn.onclick = function() {
                 modal.style.display = "block";
                 syns = JSON.parse(data.listSyn);
-                console.log(syns);
-
                 syns = syns[word];
-                console.log(word);
+
 
                 var keys = Object.keys(syns);
                 var lenExamples;
@@ -132,7 +118,6 @@ function nltkCorpus(data) {
                     mbody.appendChild(z);
 
                     lenExamples = syns[keys[i]][1].length
-                    console.log(lenExamples);
                     if (typeof (syns[keys[i]][1]) == "string") {
                         lenExamples = 1;
                         t = document.createTextNode("Examples:    " + syns[keys[i]][1]);
@@ -156,7 +141,6 @@ function nltkCorpus(data) {
                             mbody.appendChild(z);
                         }
                     }
-                    console.log(syns[keys[i]][1])
 
                 }
                 //}

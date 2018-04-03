@@ -73,7 +73,7 @@
   position: fixed;
   z-index: 1;
   top: 0;
-  padding-top: 45px;
+  
   overflow-x: hidden;
 }
 
@@ -84,6 +84,7 @@
 }
 
 .right {
+  padding-top: 45px;
   right: 0;
   background-color: white;
   position: absolute;
@@ -103,9 +104,6 @@
 }
 
 #data-wrapper{
-  padding-top:10%;
-  padding-right: 10%;
-  padding-left: 10%;
   width: 100%;
 }
 
@@ -218,15 +216,11 @@
 /*Fundemental Stuff Here*/
 #chart_div {
 	text-align: center;
-  width: 150%;
-  height: 500px;
 }
 
 /* Volume stuff */
 #chart_div_volume {
 	text-align: center;
-  width: 150%;
-  height: 500px;
 }
 /*  color styles for quick data cards */
 .very-low {

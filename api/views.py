@@ -108,7 +108,7 @@ def googleCall(request):
             sentences = str(res[3])
             confidence = float(res[1])
             confidence = round(confidence, 4)*100
-            sentencesEnd = res[2]
+            wpm = str(res[2])
             resData = mostCommon(transcript)
             indexArray = str(resData[0])
             corpus = str(resData[1])
@@ -118,6 +118,8 @@ def googleCall(request):
             list_of_sentences = res[3]
             wordsperminute = res[4]
             sentimentArray = sentimentCall(list_of_sentences)
+            average_wpm = res[5]
+            total_words = res[6]
             print(sentimentArray)
 
         else:
@@ -131,24 +133,26 @@ def googleCall(request):
             listSyn = ""
             list_of_sentences = "empty response"
             wordsperminute = "empty response"
+            average_wpm = "empty response"
+            total_words = "rempty response"
 
         stichImagesCall(sentencesEnd)
         emotionImages = AzureCall()
 
         # Pitch Tracking
-        # f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
-        #                          freq_range=(40, 300),
-        #                          threshold=0.1,
-        #                          timestep=0.25,
-        #                          Fc=1e3)
-        # f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
-        #                          freq_range=(300, 600),
-        #                          threshold=0.1,
-        #                          timestep=0.25,
-        #                          Fc=1e3)
-        # pitch = np.zeros((f0.shape[0], 3))
-        # for i in range(pitch.shape[0]):
-        #     pitch[i, :] = np.asarray([i, f0[i], f1[i]])
+        f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
+                                 freq_range=(40, 300),
+                                 threshold=0.1,
+                                 timestep=0.25,
+                                 Fc=1e3)
+        f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
+                                 freq_range=(300, 600),
+                                 threshold=0.1,
+                                 timestep=0.25,
+                                 Fc=1e3)
+        pitch = np.zeros((f0.shape[0], 3))
+        for i in range(pitch.shape[0]):
+            pitch[i, :] = np.asarray([i, f0[i], f1[i]])
 
         # Adjust wpm
 
@@ -172,15 +176,18 @@ def googleCall(request):
             "transcript": transcript,
             "sentences": sentences,
             "confidence": confidence,
+            "wpm": wpm,
             "indexArray": indexArray,
             "corpus": corpus,
             "tok": tok,
             "listSyn": listSyn,
-            # "pitch": pitch,
+            "pitch": pitch,
             "filler_count": filler_count,
             "volume": volume,
             "list_of_sentences": list_of_sentences,
             "wordsperminute": wordsperminute,
+            "average_wpm": average_wpm,
+            "total_words": total_words,
             "pauses": pauses,
             "imagesSadness": emotionImages[0],
             "imagesJoy": emotionImages[1],
@@ -201,12 +208,12 @@ def screenshotCall(request):
         # Save the audio file
         dataDict = request.data
         dataDict = dataDict['image']
+        number=number+1
         dataDict.seek(22)   # skip the first 22 bytes
         rest = dataDict.read()
         decode = base64.standard_b64decode(rest)
         path = default_storage.save(
-            settings.IMAGE_ROOT +"/" +str(number)+".png", ContentFile(decode))
-        number = number + 1
+            settings.IMAGE_ROOT + "/img" +str(number)+".png", ContentFile(decode))
 
     else:
         number=0
