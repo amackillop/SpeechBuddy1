@@ -162,5 +162,5 @@ def formatResponse(response, pauses):
         print("###############################~~~~~~~LOOK HERE~~~~~~~~~########################")
         print(sentenceEnds, list_of_sentences, wordsperminute)
         print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
-    return [alternative.transcript.encode('ascii'),alternative.confidence, sentenceEnds, list_of_sentences, wordsperminute]
-    return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences, wordsperminute,average_wpm,total_words]
+
+    return [alternative.transcript.encode('ascii'),alternative.confidence, sentenceEnds, list_of_sentences, wordsperminute,average_wpm,total_words]
