@@ -17,9 +17,9 @@ function hover(id, data) {
     indices = data.indexArray;
     indices = JSON.parse(indices);
     tempString = "";
-    for (i = 0; i < data.tok.length; i++) {
+    for (i = 1; i < data.tok.length; i++) {
         if (word == data.tok[i]) {
-            tempString = tempString + " <mark>" + data.tok[i] + "</mark> ";
+            tempString = tempString + " <mark class = 'too_fast'>" + data.tok[i] + "</mark> ";
         }
         else {
             tempString = tempString + " " + data.tok[i];
@@ -52,7 +52,8 @@ function nltkCorpus(data) {
         for (col = 0; col < 4; col++) {
             z = document.createElement("TD");
             z.setAttribute("id", "child" + index);
-            z.setAttribute("class", "result");
+            z.setAttribute("class", "result");        
+            
             var t = document.createTextNode(res[index]);
             index = index + 1;
             z.appendChild(t);
@@ -61,7 +62,7 @@ function nltkCorpus(data) {
         tb.appendChild(y);
     }
 
-    x.appendChild(tb)
+    x.appendChild(tb);
 
     $("#data-wrapper").prepend(x);
 
@@ -73,19 +74,19 @@ function nltkCorpus(data) {
                 indices = data.indexArray;
                 indices = JSON.parse(indices);
                 tempString = "";
-                for (i = 0; i < data.tok.length; i++) {
+                for (i = 1; i < data.tok.length; i++) {
                     if (word == data.tok[i]) {
-                        tempString = tempString + " <mark>" + data.tok[i] + "</mark> ";
+                        tempString = tempString + " <mark class = 'too_fast'>" + data.tok[i] + "</mark> ";
                     }
                     else {
                         tempString = tempString + " " + data.tok[i];
                     }
                 }
-                $('#transcript-display').html(tempString);
+                $('#corpusTranscript').html(tempString);
             },
             mouseleave: function () {
                 $(this).css("background", "white");
-                $("#results").children().css("opacity", 1);
+                // $("#results").children().css("opacity", 1);
             },
             click: function () {
                 var modal = document.getElementById('myModal');

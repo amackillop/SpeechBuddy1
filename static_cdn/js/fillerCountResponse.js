@@ -1,4 +1,4 @@
 function fillerCountResponse(data) {
-    console.log("count ran")
+    console.log(data.filler_count)
     $('#filler-count-val').text(data.filler_count);
 }

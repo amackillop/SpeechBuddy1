@@ -1,5 +1,9 @@
 
+var global_data;
+
 function googleResponse(data) {
+
+    global_data = data;
 
     //handle sliding + loading icon
     $("#myloader").hide();
@@ -35,9 +39,10 @@ var analytics_page = `
                 </div>
                 <div class="row" style="height: 35vw">
                     <div class="col-sm-6" >
-                        <div class="well" style="height: 34vw;overflow-y: scroll">
+                        <div id = "left-split" class="well" style="height: 34vw;overflow-y: scroll">
                             <h2>Here's what you said:</h2>
                             <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
+                            <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                         </div>
                     </div>   
 
@@ -80,10 +85,10 @@ var analytics_page = `
                     <div class="col-sm-6">
                         <div class="well">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#home">Tone</a></li>
-                                <li><a data-toggle="tab" href="#menu1">Volume</a></li>
-                                <li><a data-toggle="tab" href="#menu2">Corpus</a></li>
-                                <li><a data-toggle="tab" href="#menu3">Emotion</a></li>
+                                <li class="active"><a data-toggle="tab" href="#home"  onclick = "wpmTranscript()">Tone</a></li>
+                                <li><a data-toggle="tab" href="#menu1"  onclick = "wpmTranscript()">Volume</a></li>
+                                <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
+                                <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
                             </ul>
 
                             <div class="tab-content">
@@ -143,7 +148,7 @@ function loadAnalyticsPage() {
 
 function displayTranscriptWPM(data) {
     var temp1 = document.getElementById("empty-transcript");
-    for (i = 0; i < data.wordsperminute.length - 1; i++) {
+    for (i = 0; i < data.wordsperminute.length + 1; i++) {
         if (data.wordsperminute[i] <= 120) {
             var temp3 = document.createElement("div");
             temp3.setAttribute("class", "too_slow");
@@ -183,53 +188,9 @@ function displayTranscriptWPM(data) {
 }
 
 function displayGraphs(data) {
-    console.log("Displaying graphs...");
-    var all_data = `
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close">&times;</span>
-                <h2 id="mhead">Modal Header</h2>
-            </div>
-            <div class="modal-body" id="mbody"></div>
-            <div class="modal-footer">
-                <h3>nltk lib</h3>
-            </div>
-        </div>
-    </div>
-
-    <div id = "data-wrapper">
-        <div id="fundementals">
-            
-            <div id="chart_div">
-            </div>
-            
-            <div id="volume">
-                <div id="chart_div_volume">
-                </div>
-            </div>
-            
-            <div id="filler count">
-                <div id="count">
-                </div>
-            </div>
-            
-        </div>
-    </div>
-    `;
-
-
-    var frequencyGraph = `
-        <div id="chart_div">
-        </div>
-    `;
-
-    var volumeGraph = `
-        <div id="volume">
-            <div id="chart_div_volume">
-            </div>
-        </div>
-    `;
+    var transcript_split = data.transcript.split("\"");
+    var corpusTranscript = transcript_split[1];
+    $("#corpusTranscript").text(corpusTranscript);
 
     var fillerData = `
         <div id="filler count">
@@ -237,23 +198,6 @@ function displayGraphs(data) {
             </div>
         </div>
     `;
-
-    var corpus = `
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close">&times;</span>
-                <h2 id="mhead">Modal Header</h2>
-            </div>
-            <div class="modal-body" id="mbody"></div>
-            <div class="modal-footer">
-                <h3>nltk lib</h3>
-            </div>
-        </div>
-    </div>   
-    `;
-
-    $("#freq-graph").append(corpus);
 }
 
 function displayQuickData(data) {
@@ -264,4 +208,18 @@ function displayQuickData(data) {
     //set track duration
     // var track_time = Math.floor($("#audioplayer").duration);
     // $("#track-time").text(track_time);
+}
+
+function corpusTranscript(data) {
+    if (!$("#corpusTranscript").is(":visible")) {
+        $("#empty-transcript").hide();
+        $("#corpusTranscript").show();
+    }
+}
+
+function wpmTranscript() {
+    if ($("#corpusTranscript").is(":visible")) {
+        $("#corpusTranscript").hide();
+        $("#empty-transcript").show();
+    }
 }
