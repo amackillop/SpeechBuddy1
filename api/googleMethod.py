@@ -74,7 +74,7 @@ def formatResponse(response, pauses):
 
         #getting the words in 15-word based sentence based list
         for i in range(0,len(strings_of_words)):
-            
+        
             if(i==len(strings_of_words)-1):
                 temp_string= temp_string + str(strings_of_words[i]) + ' '
                 list_of_sentences.append(temp_string)
@@ -119,6 +119,16 @@ def formatResponse(response, pauses):
             speaking_rate_last_sentence=(60*15)/(time_per_last_sentence)
             wordsperminute.append(speaking_rate_last_sentence)
             speaking_rate_last_sentence=0
+        
+
+        #Finding Average Words Per Minute
+        total_wpm=0
+        average_wpm=0
+
+        for i in range(0,len(wordsperminute)):
+            total_wpm= total_wpm + wordsperminute[i]
+            average_wpm= total_wpm/len(wordsperminute)
+            average_wpm=int(average_wpm)
 
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nTotal time taken to complete each sentence:")
@@ -130,9 +140,11 @@ def formatResponse(response, pauses):
         print("\nList of Sentences:")
         print(list_of_sentences)
         print(len(list_of_sentences))
+        print("\nAverage Words Per Minute for whole speech:")
+        print("%0.2f" % average_wpm)
         #print(len(alternative.words))
                 # add more calcs to print here for testing...
         print("###############################~~~~~~~LOOK HERE~~~~~~~~~########################")
         print(movingWindow, list_of_sentences, wordsperminute)
         print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
-    return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences, wordsperminute]
+    return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences, wordsperminute,average_wpm]
