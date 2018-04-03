@@ -25,7 +25,6 @@ var analytics_page = `
     <div class="container-fluid">
         <div class="row">  
             <br>
-
             <div class="col-sm-12">
                 <div class="well well-sm " >
                     <div style="text-align:left">
@@ -63,7 +62,7 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Fillers</b></h4>
-                            <h4 style="font-size: 1.5vw" class="very-high">7</h4>
+                            <h4 id= "filler-count-val" style="font-size: 1.5vw" class="very-high">7</h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -97,7 +96,20 @@ var analytics_page = `
                                     </div>
                                 </div>
                                 <div id="menu2" class="tab-pane fade">
-                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                                    <div id = "data-wrapper">
+                                        <div id="myModal" class="modal">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <span class="close">&times;</span>
+                                                    <h2 id="mhead">Modal Header</h2>
+                                                </div>
+                                                <div class="modal-body" id="mbody"></div>
+                                                <div class="modal-footer">
+                                                    <h3>nltk lib</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div id="menu3" class="tab-pane fade">
                                     <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
@@ -106,28 +118,23 @@ var analytics_page = `
                         </div>
                     </div>
                     </div>
-                </div>
-                <div id="random"></div>
-                
-                
-            </div>
-            <div class="well well-sm" style="text-align:left">
-                <ul class="legend">
-                    <li><span class="legend too_slow"></span> Too Slow</li>
-                    <li><span class="slow"></span> Slow</li>
-                    <li><span class="good"></span> Good</li>
-                    <li><span class="fast"></span> Fast</li>
-                    <li><span class="too_fast"></span> Too Fast</li>
-                </ul>
-            </div>
-            <div class="well well-sm" style="text-align:left">
-                    <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
-                        ontimeupdate="document.getElementById('track-time').innerHTML = Math.floor(this.duration);">
-                    </audio>
-                </div>
-            
+                </div>               
+            </div>            
         </div>
-    </div>
+        <div class="well well-sm" style="text-align:left; margin:10px">
+            <ul class="legend">
+                <li><span class="legend too_slow"></span> Too Slow</li>
+                <li><span class="slow"></span> Slow</li>
+                <li><span class="good"></span> Good</li>
+                <li><span class="fast"></span> Fast</li>
+                <li><span class="too_fast"></span> Too Fast</li>
+            </ul>
+        </div>
+        <div class="well well-sm" style="text-align:left; margin:10px">
+            <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
+                ontimeupdate="document.getElementById('track-time').innerHTML = Math.floor(this.duration);">
+            </audio>
+        </div>
     `;
 
 function loadAnalyticsPage() {
