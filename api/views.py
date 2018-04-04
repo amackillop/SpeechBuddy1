@@ -144,19 +144,19 @@ def googleCall(request):
 
 
         # Pitch Tracking
-        # f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
-        #                          freq_range=(40, 300),
-        #                          threshold=0.1,
-        #                          timestep=0.25,
-        #                          Fc=1e3)
-        # f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
-        #                          freq_range=(300, 600),
-        #                          threshold=0.1,
-        #                          timestep=0.25,
-        #                          Fc=1e3)
-        # pitch = np.zeros((f0.shape[0], 3))
-        # for i in range(pitch.shape[0]):
-        #     pitch[i, :] = np.asarray([i, f0[i], f1[i]])
+        f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
+                                 freq_range=(40, 300),
+                                 threshold=0.1,
+                                 timestep=0.25,
+                                 Fc=1e3)
+        f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
+                                 freq_range=(300, 600),
+                                 threshold=0.1,
+                                 timestep=0.25,
+                                 Fc=1e3)
+        pitch = np.zeros((f0.shape[0], 3))
+        for i in range(pitch.shape[0]):
+            pitch[i, :] = np.asarray([i, f0[i], f1[i]])
 
         # Adjust wpm
 
@@ -218,7 +218,7 @@ def googleCall(request):
             "corpus": corpus,
             "tok": tok,
             "listSyn": listSyn,
-            # "pitch": pitch,
+            "pitch": pitch,
             "filler_count": filler_count,
             "volume": volume,
             "list_of_sentences": list_of_sentences,

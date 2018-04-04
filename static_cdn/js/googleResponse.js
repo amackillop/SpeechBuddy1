@@ -94,7 +94,6 @@ var analytics_page = `
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
                                 <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
                             </ul>
-
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
                                     <div id="chart_div" style="height:20vw;width:42vw">
@@ -102,8 +101,7 @@ var analytics_page = `
                                 </div>
                                 <div id="menu1" class="tab-pane fade">
                                     <canvas id="VolumeLineChart" width="42vw" height="20vw"></canvas>
-                                    </div>
-                                </div>2
+                                </div>
                                 <div id="menu2" class="tab-pane fade">
                                     <div id = "data-wrapper">
                                         <div id="myModal" class="modal">
@@ -126,24 +124,24 @@ var analytics_page = `
                             </div>
                         </div>
                     </div>
-                    </div>
-                </div>               
-            </div>            
+                </div>
+            </div>
         </div>
-        <div class="well well-sm" style="text-align:left; margin:10px">
-            <ul class="legend">
-                <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
-                <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
-                <li><span class="good"></span> Good(>140 WPM ≤170)</li>
-                <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
-                <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
-            </ul>
-        </div>
-        <div class="well well-sm" style="text-align:left; margin:10px">
-            <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
+    </div>
+    <div class="well well-sm" style="text-align:left; margin:10px">
+    <ul class="legend">
+        <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
+        <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
+        <li><span class="good"></span> Good(>140 WPM ≤170)</li>
+        <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
+        <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
+    </ul>
+    </div>
+    <div class="well well-sm" style="text-align:left; margin:10px">
+    <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
                 ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
-            </audio>
-        </div>
+    </audio>
+    </div>
     `;
 
 function loadAnalyticsPage() {
