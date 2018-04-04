@@ -34,6 +34,8 @@ pip install h5py
 pip install PyDrive
 pip install pydub
 pip install librosa
+pip install pillow
+pip install watson-developer-cloud
 ```
 You will also need to install Keras and tensorflow. If ```pip install tensorflow``` does not install tensorflow correctly, download Anaconda and run ```conda install tensorflow```. You should only have to do this once.
 
