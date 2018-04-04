@@ -1,173 +1,308 @@
+
+var global_data;
+
 function googleResponse(data) {
-    console.log("Google ran");
+    console.log(data);
+    global_data = data;
 
     //handle sliding + loading icon
     $("#myloader").hide();
-    $("#text-wrapper").show();
-    $("#right-split").animate({width:'100%'}, 1500);
-    $("#string").animate({width:'45%'}, 1000);
-   
-    $("#title").text("Here's what you said:");
-    $("#title").fadeIn( "fast" );
-
-    $("#transcript-display").text(data.transcript);
-    $("#transcript-display").fadeIn( "slow" );
-   
-    $('#right-split').prepend('<div class = "split right" id = "data-view"></div>');
-    var vol_n_pitch = `
-         <div id="myModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="close">&times;</span>
-                    <h2 id="mhead">Modal Header</h2>
-                </div>
-                <div class="modal-body" id="mbody"></div>
-                <div class="modal-footer">
-                    <h3>nltk lib</h3>
-                </div>
-            </div>
-        </div>
-        <div id = "data-wrapper">
-            <div id="fundementals">
-                <h2></h2>
-                <div id="chart_div" /div>
-                </div>
-                <div id="volume">
-                    <h2></h2>
-                    <div id="chart_div_volume" /div>
-                    </div>
-        
-                <div id="filler count">
-                    <div id="count">
-        
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    $("#data-view").append(vol_n_pitch);
-
-    confidence = document.getElementById("confidence");
-    confidence.innerHTML = "Confidence: " + data.confidence;
-    confidence.style.display = "block";
-
-    
-    list_of_sentences = document.getElementById("list_of_sentences");
-    //list_of_sentences.innerHTML = data.list_of_sentences[0];
-
-    wordsperminute = document.getElementById("wordsperminute")
-    //wordsperminute.innerHTML = data.wordsperminute[0]
-    //console.log(data.wordsperminute.length);
-    console.log(data.list_of_sentences.length);
-
-    var temp1 = document.getElementById("Empty Transcript");
-    for(i = 0; i < data.wordsperminute.length+1 ; i++){
-        if(data.wordsperminute[i]<=120){
-            var temp3 = document.createElement("div"); 
-            temp3.setAttribute("class","too_slow");
-            // temp3.setAttribute("id","sen" + i);
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            // $(temp3).append(node);
-            // $(temp1).append(temp3);
-            temp1.appendChild(temp3);
-        }
-         else if(data.wordsperminute[i] > 120 && data.wordsperminute[i]<= 140){
-            var temp3 = document.createElement("div"); 
-            temp3.setAttribute("class","slow");
-            // temp3.setAttribute("id","sen" + i);
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            // $(temp3).append(node);
-            // $(temp1).append(temp3);
-            temp1.appendChild(temp3);
-
-         }
-        else if(data.wordsperminute[i] > 140 && data.wordsperminute[i] <= 170){
-            var temp3 = document.createElement("div"); 
-            temp3.setAttribute("class","good");
-            // temp3.setAttribute("id","sen" + i);
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            // $(temp3).append(node);
-            // $(temp1).append(temp3);
-            temp1.appendChild(temp3);
- }
-         else if(data.wordsperminute[i] > 170 && data.wordsperminute[i] <= 190){
-            var temp3 = document.createElement("div"); 
-            temp3.setAttribute("class","fast");
-            // temp3.setAttribute("id","sen" + i);
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            // $(temp3).append(node);
-            // $(temp1).append(temp3);
-            temp1.appendChild(temp3);
-        }
-         else if(data.wordsperminute[i] > 190){
-            var temp3 = document.createElement("div"); 
-            temp3.setAttribute("class","too_fast");
-            // temp3.setAttribute("id","sen" + i);
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            // $(temp3).append(node);
-            // $(temp1).append(temp3);
-            temp1.appendChild(temp3);
-        }
-     }
+    loadAnalyticsPage();
+    $("#right-split").animate({ width: '100%' }, 1500);
+    displayTranscript(data)
+    displayTranscriptWPM(data);
+    displayGraphs(data);
+    displayQuickData(data);
 }
 
-function loadingTranscript(){
-    
+function loadingTranscript() {
+
     $("#submit-btn").prop('disabled', true);
     $("#header-text").remove();
     $("#text-wrapper").hide();
 
     $('#right-split').prepend('<div class = "loader" id = "myloader" align="center" hidden = "true"></div>');
-    $("#myloader").fadeIn( "slow" );
-
-    
-    //$("#transcript-display").hide();
+    $("#myloader").fadeIn("slow");
 }
 
-// function SentenceSpeed(data){
-//     //console.log("Testingtesting");
-//     //console.log(string(data.wordsperminute[0]));
-//     for(i = 0; i < data.wordsperminute.length ; i++){
-//         console.log(data.wordsperminute.length);
-//         if(data.wordsperminute[i]<=120){
-//             var temp=data.list_of_sentences[i];
-//             var temp2=document.getElementById("Empty Transcript").textContent;
-//             document.getElementById("Empty Transcript").textContent=temp2 + temp
-//             console.log("Temp is nOOOOOt");
-//         }
-//          else if(data.wordsperminute[i] > 120 && data.wordsperminute[i]<= 140){
-//             var temp=data.list_of_sentences[i];
-//             var temp2=document.getElementById("Empty Transcript").textContent;
-//             document.getElementById("Empty Transcript").textContent=temp2 + temp
-//             console.log("Temp is nOOOOOt2");
+//this is a variable that contains the entire analytics page. It will be loaded once the google response returns
+var analytics_page = `
+    <div class="container-fluid">
+        <div class="row">  
+            <br>
+            <div class="col-sm-12">
+                <div class="well well-sm " >
+                    <div style="text-align:left">
+                        <div>
+                            <p style="font-size:16px; margin:0px" class="btn" >Record / <b>Transcript Analysis</b></p>
 
-//          }
-//         else if(data.wordsperminute[i] > 140 && data.wordsperminute[i] <= 170){
-//             var temp=data.list_of_sentences[i];
-//             var temp2=document.getElementById("Empty Transcript").textContent;
-//             document.getElementById("Empty Transcript").textContent=temp2 + temp
-//             console.log("Temp is nOOOOOt3");
+                            <p id = "CurrentTime">sfbv</p>
+                        </div>
+                    </div>                      
+                </div>
+                <div class="row" style="height: 35vw">
+                    <div class="col-sm-6" >
+                        <div id = "left-split" class="well" style="height: 34vw;overflow-y: scroll">
+                            <h2>Here's what you said:</h2>
+                            <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
+                            <h4 id ="Audio-transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                            <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                        </div>
+                    </div>   
 
-//  }
-//          else if(data.wordsperminute[i] > 170 && data.wordsperminute[i] <= 190){
-//             var temp=data.list_of_sentences[i];
-//             var temp2=document.getElementById("Empty Transcript").textContent;
-//             document.getElementById("Empty Transcript").textContent=temp2 + temp
-//             console.log("Temp is nOOOOOt4");
+                    <div class="col-sm-1">
+                        <div class="well well-sm">
+                            <h4 style="font-size: 1vw"><b>Score</b></h4>
+                            <h4 id="score-data" style="font-size: 1.5vw" class = "med">82.5%</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="well well-sm">
+                            <h4 style="font-size: 1vw"><b>WPM</b></h4>
+                            <h4 id="WPM" style="font-size: 1.5vw" class = "med"></h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="well well-sm">
+                            <h4 style="font-size: 1vw"><b>Words</b></h4>
+                            <h4 id="Words" style="font-size: 1.5vw" class = "med"></h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="well well-sm">
+                            <h4 style="font-size: 1vw"><b>Fillers</b></h4>
+                            <h4 id= "filler-count-val" style="font-size: 1.5vw" class="very-high"></h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="well well-sm">
+                            <h4 style="font-size: 1vw"><b>Tone:</b></h4>
+                            <h4 id="Tone" style="font-size: 1.5vw" class="low">Neutral</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="well well-sm">
+                            <h4 style="font-size: 1vw"><b>Duration</b></h4>
+                            <h4 id="track-time" style="font-size: 1.5vw">2:49s</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="well">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#home"  onclick = "wpmTranscript()">Tone</a></li>
+                                <li><a data-toggle="tab" href="#menu1"  onclick = "wpmTranscript()">Volume</a></li>
+                                <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
+                                <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu4"  onclick = "AudioTranscript()">Emotion</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="home" class="tab-pane fade in active">
+                                    <div id="chart_div" style="height:20vw;width:42vw">
+                                    </div>
+                                </div>
+                                <div id="menu1" class="tab-pane fade">
+                                    <canvas id="VolumeLineChart" width="42vw" height="20vw"></canvas>
+                                </div>
+                                <div id="menu2" class="tab-pane fade">
+                                    <div id = "data-wrapper">
+                                        <div id="myModal" class="modal">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <span class="close">&times;</span>
+                                                    <h2 id="mhead">Modal Header</h2>
+                                                </div>
+                                                <div class="modal-body" id="mbody"></div>
+                                                <div class="modal-footer">
+                                                    <h3>nltk lib</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="menu3" class="tab-pane fade">
+                                    <canvas id="EmotionTextPieChart" width="42vw" height="20vw"></canvas>
+                                </div>
+                                <div id="menu4" class="tab-pane fade">
+                                    <canvas id="EmotionTextBarChart" width="42vw" height="20vw"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class= "row">
+            <div class="well well-sm" style="text-align:left; margin:10px; margin-top:0px; height:2.2vw">
+                <ul class="legend">
+                    <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
+                    <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
+                    <li><span class="good"></span> Good(>140 WPM ≤170)</li>
+                    <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
+                    <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
+                </ul>
+            </div>
+        </div>
+        <div class= "row">
+            <div class="well well-sm" style="text-align:left; margin:10px">
+                <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
+                ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
+                </audio>
+            </div>
+        </div>
+    </div>
+    `;
 
-//         }
-//          else if(data.wordsperminute[i] > 190){
-//             var temp=data.list_of_sentences[i];
-//             var temp2=document.getElementById("Empty Transcript").textContent;
-//             document.getElementById("Empty Transcript").textContent=temp2 + temp
-//             console.log("Temp is nOOOOOt5");
+function loadAnalyticsPage() {
+    $("#right-split").append(analytics_page);
+}
 
-//         }
+var counter = 0;
 
-//      }}
+function changeTimes(info, sentencesEnd){
+     if (!$("#Audio-transcript").is(":visible")) {
+        AudioTranscript();
+        for (i = 0; i < document.getElementById('Audio-transcript').childNodes.length; i++) {
+            document.getElementById('Audio-transcript').childNodes[i].className = "basic_transcript";
+         }
+     }
+    document.getElementById('CurrentTime').innerHTML = info;
+
+    if(info == 0){
+//        console.log(document.getElementById('empty-transcript').childNodes[0]);
+        document.getElementById('Audio-transcript').childNodes[0].className = "reading_transcript";
+    }
+//    console.log(info, sentencesEnd, counter);
+    if(info + 1 > sentencesEnd[counter]){
+        document.getElementById('Audio-transcript').childNodes[counter].className = "basic_transcript";
+        counter = counter + 1;
+        document.getElementById('Audio-transcript').childNodes[counter].className = "reading_transcript";
+    }
+}
+
+function displayTranscript(data){
+    var mainTranscript = document.getElementById("Audio-transcript");
+    for (i = 0; i < data.wordsperminute.length; i++) {
+        var sentenceDiv = document.createElement("div");
+        sentenceDiv.setAttribute("class", "basic_transcript");
+        var node = document.createTextNode(data.list_of_sentences[i]);
+        sentenceDiv.appendChild(node);
+        mainTranscript.appendChild(sentenceDiv);
+    }
+
+}
+
+function displayTranscriptWPM(data) {
+    var temp1 = document.getElementById("empty-transcript");
+    for (i = 0; i < data.wordsperminute.length + 1; i++) {
+        if (data.wordsperminute[i] <= 120) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "too_slow");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+        else if (data.wordsperminute[i] > 120 && data.wordsperminute[i] <= 140) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "slow");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+        else if (data.wordsperminute[i] > 140 && data.wordsperminute[i] <= 170) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "good");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+        else if (data.wordsperminute[i] > 170 && data.wordsperminute[i] <= 190) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "fast");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+        else if (data.wordsperminute[i] > 190) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "too_fast");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+    }
+}
+
+
+
+function displayGraphs(data) {
+    var transcript_split = data.transcript.split("\"");
+    var corpusTranscript = transcript_split[1];
+    $("#corpusTranscript").text(corpusTranscript);
+}
+
+function displayQuickData(data) {
+    //set confidence level
+    $("#score-data").text(data.confidence);
+    $("#WPM").text(data.average_wpm);
+    $("#Words").text(data.total_words);
+    $("#filler-count-val").text(data.fillerCount);
+    ToneMethod(data)
+    //set track duration
+    // var track_time = Math.floor($("#audioplayer").duration);
+    // $("#track-time").text(track_time);
+}
+
+function corpusTranscript(data) {
+    if (!$("#corpusTranscript").is(":visible")) {
+        $("#empty-transcript").hide();
+        $("#Audio-transcript").hide();
+        $("#corpusTranscript").show();
+    }
+}
+
+function wpmTranscript() {
+    if ($("#corpusTranscript").is(":visible")) {
+        $("#corpusTranscript").hide();
+        $("#Audio-transcript").hide();
+        $("#empty-transcript").show();
+    }
+}
+
+function AudioTranscript() {
+    if (!$("#Audio-transcript").is(":visible")) {
+        $("#empty-transcript").hide();
+        $("#corpusTranscript").hide();
+        $("#Audio-transcript").show();
+    }
+}
+function ToneMethod(data){
+    console.log('Tone Method Testing')
+    console.log(data.AvgT, document.getElementById("Tone").innerHTML);
+    var tonetemp=Math.max.apply(Math, data.AvgT);
+    console.log(tonetemp);
+    for (i = 0; i < data.AvgT.length; i++) {
+        if(data.AvgT[i]==tonetemp){
+            console.log(i,data.AvgT[i])
+            if(i == 0){
+                $("#Tone").text("Sadness");
+            }
+            else if(i == 1){
+                $("#Tone").text("Joy");
+
+            }
+            else if(i == 2){
+                $("#Tone").text("Anger");
+
+            }
+            else if(i == 3){
+                $("#Tone").text("Disgust");
+
+            }
+            else if(i == 4){
+                $("#Tone").text("Fear");
+
+            }
+        }
+    }
+
+}

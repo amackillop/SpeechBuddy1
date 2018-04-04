@@ -1,7 +1,11 @@
 @media screen and (max-width: inherit) { 
-    body { 
-      padding-top: 0px; 
+    .body { 
+      padding-top: 35px; 
     }
+}
+
+.body { 
+  padding-top: 55px; 
 }
 
 #myNavbar{ /* Style navbar */
@@ -69,18 +73,21 @@
   position: fixed;
   z-index: 1;
   top: 0;
+  
   overflow-x: hidden;
 }
 
 .left {
   left: 0;
   background-color: #111;
+  padding-top: 45px;
+
   
 }
 
 .right {
+  /* padding-top: 45px; */
   right: 0;
-  padding-right: 10%;
   background-color: white;
   position: absolute;
 }
@@ -99,9 +106,6 @@
 }
 
 #data-wrapper{
-  padding-top:10%;
-  padding-right: 10%;
-  padding-left: 10%;
   width: 100%;
 }
 
@@ -214,55 +218,29 @@
 /*Fundemental Stuff Here*/
 #chart_div {
 	text-align: center;
-  width: 150%;
-  height: 500px;
 }
 
 /* Volume stuff */
 #chart_div_volume {
 	text-align: center;
-  width: 150%;
-  height: 500px;
+}
+/*  color styles for quick data cards */
+.very-low {
+  color: #AED6F1;
 }
 
-
-/* FOR WPM */
-.too_slow {
-  background-color: #AED6F1;
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
+.low{
+  color: #2471A3;
 }
 
-.slow{
-  background-color: #2471A3;
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
+.med{
+  color: #27AE60;
 }
 
-.good{
-  background-color: #27AE60;
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
+.high{
+  color: #E67E22;
 }
 
-.fast{
-  background-color: #E67E22;
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
-}
-
-.too_fast{
-  background-color: rgb(241, 38, 11);
-  /* float: left; */
-  font-size: 14px;
-  font-weight: normal;
-  display: inline;
+.very-high{
+  color: #E67E22;
 }

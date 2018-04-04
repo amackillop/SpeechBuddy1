@@ -1,35 +1,97 @@
+/* FOR WPM DYNAMIC SENTENCE STYLING*/
+.basic_transcript {
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.2;
+    font-size: 18px;
+  }
+  .reading_transcript {
+    background-color: rgba(11, 26, 241, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.2;
+    font-size: 18px;
+  }
+  .too_slow {
+    background-color: rgba(11, 26, 241, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.2;
+    font-size: 18px;
+  }
+  
+  .slow{
+    background-color: rgba(11, 176, 241, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.2;
+    font-size: 18px;
+  }
+  
+  .good{
+    background-color: rgba(49, 241, 11, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.2;
+    font-size: 18px;
+  }
+  
+  .fast{
+    background-color: rgba(231, 172, 63, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.2;
+    font-size: 18px;
+  }
+  
+  .too_fast{
+    background-color: rgba(231, 63, 63, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.2;
+    font-size: 18px;
+  }
 
-.too_slow {
-    background-color: #AED6F1;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  /* Legend Positioning */
+.legend { 
+  list-style: none; 
 }
-
-.slow{
-    background-color: #2471A3;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.legend li 
+{ float: left; 
+  margin-right: 18px; 
 }
-
-good{
-    background-color: #27AE60;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.legend span { 
+  border: 1px solid #ccc; 
+  float: left; 
+  width: 12px; 
+  height: 12px; 
+  margin: 2px; 
 }
-
-.fast{
-    background-color: #E67E22;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+/* Legend Colors colors */
+.legend .too_slow {
+  background-color: rgba(11, 26, 241, 0.3); 
+  font-size: 15px;
 }
-
-.too_fast{
-    background-color: #F1190B;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.legend .slow { 
+  background-color: rgba(11, 176, 241, 0.3); 
+  font-size: 15px;
+}
+.legend .good {
+  background-color: rgba(49, 241, 11, 0.3); 
+  font-size: 15px;
+}
+.legend .fast {
+  background-color: rgba(231, 172, 63, 0.3);
+  font-size: 15px;
+}
+.legend .too_fast{
+  background-color: rgba(231, 63, 63, 0.3);
+  font-size: 15px;
 }

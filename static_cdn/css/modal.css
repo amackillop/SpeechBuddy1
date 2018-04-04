@@ -64,7 +64,7 @@
 
 .modal-footer {
     padding: 2px 16px;
-    background-color: #634784;
+    background-color: #008a99;
     color: white;
 }
 
@@ -93,22 +93,3 @@
     font-size: 14px;
 
 }
-
-body {
-    padding-top: 54px;
-  }
-  @media (min-width: 992px) {
-    body {
-      padding-top: 56px;
-    }
-  }
-  #container {
-    margin: 0px auto;
-    width: 500px;
-    height: 375px;
-  }
-  #videoElement {
-      width: 500px;
-      height: 375px;
-      background-color: #666;
-  }
