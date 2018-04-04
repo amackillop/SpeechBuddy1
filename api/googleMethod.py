@@ -56,7 +56,8 @@ def formatResponse(response, pauses):
         temp_string = ""
         list_of_sentences=[]
 
-         
+
+
 
         for word_info in alternative.words:
             word = word_info.word
@@ -74,7 +75,7 @@ def formatResponse(response, pauses):
 
         #getting the words in 15-word based sentence based list
         for i in range(0,len(strings_of_words)):
-        
+            
             if(i==len(strings_of_words)-1):
                 temp_string= temp_string + str(strings_of_words[i]) + ' '
                 list_of_sentences.append(temp_string)
@@ -94,6 +95,7 @@ def formatResponse(response, pauses):
         time_per_last_sentence=0
         speaking_rate=0
         speaking_rate_last_sentence=0
+        total_words=len(strings_of_words)
         for i in range(0,len(wordslist)):
 
             if (len(wordslist)<15):
@@ -119,7 +121,18 @@ def formatResponse(response, pauses):
             speaking_rate_last_sentence=(60*15)/(time_per_last_sentence)
             wordsperminute.append(speaking_rate_last_sentence)
             speaking_rate_last_sentence=0
-        
+
+
+        sentenceEnds=[0] * len(sentence_duration)
+
+        for i in range(len(sentence_duration)):
+            if i == 0:
+                sentenceEnds[i] = sentence_duration[i]
+            else:
+                sentenceEnds[i] = round(sentence_duration[i]+sentenceEnds[i-1],2)
+
+        print(sentenceEnds)
+
 
         #Finding Average Words Per Minute
         total_wpm=0
@@ -131,20 +144,23 @@ def formatResponse(response, pauses):
             average_wpm=int(average_wpm)
 
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
+        print("\nTotal words spoken")
+        print (total_words)
         print("\nTotal time taken to complete each sentence:")
         print (["%0.2f" % i for i in sentence_duration])
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
         print("\nWords per Minute based on sentence time:")
         print (["%d" % i for i in wordsperminute])
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
-        print("\nList of Sentences:")
-        print(list_of_sentences)
-        print(len(list_of_sentences))
-        print("\nAverage Words Per Minute for whole speech:")
-        print("%0.2f" % average_wpm)
+        # print("\nList of Sentences:")
+        # print(list_of_sentences)
+        # print(len(list_of_sentences))
+        # print("\nAverage Words Per Minute for whole speech:")
+        # print("%0.2f" % average_wpm)
         #print(len(alternative.words))
                 # add more calcs to print here for testing...
         print("###############################~~~~~~~LOOK HERE~~~~~~~~~########################")
-        print(movingWindow, list_of_sentences, wordsperminute)
+        print(sentenceEnds, list_of_sentences, wordsperminute)
         print("\n ************************************************** Done Printing calculations [for testing] **********************************************\n\n")
-    return [alternative.transcript.encode('ascii'),alternative.confidence, movingWindow, list_of_sentences, wordsperminute,average_wpm]
+
+    return [alternative.transcript.encode('ascii'),alternative.confidence, sentenceEnds, list_of_sentences, wordsperminute,average_wpm,total_words]

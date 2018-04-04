@@ -2,7 +2,7 @@
 var global_data;
 
 function googleResponse(data) {
-
+    console.log(data);
     global_data = data;
 
     //handle sliding + loading icon
@@ -55,19 +55,19 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>WPM</b></h4>
-                             <h4 id="WPM" style="font-size: 1.5vw" class = "med"></h4>
+                            <h4 id="WPM" style="font-size: 1.5vw" class = "med"></h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Words</b></h4>
-                            <h4 style="font-size: 1.5vw"  class="low">323</h4>
+                            <h4 id="Words" style="font-size: 1.5vw" class = "med"></h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Fillers</b></h4>
-                            <h4 id= "filler-count-val" style="font-size: 1.5vw" class="very-high">7</h4>
+                            <h4 id= "filler-count-val" style="font-size: 1.5vw" class="very-high"></h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -128,11 +128,11 @@ var analytics_page = `
         </div>
         <div class="well well-sm" style="text-align:left; margin:10px">
             <ul class="legend">
-                <li><span class="legend too_slow"></span> Too Slow</li>
-                <li><span class="slow"></span> Slow</li>
-                <li><span class="good"></span> Good</li>
-                <li><span class="fast"></span> Fast</li>
-                <li><span class="too_fast"></span> Too Fast</li>
+                <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
+                <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
+                <li><span class="good"></span> Good(>140 WPM ≤170)</li>
+                <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
+                <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
             </ul>
         </div>
         <div class="well well-sm" style="text-align:left; margin:10px">
@@ -204,7 +204,8 @@ function displayQuickData(data) {
     //set confidence level
     $("#score-data").text(data.confidence);
     $("#WPM").text(data.average_wpm);
-
+    $("#Words").text(data.total_words);
+    $("#filler-count-val").text(data.fillerCount);
     //set track duration
     // var track_time = Math.floor($("#audioplayer").duration);
     // $("#track-time").text(track_time);
@@ -222,4 +223,9 @@ function wpmTranscript() {
         $("#corpusTranscript").hide();
         $("#empty-transcript").show();
     }
+}
+
+function createPieChart(data){
+
+
 }
