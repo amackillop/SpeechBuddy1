@@ -12,7 +12,6 @@ function googleResponse(data) {
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
-    EmotionTabCreate(data);
 }
 
 function loadingTranscript() {
@@ -92,6 +91,7 @@ var analytics_page = `
                                 <li><a data-toggle="tab" href="#menu1"  onclick = "wpmTranscript()">Volume</a></li>
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
                                 <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu4"  onclick = "wpmTranscript()">Emotion</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
@@ -119,6 +119,9 @@ var analytics_page = `
                                 </div>
                                 <div id="menu3" class="tab-pane fade">
                                     <canvas id="EmotionTextPieChart" width="42vw" height="20vw"></canvas>
+                                </div>
+                                <div id="menu4" class="tab-pane fade">
+                                    <canvas id="EmotionTextBarChart" width="42vw" height="20vw"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -156,10 +159,10 @@ var counter = 0;
 function changeTimes(info, sentencesEnd){
     document.getElementById('CurrentTime').innerHTML = info;
     if(info == 0){
-        console.log(document.getElementById('empty-transcript').childNodes[0]);
+//        console.log(document.getElementById('empty-transcript').childNodes[0]);
         document.getElementById('empty-transcript').childNodes[0].className = "reading_transcript";
     }
-    console.log(info, sentencesEnd, counter);
+//    console.log(info, sentencesEnd, counter);
     if(info + 1 > sentencesEnd[counter]){
         document.getElementById('empty-transcript').childNodes[counter].className = "basic_transcript";
         counter = counter + 1;

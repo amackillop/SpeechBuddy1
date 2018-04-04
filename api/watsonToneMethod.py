@@ -56,7 +56,6 @@ def watsontoneCall(sentencesLIST):
 
     emotionsOrder = []
     for i in range(len(arrayEmo['sentences_tone'])):
-
         # print(arrayEmo['sentences_tone'][i])
         emotions = arrayEmo['sentences_tone'][i]['tone_categories'][0]['tones']
         for j in range(len(emotions)):

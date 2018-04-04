@@ -1,4 +1,4 @@
-function EmotionTabCreate(data){
+function EmotionPieCreate(data){
     var ctx = document.getElementById("EmotionTextPieChart");
     var config = {
     type: 'doughnut',

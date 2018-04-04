@@ -9,10 +9,10 @@ function googleResponse(data) {
     $("#myloader").hide();
     loadAnalyticsPage();
     $("#right-split").animate({ width: '100%' }, 1500);
+    displayTranscript(data)
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
-    EmotionTabCreate(data);
 }
 
 function loadingTranscript() {
@@ -45,6 +45,7 @@ var analytics_page = `
                         <div id = "left-split" class="well" style="height: 34vw;overflow-y: scroll">
                             <h2>Here's what you said:</h2>
                             <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
+                            <h4 id ="Audio-transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                             <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                         </div>
                     </div>   
@@ -92,6 +93,7 @@ var analytics_page = `
                                 <li><a data-toggle="tab" href="#menu1"  onclick = "wpmTranscript()">Volume</a></li>
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
                                 <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu4"  onclick = "wpmTranscript()">Emotion</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
@@ -119,6 +121,9 @@ var analytics_page = `
                                 </div>
                                 <div id="menu3" class="tab-pane fade">
                                     <canvas id="EmotionTextPieChart" width="42vw" height="20vw"></canvas>
+                                </div>
+                                <div id="menu4" class="tab-pane fade">
+                                    <canvas id="EmotionTextBarChart" width="42vw" height="20vw"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -154,21 +159,24 @@ function loadAnalyticsPage() {
 var counter = 0;
 
 function changeTimes(info, sentencesEnd){
+     if (!$("#Audio-transcript").is(":visible")) {
+        AudioTranscript();
+     }
     document.getElementById('CurrentTime').innerHTML = info;
     if(info == 0){
-        console.log(document.getElementById('empty-transcript').childNodes[0]);
-        document.getElementById('empty-transcript').childNodes[0].className = "reading_transcript";
+//        console.log(document.getElementById('empty-transcript').childNodes[0]);
+        document.getElementById('Audio-transcript').childNodes[0].className = "reading_transcript";
     }
-    console.log(info, sentencesEnd, counter);
+//    console.log(info, sentencesEnd, counter);
     if(info + 1 > sentencesEnd[counter]){
-        document.getElementById('empty-transcript').childNodes[counter].className = "basic_transcript";
+        document.getElementById('Audio-transcript').childNodes[counter].className = "basic_transcript";
         counter = counter + 1;
-        document.getElementById('empty-transcript').childNodes[counter].className = "reading_transcript";
+        document.getElementById('Audio-transcript').childNodes[counter].className = "reading_transcript";
     }
 }
 
 function displayTranscript(data){
-    var mainTranscript = document.getElementById("empty-transcript");
+    var mainTranscript = document.getElementById("Audio-transcript");
     for (i = 0; i < data.wordsperminute.length; i++) {
         var sentenceDiv = document.createElement("div");
         sentenceDiv.setAttribute("class", "basic_transcript");
@@ -254,6 +262,7 @@ function displayQuickData(data) {
 function corpusTranscript(data) {
     if (!$("#corpusTranscript").is(":visible")) {
         $("#empty-transcript").hide();
+        $("#Audio-transcript").hide();
         $("#corpusTranscript").show();
     }
 }
@@ -261,6 +270,15 @@ function corpusTranscript(data) {
 function wpmTranscript() {
     if ($("#corpusTranscript").is(":visible")) {
         $("#corpusTranscript").hide();
+        $("#Audio-transcript").hide();
         $("#empty-transcript").show();
+    }
+}
+
+function AudioTranscript() {
+    if (!$("#Audio-transcript").is(":visible")) {
+        $("#empty-transcript").hide();
+        $("#corpusTranscript").hide();
+        $("#Audio-transcript").show();
     }
 }
