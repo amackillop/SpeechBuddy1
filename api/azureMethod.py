@@ -24,7 +24,7 @@ subscription_key = ApiKeys['subscriptionkey']
 # faces = response.json()
 # print faces
 def AzureCall():
-    folder = '/home/sanghs3/Capstone/SpeechBuddy1/audio/finalImages/'
+    folder = 'C:/Users/Gladiator/Desktop/Capestone/Updated UI/SpeechBuddy1/audio/finalimages/'
     listofImages = sorted(os.listdir(folder))
     Sadness = [0] * len(listofImages)
     Joy = [0] * len(listofImages)
