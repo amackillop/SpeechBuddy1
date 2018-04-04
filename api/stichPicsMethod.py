@@ -114,10 +114,5 @@ def creatImage(listofImages,counter):
                 new_im.paste(temp, (x_offset, y_offset))
                 x_offset += temp.size[0]
 
-<<<<<<< HEAD
     #new_im.save('/home/sanghs3/Capstone/SpeechBuddy1/audio/finalImages/' + stringFile + '.jpg')
     new_im.save('C:/Users/Gladiator/Desktop/Capestone/Updated UI/SpeechBuddy1/audio/finalimages/' + str(counter) + '.jpg')
-=======
-    new_im.save('/home/sanghs3/Capstone/SpeechBuddy1/audio/finalImages/' + stringFile + '.jpg')
-    # new_im.save('/home/sanghs3/Capstone/SpeechBuddy1/audio/finalImages/' + str(counter) + '.jpg')
->>>>>>> a4c163797bdc3624b262e7d19666367351a5e87f
