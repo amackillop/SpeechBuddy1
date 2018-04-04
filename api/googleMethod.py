@@ -65,6 +65,8 @@ def formatResponse(response, pauses):
 #                if start_time < pause[0] and end_time > pause[0]:
 #                    end_time -= pause[1]
             wordslist.append((end_time.seconds + end_time.nanos * 1e-9) - ( start_time.seconds + start_time.nanos * 1e-9))
+            if word_info == alternative.words[len(alternative.words)-1]:
+                EndTime = round((end_time.seconds + end_time.nanos * 1e-9),0)
 
         #alternate way to get the words in the list
         for word_info in alternative.words:
@@ -126,10 +128,15 @@ def formatResponse(response, pauses):
         for i in range(len(sentence_duration)):
             if i == 0:
                 sentenceEnds[i] = sentence_duration[i]
+            elif i == len(sentence_duration)-1:
+                sentenceEnds[i] = EndTime
             else:
                 sentenceEnds[i] = round(sentence_duration[i]+sentenceEnds[i-1],2)
 
+<<<<<<< HEAD
         # print(sentenceEnds)
+=======
+>>>>>>> d3adaa5f145fab382a9af81052501ffa749bcfab
 
 
         #Finding Average Words Per Minute

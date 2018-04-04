@@ -1,5 +1,20 @@
 /* FOR WPM DYNAMIC SENTENCE STYLING*/
-.too_slow {
+.basic_transcript {
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.2;
+    font-size: 18px;
+  }
+  .reading_transcript {
+    background-color: rgba(11, 26, 241, 0.3);
+    /* float: left; */
+    font-weight: normal;
+    display: inline;
+    line-height: 2.2;
+    font-size: 18px;
+  }
+  .too_slow {
     background-color: rgba(11, 26, 241, 0.3);
     /* float: left; */
     font-weight: normal;

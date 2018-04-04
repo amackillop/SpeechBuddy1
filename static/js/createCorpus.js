@@ -53,10 +53,12 @@ function nltkCorpus(data) {
             z = document.createElement("TD");
             z.setAttribute("id", "child" + index);
             z.setAttribute("class", "result");        
-            
+            var link = document.createElement("a");
+            link.setAttribute("href", "#");
             var t = document.createTextNode(res[index]);
             index = index + 1;
-            z.appendChild(t);
+            link.appendChild(t);
+            z.appendChild(link);
             y.appendChild(z);
         }
         tb.appendChild(y);

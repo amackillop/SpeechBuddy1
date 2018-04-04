@@ -142,7 +142,7 @@ def mostCommon(strData):
         corpus = [];
         indexArray = {}
         # str=expand_contractions(str)
-        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','this', 'that','our']
+        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','this', 'that','our','be']
         fillerWords = {'well': 0, 'like': 0, 'actually': 0, 'basically': 0, 'seriously': 0, 'and': 0}
         tokenizer = nltk.RegexpTokenizer(r"\w+[']+\w+|\w+")
         tok = tokenizer.tokenize(strData)
@@ -176,8 +176,12 @@ def mostCommon(strData):
                 listSyn[w] = synCreate(w)
                 #print(w)
                 #print(synCreate(w))
+        fillerCount = 0;
+        for fill in fillerWords:
+                fillerCount = fillerCount + fillerWords[fill]
         listSyn = json.dumps(listSyn)
-        corpus = [indexArray, freq.most_common(16), tok, listSyn, fillerWords]
+        print(fillerCount)
+        corpus = [indexArray, freq.most_common(16), tok, listSyn, fillerWords, fillerCount]
         return corpus
 
 
@@ -204,6 +208,6 @@ def synCreate(strData):
                                         res[j.name()] = [res[j.name()], i.definition(), i.examples()]
         # print(res)
         return res
-#text = 'Hello and you are my hello and i am and like like drunk'
-#corpus = mostCommon(text)
+# text = 'Hello and you are my hello and i am and like like drunk'
+# corpus = mostCommon(text)
 #print corpus[4]

@@ -2,16 +2,18 @@
 var global_data;
 
 function googleResponse(data) {
-
+    console.log(data);
     global_data = data;
 
     //handle sliding + loading icon
     $("#myloader").hide();
     loadAnalyticsPage();
     $("#right-split").animate({ width: '100%' }, 1500);
-    displayTranscriptWPM(data);
+    displayTranscript(data)
+    //displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
+    EmotionTabCreate(data);
 }
 
 function loadingTranscript() {
@@ -34,6 +36,8 @@ var analytics_page = `
                     <div style="text-align:left">
                         <div>
                             <p style="font-size:16px; margin:0px" class="btn" >Record / <b>Transcript Analysis</b></p>
+
+                            <p id = "CurrentTime">sfbv</p>
                         </div>
                     </div>                      
                 </div>
@@ -67,7 +71,7 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Fillers</b></h4>
-                            <h4 id= "filler-count-val" style="font-size: 1.5vw" class="very-high">7</h4>
+                            <h4 id= "filler-count-val" style="font-size: 1.5vw" class="very-high"></h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -90,15 +94,13 @@ var analytics_page = `
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
                                 <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
                             </ul>
-
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
                                     <div id="chart_div" style="height:20vw;width:42vw">
                                     </div>
                                 </div>
                                 <div id="menu1" class="tab-pane fade">
-                                    <div id="chart_div_volume">
-                                    </div>
+                                    <canvas id="VolumeLineChart" width="42vw" height="20vw"></canvas>
                                 </div>
                                 <div id="menu2" class="tab-pane fade">
                                     <div id = "data-wrapper">
@@ -117,33 +119,61 @@ var analytics_page = `
                                     </div>
                                 </div>
                                 <div id="menu3" class="tab-pane fade">
-                                    <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                                    <canvas id="EmotionTextPieChart" width="42vw" height="20vw"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </div>
-                </div>               
-            </div>            
+                </div>
+            </div>
         </div>
-        <div class="well well-sm" style="text-align:left; margin:10px">
-            <ul class="legend">
-                <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
-                <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
-                <li><span class="good"></span> Good(>140 WPM ≤170)</li>
-                <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
-                <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
-            </ul>
-        </div>
-        <div class="well well-sm" style="text-align:left; margin:10px">
-            <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
-                ontimeupdate="document.getElementById('track-time').innerHTML = Math.floor(this.duration);">
-            </audio>
-        </div>
+    </div>
+    <div class="well well-sm" style="text-align:left; margin:10px">
+    <ul class="legend">
+        <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
+        <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
+        <li><span class="good"></span> Good(>140 WPM ≤170)</li>
+        <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
+        <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
+    </ul>
+    </div>
+    <div class="well well-sm" style="text-align:left; margin:10px">
+    <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
+                ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
+    </audio>
+    </div>
     `;
 
 function loadAnalyticsPage() {
     $("#right-split").append(analytics_page);
+}
+
+var counter = 0;
+
+function changeTimes(info, sentencesEnd){
+    document.getElementById('CurrentTime').innerHTML = info;
+    if(info == 1){
+        console.log(document.getElementById('empty-transcript').childNodes[0]);
+        document.getElementById('empty-transcript').childNodes[0].className = "reading_transcript";
+    }
+    console.log(info, sentencesEnd, counter);
+    if(info + 1 > sentencesEnd[counter]){
+        document.getElementById('empty-transcript').childNodes[counter].setAttribute("class", "basic_transcript");
+        counter = counter + 1;
+        document.getElementById('empty-transcript').childNodes[counter].setAttribute("class", "reading_transcript");
+    }
+}
+
+function displayTranscript(data){
+    var mainTranscript = document.getElementById("empty-transcript");
+    for (i = 0; i < data.wordsperminute.length; i++) {
+        var sentenceDiv = document.createElement("div");
+        sentenceDiv.setAttribute("class", "basic_transcript");
+        var node = document.createTextNode(data.list_of_sentences[i]);
+        sentenceDiv.appendChild(node);
+        mainTranscript.appendChild(sentenceDiv);
+    }
+
 }
 
 function displayTranscriptWPM(data) {
@@ -191,13 +221,6 @@ function displayGraphs(data) {
     var transcript_split = data.transcript.split("\"");
     var corpusTranscript = transcript_split[1];
     $("#corpusTranscript").text(corpusTranscript);
-
-    var fillerData = `
-        <div id="filler count">
-            <div id="count">
-            </div>
-        </div>
-    `;
 }
 
 function displayQuickData(data) {
@@ -205,6 +228,7 @@ function displayQuickData(data) {
     $("#score-data").text(data.confidence);
     $("#WPM").text(data.average_wpm);
     $("#Words").text(data.total_words);
+    $("#filler-count-val").text(data.fillerCount);
     //set track duration
     // var track_time = Math.floor($("#audioplayer").duration);
     // $("#track-time").text(track_time);
