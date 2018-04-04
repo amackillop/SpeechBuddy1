@@ -30,7 +30,7 @@ var analytics_page = `
         <div class="row">  
             <br>
             <div class="col-sm-12">
-                <div class="well well-sm " >
+                <div class="well well-sm" style="padding:0px">
                     <div style="text-align:left">
                         <div>
                             <p style="font-size:16px; margin:0px" class="btn" >Record / <b>Transcript Analysis</b></p>
