@@ -226,13 +226,21 @@ def googleCall(request):
             "average_wpm": average_wpm,
             "total_words": total_words,
             "pauses": pauses,
-            # "imagesSadness": SadnessI,
-            # "imagesJoy": JoyI,
-            # "imagesAnger": AngerI,
-            # "imagesDisgust": DisgustI,
-            # "imagesFear": FearI,
-            # "imagesAvg": AvgI,
-            "fillerCount": fillerCount
+            # "SadnessI": SadnessI,
+            # "JoyI": JoyI,
+            # "AngerI": AngerI,
+            # "DisgustI": DisgustI,
+            # "FearI": FearI,
+            # "AvgI": AvgI,
+            "SadnessT": SadnessT,
+            "JoyT": JoyT,
+            "AngerT": AngerT,
+            "DisgustT": DisgustT,
+            "FearT": FearT,
+            "AvgT": AvgT,
+            "fillerCount": fillerCount,
+            "EndTime": sentencesEnd[len(sentencesEnd)-1],
+            "V": V
 
         })
     return Response({"message": "Hello, world!"})

@@ -12,6 +12,7 @@ function googleResponse(data) {
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
+    EmotionTabCreate(data);
 }
 
 function loadingTranscript() {
@@ -97,7 +98,7 @@ var analytics_page = `
                                     </div>
                                 </div>
                                 <div id="menu1" class="tab-pane fade">
-                                    <div id="chart_div_volume">
+                                    <canvas id="VolumeLineChart" width="42vw" height="20vw"></canvas>
                                     </div>
                                 </div>
                                 <div id="menu2" class="tab-pane fade">
@@ -117,7 +118,7 @@ var analytics_page = `
                                     </div>
                                 </div>
                                 <div id="menu3" class="tab-pane fade">
-                                    <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                                    <canvas id="EmotionTextPieChart" width="42vw" height="20vw"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -191,13 +192,6 @@ function displayGraphs(data) {
     var transcript_split = data.transcript.split("\"");
     var corpusTranscript = transcript_split[1];
     $("#corpusTranscript").text(corpusTranscript);
-
-    var fillerData = `
-        <div id="filler count">
-            <div id="count">
-            </div>
-        </div>
-    `;
 }
 
 function displayQuickData(data) {
@@ -223,9 +217,4 @@ function wpmTranscript() {
         $("#corpusTranscript").hide();
         $("#empty-transcript").show();
     }
-}
-
-function createPieChart(data){
-
-
 }
