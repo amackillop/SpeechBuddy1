@@ -188,8 +188,9 @@ function displayTranscriptWPM(data) {
 }
 
 function displayGraphs(data) {
-    $("#corpusTranscript").text(data.transcript);
-
+    var transcript_split = data.transcript.split("\"");
+    var corpusTranscript = transcript_split[1];
+    $("#corpusTranscript").text(corpusTranscript);
 
     var fillerData = `
         <div id="filler count">
@@ -211,14 +212,14 @@ function displayQuickData(data) {
 
 function corpusTranscript(data) {
     if (!$("#corpusTranscript").is(":visible")) {
-        $("#empty-transcript").fadeOut("slow");
-        $("#corpusTranscript").fadeIn("slow");
+        $("#empty-transcript").hide();
+        $("#corpusTranscript").show();
     }
 }
 
 function wpmTranscript() {
     if ($("#corpusTranscript").is(":visible")) {
-        $("#corpusTranscript").fadeOut("slow");
-        $("#empty-transcript").fadeIn("slow");
+        $("#corpusTranscript").hide();
+        $("#empty-transcript").show();
     }
 }
