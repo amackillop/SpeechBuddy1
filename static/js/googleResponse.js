@@ -12,7 +12,7 @@ function googleResponse(data) {
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
-    EmotionTabCreate(data);
+    EmotionTabCreate(data);    
 }
 
 function loadingTranscript() {
@@ -46,7 +46,6 @@ var analytics_page = `
                             <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                         </div>
                     </div>   
-
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Score</b></h4>
@@ -91,7 +90,6 @@ var analytics_page = `
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
                                 <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
                             </ul>
-
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
                                     <div id="chart_div" style="height:20vw;width:42vw">
@@ -99,7 +97,6 @@ var analytics_page = `
                                 </div>
                                 <div id="menu1" class="tab-pane fade">
                                     <canvas id="VolumeLineChart" width="42vw" height="20vw"></canvas>
-                                    </div>
                                 </div>
                                 <div id="menu2" class="tab-pane fade">
                                     <div id = "data-wrapper">
@@ -123,24 +120,28 @@ var analytics_page = `
                             </div>
                         </div>
                     </div>
-                    </div>
-                </div>               
-            </div>            
+                </div>
+            </div>
+        </div> 
+        <div class= "row">
+            <div class="well well-sm" style="text-align:left; margin:10px; margin-top:0px; height:2.2vw">
+                <ul class="legend">
+                    <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
+                    <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
+                    <li><span class="good"></span> Good(>140 WPM ≤170)</li>
+                    <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
+                    <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
+                </ul>
+            </div>
         </div>
-        <div class="well well-sm" style="text-align:left; margin:10px">
-            <ul class="legend">
-                <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
-                <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
-                <li><span class="good"></span> Good(>140 WPM ≤170)</li>
-                <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
-                <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
-            </ul>
-        </div>
-        <div class="well well-sm" style="text-align:left; margin:10px">
-            <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
-                ontimeupdate="document.getElementById('track-time').innerHTML = Math.floor(this.duration);">
-            </audio>
-        </div>
+        <div class= "row">
+            <div class="well well-sm" style="text-align:left; margin:10px">
+                <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
+                    onloadedmetadata ="document.getElementById('track-time').innerHTML = Math.floor(this.duration) + 's';">
+                </audio>
+            </div>
+        </div>           
+    </div>            
     `;
 
 function loadAnalyticsPage() {
