@@ -240,6 +240,7 @@ def googleCall(request):
             "AvgT": AvgT,
             "fillerCount": fillerCount,
             "EndTime": sentencesEnd[len(sentencesEnd)-1],
+            "sentencesEnd": sentencesEnd,
             "V": V
 
         })

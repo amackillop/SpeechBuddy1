@@ -9,7 +9,8 @@ function googleResponse(data) {
     $("#myloader").hide();
     loadAnalyticsPage();
     $("#right-split").animate({ width: '100%' }, 1500);
-    displayTranscriptWPM(data);
+    displayTranscript(data)
+    //displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
     EmotionTabCreate(data);
@@ -35,6 +36,8 @@ var analytics_page = `
                     <div style="text-align:left">
                         <div>
                             <p style="font-size:16px; margin:0px" class="btn" >Record / <b>Transcript Analysis</b></p>
+
+                            <p id = "CurrentTime">sfbv</p>
                         </div>
                     </div>                      
                 </div>
@@ -100,7 +103,7 @@ var analytics_page = `
                                 <div id="menu1" class="tab-pane fade">
                                     <canvas id="VolumeLineChart" width="42vw" height="20vw"></canvas>
                                     </div>
-                                </div>
+                                </div>2
                                 <div id="menu2" class="tab-pane fade">
                                     <div id = "data-wrapper">
                                         <div id="myModal" class="modal">
@@ -138,13 +141,41 @@ var analytics_page = `
         </div>
         <div class="well well-sm" style="text-align:left; margin:10px">
             <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
-                ontimeupdate="document.getElementById('track-time').innerHTML = Math.floor(this.duration);">
+                ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
             </audio>
         </div>
     `;
 
 function loadAnalyticsPage() {
     $("#right-split").append(analytics_page);
+}
+
+var counter = 0;
+
+function changeTimes(info, sentencesEnd){
+    document.getElementById('CurrentTime').innerHTML = info;
+    if(info == 1){
+        console.log(document.getElementById('empty-transcript').childNodes[0]);
+        document.getElementById('empty-transcript').childNodes[0].className = "reading_transcript";
+    }
+    console.log(info, sentencesEnd, counter);
+    if(info + 1 > sentencesEnd[counter]){
+        document.getElementById('empty-transcript').childNodes[counter].setAttribute("class", "basic_transcript");
+        counter = counter + 1;
+        document.getElementById('empty-transcript').childNodes[counter].setAttribute("class", "reading_transcript");
+    }
+}
+
+function displayTranscript(data){
+    var mainTranscript = document.getElementById("empty-transcript");
+    for (i = 0; i < data.wordsperminute.length; i++) {
+        var sentenceDiv = document.createElement("div");
+        sentenceDiv.setAttribute("class", "basic_transcript");
+        var node = document.createTextNode(data.list_of_sentences[i]);
+        sentenceDiv.appendChild(node);
+        mainTranscript.appendChild(sentenceDiv);
+    }
+
 }
 
 function displayTranscriptWPM(data) {
