@@ -133,12 +133,7 @@ def formatResponse(response, pauses):
             else:
                 sentenceEnds[i] = round(sentence_duration[i]+sentenceEnds[i-1],2)
 
-<<<<<<< HEAD
         # print(sentenceEnds)
-=======
->>>>>>> d3adaa5f145fab382a9af81052501ffa749bcfab
-
-
         #Finding Average Words Per Minute
         total_wpm=0
         average_wpm=0
@@ -149,6 +144,7 @@ def formatResponse(response, pauses):
             average_wpm=int(average_wpm)
 
         print("\n\n ************************************************** Printing calculations [for testing] **************************************************")
+        print(alternative.transcript)
         print("\nWord Info")
         print (word_info)
         print("\nTotal words spoken")

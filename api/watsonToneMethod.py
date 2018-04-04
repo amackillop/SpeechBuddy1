@@ -21,7 +21,7 @@ def watsontoneCall(sentencesLIST):
             sentencesStr = sentencesStr + " " + sentencesLIST[i]
         else:
             sentencesStr = sentencesStr + " " + sentencesLIST[i] + "."
-    print(sentencesStr)
+    print("Sentences Print:   ", sentencesStr)
     social = json.dumps(
         tone_analyzer.tone(tone_input=sentencesStr, content_type="text/plain", sentences=True, tones="social"),
         indent=2)
@@ -32,7 +32,7 @@ def watsontoneCall(sentencesLIST):
     # print(emotion)
     arrayEmo = json.loads(emotionLIST)
     emotions = arrayEmo['document_tone']['tone_categories'][0]['tones']
-    print("LEN:  ", len(arrayEmo['sentences_tone']))
+    print("LEN:  ", len(arrayEmo['sentences_tone']), arrayEmo)
 
     EmotionalAVG = [0] * len(arrayEmo['sentences_tone'])
     Sadness = [0] * len(arrayEmo['sentences_tone'])

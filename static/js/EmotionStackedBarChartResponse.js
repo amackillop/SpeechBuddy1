@@ -41,7 +41,7 @@ function EmotionStackedBarCreate(data){
 						mode: 'index',
 						intersect: false,
 						callbacks: {
-                            label: function(tooltipItem) {
+                            index: function(tooltipItem) {
                                 console.log(tooltipItem.yLabel);
                                 console.log(tooltipItem.xLabel);
                                 return  Number(tooltipItem.xLabel) + '\n' + ;
