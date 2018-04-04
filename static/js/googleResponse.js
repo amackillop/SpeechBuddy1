@@ -2,7 +2,7 @@
 var global_data;
 
 function googleResponse(data) {
-
+    console.log(data);
     global_data = data;
 
     //handle sliding + loading icon
@@ -67,7 +67,7 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Fillers</b></h4>
-                            <h4 id= "filler-count-val" style="font-size: 1.5vw" class="very-high">7</h4>
+                            <h4 id= "filler-count-val" style="font-size: 1.5vw" class="very-high"></h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -205,6 +205,7 @@ function displayQuickData(data) {
     $("#score-data").text(data.confidence);
     $("#WPM").text(data.average_wpm);
     $("#Words").text(data.total_words);
+    $("#filler-count-val").text(data.fillerCount);
     //set track duration
     // var track_time = Math.floor($("#audioplayer").duration);
     // $("#track-time").text(track_time);
@@ -222,4 +223,9 @@ function wpmTranscript() {
         $("#corpusTranscript").hide();
         $("#empty-transcript").show();
     }
+}
+
+function createPieChart(data){
+
+
 }

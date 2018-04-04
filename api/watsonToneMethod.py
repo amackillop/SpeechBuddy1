@@ -21,7 +21,6 @@ def watsontoneCall(sentencesLIST):
             sentencesStr = sentencesStr + " " + sentencesLIST[i]
         else:
             sentencesStr = sentencesStr + " " + sentencesLIST[i] + "."
-        print(sentencesStr)
     print(sentencesStr)
     social = json.dumps(
         tone_analyzer.tone(tone_input=sentencesStr, content_type="text/plain", sentences=True, tones="social"),
