@@ -9,8 +9,7 @@ function googleResponse(data) {
     $("#myloader").hide();
     loadAnalyticsPage();
     $("#right-split").animate({ width: '100%' }, 1500);
-    displayTranscript(data)
-    //displayTranscriptWPM(data);
+    displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
 }
@@ -223,6 +222,20 @@ function displayTranscriptWPM(data) {
         }
     }
 }
+
+// function ToneMethod(data){
+//     console.log('Tone Method Testing')
+//     console.log(data.AvgT);
+//     var tonetemp=(Math.max(AvgT));
+    
+//     if(AvgT[0]==tonetemp){
+
+
+//     }
+
+
+// }
+
 
 function displayGraphs(data) {
     var transcript_split = data.transcript.split("\"");
