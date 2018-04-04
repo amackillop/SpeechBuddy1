@@ -13,7 +13,6 @@ function googleResponse(data) {
     //displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
-    EmotionTabCreate(data);
 }
 
 function loadingTranscript() {
@@ -93,6 +92,7 @@ var analytics_page = `
                                 <li><a data-toggle="tab" href="#menu1"  onclick = "wpmTranscript()">Volume</a></li>
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
                                 <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu4"  onclick = "wpmTranscript()">Emotion</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
@@ -121,26 +121,33 @@ var analytics_page = `
                                 <div id="menu3" class="tab-pane fade">
                                     <canvas id="EmotionTextPieChart" width="42vw" height="20vw"></canvas>
                                 </div>
+                                <div id="menu4" class="tab-pane fade">
+                                    <canvas id="EmotionTextBarChart" width="42vw" height="20vw"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="well well-sm" style="text-align:left; margin:10px">
-    <ul class="legend">
-        <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
-        <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
-        <li><span class="good"></span> Good(>140 WPM ≤170)</li>
-        <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
-        <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
-    </ul>
-    </div>
-    <div class="well well-sm" style="text-align:left; margin:10px">
-    <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
+        <div class= "row">
+            <div class="well well-sm" style="text-align:left; margin:10px; margin-top:0px; height:2.2vw">
+                <ul class="legend">
+                    <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
+                    <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
+                    <li><span class="good"></span> Good(>140 WPM ≤170)</li>
+                    <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
+                    <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
+                </ul>
+            </div>
+        </div>
+        <div class= "row">
+            <div class="well well-sm" style="text-align:left; margin:10px">
+                <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
                 ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
-    </audio>
+                </audio>
+            </div>
+        </div>
     </div>
     `;
 
@@ -152,15 +159,15 @@ var counter = 0;
 
 function changeTimes(info, sentencesEnd){
     document.getElementById('CurrentTime').innerHTML = info;
-    if(info == 1){
-        console.log(document.getElementById('empty-transcript').childNodes[0]);
+    if(info == 0){
+//        console.log(document.getElementById('empty-transcript').childNodes[0]);
         document.getElementById('empty-transcript').childNodes[0].className = "reading_transcript";
     }
-    console.log(info, sentencesEnd, counter);
+//    console.log(info, sentencesEnd, counter);
     if(info + 1 > sentencesEnd[counter]){
-        document.getElementById('empty-transcript').childNodes[counter].setAttribute("class", "basic_transcript");
+        document.getElementById('empty-transcript').childNodes[counter].className = "basic_transcript";
         counter = counter + 1;
-        document.getElementById('empty-transcript').childNodes[counter].setAttribute("class", "reading_transcript");
+        document.getElementById('empty-transcript').childNodes[counter].className = "reading_transcript";
     }
 }
 
