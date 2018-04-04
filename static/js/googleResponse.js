@@ -77,7 +77,7 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Tone:</b></h4>
-                            <h4 style="font-size: 1.5vw" class="low">Neutral</h4>
+                            <h4 id="Tone" style="font-size: 1.5vw" class="low">Neutral</h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -93,7 +93,7 @@ var analytics_page = `
                                 <li><a data-toggle="tab" href="#menu1"  onclick = "wpmTranscript()">Volume</a></li>
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
                                 <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
-                                <li><a data-toggle="tab" href="#menu4"  onclick = "wpmTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu4"  onclick = "AudioTranscript()">Emotion</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
@@ -161,8 +161,12 @@ var counter = 0;
 function changeTimes(info, sentencesEnd){
      if (!$("#Audio-transcript").is(":visible")) {
         AudioTranscript();
+        for (i = 0; i < document.getElementById('Audio-transcript').childNodes.length; i++) {
+            document.getElementById('Audio-transcript').childNodes[i].className = "basic_transcript";
+         }
      }
     document.getElementById('CurrentTime').innerHTML = info;
+
     if(info == 0){
 //        console.log(document.getElementById('empty-transcript').childNodes[0]);
         document.getElementById('Audio-transcript').childNodes[0].className = "reading_transcript";
@@ -228,18 +232,6 @@ function displayTranscriptWPM(data) {
     }
 }
 
-// function ToneMethod(data){
-//     console.log('Tone Method Testing')
-//     console.log(data.AvgT);
-//     var tonetemp=(Math.max(AvgT));
-    
-//     if(AvgT[0]==tonetemp){
-
-
-//     }
-
-
-// }
 
 
 function displayGraphs(data) {
@@ -254,6 +246,7 @@ function displayQuickData(data) {
     $("#WPM").text(data.average_wpm);
     $("#Words").text(data.total_words);
     $("#filler-count-val").text(data.fillerCount);
+    ToneMethod(data)
     //set track duration
     // var track_time = Math.floor($("#audioplayer").duration);
     // $("#track-time").text(track_time);
@@ -281,4 +274,35 @@ function AudioTranscript() {
         $("#corpusTranscript").hide();
         $("#Audio-transcript").show();
     }
+}
+function ToneMethod(data){
+    console.log('Tone Method Testing')
+    console.log(data.AvgT, document.getElementById("Tone").innerHTML);
+    var tonetemp=Math.max.apply(Math, data.AvgT);
+    console.log(tonetemp);
+    for (i = 0; i < data.AvgT.length; i++) {
+        if(data.AvgT[i]==tonetemp){
+            console.log(i,data.AvgT[i])
+            if(i == 0){
+                $("#Tone").text("Sadness");
+            }
+            else if(i == 1){
+                $("#Tone").text("Joy");
+
+            }
+            else if(i == 2){
+                $("#Tone").text("Anger");
+
+            }
+            else if(i == 3){
+                $("#Tone").text("Disgust");
+
+            }
+            else if(i == 4){
+                $("#Tone").text("Fear");
+
+            }
+        }
+    }
+
 }

@@ -9,6 +9,7 @@ function googleResponse(data) {
     $("#myloader").hide();
     loadAnalyticsPage();
     $("#right-split").animate({ width: '100%' }, 1500);
+    displayTranscript(data)
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
@@ -44,6 +45,7 @@ var analytics_page = `
                         <div id = "left-split" class="well" style="height: 34vw;overflow-y: scroll">
                             <h2>Here's what you said:</h2>
                             <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
+                            <h4 id ="Audio-transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                             <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                         </div>
                     </div>   
@@ -75,7 +77,7 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Tone:</b></h4>
-                            <h4 style="font-size: 1.5vw" class="low">Neutral</h4>
+                            <h4 id="Tone" style="font-size: 1.5vw" class="low">Neutral</h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -157,21 +159,24 @@ function loadAnalyticsPage() {
 var counter = 0;
 
 function changeTimes(info, sentencesEnd){
+     if (!$("#Audio-transcript").is(":visible")) {
+        AudioTranscript();
+     }
     document.getElementById('CurrentTime').innerHTML = info;
     if(info == 0){
 //        console.log(document.getElementById('empty-transcript').childNodes[0]);
-        document.getElementById('empty-transcript').childNodes[0].className = "reading_transcript";
+        document.getElementById('Audio-transcript').childNodes[0].className = "reading_transcript";
     }
 //    console.log(info, sentencesEnd, counter);
     if(info + 1 > sentencesEnd[counter]){
-        document.getElementById('empty-transcript').childNodes[counter].className = "basic_transcript";
+        document.getElementById('Audio-transcript').childNodes[counter].className = "basic_transcript";
         counter = counter + 1;
-        document.getElementById('empty-transcript').childNodes[counter].className = "reading_transcript";
+        document.getElementById('Audio-transcript').childNodes[counter].className = "reading_transcript";
     }
 }
 
 function displayTranscript(data){
-    var mainTranscript = document.getElementById("empty-transcript");
+    var mainTranscript = document.getElementById("Audio-transcript");
     for (i = 0; i < data.wordsperminute.length; i++) {
         var sentenceDiv = document.createElement("div");
         sentenceDiv.setAttribute("class", "basic_transcript");
@@ -249,6 +254,7 @@ function displayQuickData(data) {
     $("#WPM").text(data.average_wpm);
     $("#Words").text(data.total_words);
     $("#filler-count-val").text(data.fillerCount);
+    ToneMethod(data)
     //set track duration
     // var track_time = Math.floor($("#audioplayer").duration);
     // $("#track-time").text(track_time);
@@ -257,6 +263,7 @@ function displayQuickData(data) {
 function corpusTranscript(data) {
     if (!$("#corpusTranscript").is(":visible")) {
         $("#empty-transcript").hide();
+        $("#Audio-transcript").hide();
         $("#corpusTranscript").show();
     }
 }
@@ -264,6 +271,46 @@ function corpusTranscript(data) {
 function wpmTranscript() {
     if ($("#corpusTranscript").is(":visible")) {
         $("#corpusTranscript").hide();
+        $("#Audio-transcript").hide();
         $("#empty-transcript").show();
     }
+}
+
+function AudioTranscript() {
+    if (!$("#Audio-transcript").is(":visible")) {
+        $("#empty-transcript").hide();
+        $("#corpusTranscript").hide();
+        $("#Audio-transcript").show();
+    }
+}
+function ToneMethod(data){
+    console.log('Tone Method Testing')
+    console.log(data.AvgT, document.getElementById("Tone").innerHTML);
+    var tonetemp=Math.max.apply(Math, data.AvgT);
+    console.log(tonetemp);
+    for (i = 0; i < data.AvgT.length; i++) {
+        if(data.AvgT[i]==tonetemp){
+            console.log(i,data.AvgT[i])
+            if(i == 0){
+                $("#Tone").text("Sadness");
+            }
+            else if(i == 1){
+                $("#Tone").text("Joy");
+
+            }
+            else if(i == 2){
+                $("#Tone").text("Anger");
+
+            }
+            else if(i == 3){
+                $("#Tone").text("Disgust");
+
+            }
+            else if(i == 4){
+                $("#Tone").text("Fear");
+
+            }
+        }
+    }
+
 }

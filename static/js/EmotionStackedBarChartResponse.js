@@ -1,5 +1,8 @@
 function EmotionStackedBarCreate(data){
     var sentencesEnd = data.sentencesEnd;
+    var numberWithCommas = function(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
     sentencesEnd[sentencesEnd.length-2] = sentencesEnd[sentencesEnd.length-1];
     sentencesEnd.splice(-1,sentencesEnd.length-1);
     console.log(sentencesEnd);
@@ -38,13 +41,14 @@ function EmotionStackedBarCreate(data){
 						text: 'Emotional Context Over time'
 					},
 					tooltips: {
-						mode: 'index',
-						intersect: false,
+//						mode: 'index',
+//						intersect: false,
 						callbacks: {
-                            index: function(tooltipItem) {
-                                console.log(tooltipItem.yLabel);
+                            label: function(tooltipItem, data) {
                                 console.log(tooltipItem.xLabel);
-                                return  Number(tooltipItem.xLabel) + '\n' + ;
+                                changeEmotions(tooltipItem.xLabel, global_data.sentencesEnd)
+                                return data.datasets[tooltipItem.datasetIndex].label + ": " + precisionRound(tooltipItem.yLabel,3);
+
                             }
                         }
 					},
@@ -61,4 +65,17 @@ function EmotionStackedBarCreate(data){
 			}
     var myChart = new Chart(ctx, config );
 
+}
+
+function changeEmotions(info, sentencesEnd){
+     if (!$("#Audio-transcript").is(":visible")) {
+        AudioTranscript();
+
+     }
+     for (i = 0; i < document.getElementById('Audio-transcript').childNodes.length; i++) {
+            document.getElementById('Audio-transcript').childNodes[i].className = "basic_transcript";
+     }
+     var value = sentencesEnd.indexOf(Number(info));
+     console.log(value, typeof(sentencesEnd[0]), typeof(info));
+    document.getElementById('Audio-transcript').childNodes[value].className = "reading_transcript";
 }

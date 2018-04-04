@@ -187,6 +187,7 @@ def googleCall(request):
         # FearI = emotionImages[4]
         # AvgI = emotionImages[5]
 
+        print(list_of_sentences)
         emotionText = watsontoneCall(list_of_sentences)
 
         SadnessT = emotionText[0]
