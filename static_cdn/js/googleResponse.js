@@ -9,8 +9,7 @@ function googleResponse(data) {
     $("#myloader").hide();
     loadAnalyticsPage();
     $("#right-split").animate({ width: '100%' }, 1500);
-    displayTranscript(data)
-    //displayTranscriptWPM(data);
+    displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
     EmotionTabCreate(data);
@@ -127,20 +126,24 @@ var analytics_page = `
                 </div>
             </div>
         </div>
-    </div>
-    <div class="well well-sm" style="text-align:left; margin:10px">
-    <ul class="legend">
-        <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
-        <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
-        <li><span class="good"></span> Good(>140 WPM ≤170)</li>
-        <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
-        <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
-    </ul>
-    </div>
-    <div class="well well-sm" style="text-align:left; margin:10px">
-    <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
+        <div class= "row">
+            <div class="well well-sm" style="text-align:left; margin:10px; margin-top:0px; height:2.2vw">
+                <ul class="legend">
+                    <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
+                    <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
+                    <li><span class="good"></span> Good(>140 WPM ≤170)</li>
+                    <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
+                    <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
+                </ul>
+            </div>
+        </div>
+        <div class= "row">
+            <div class="well well-sm" style="text-align:left; margin:10px">
+                <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
                 ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
-    </audio>
+                </audio>
+            </div>
+        </div>
     </div>
     `;
 
@@ -152,15 +155,15 @@ var counter = 0;
 
 function changeTimes(info, sentencesEnd){
     document.getElementById('CurrentTime').innerHTML = info;
-    if(info == 1){
+    if(info == 0){
         console.log(document.getElementById('empty-transcript').childNodes[0]);
         document.getElementById('empty-transcript').childNodes[0].className = "reading_transcript";
     }
     console.log(info, sentencesEnd, counter);
     if(info + 1 > sentencesEnd[counter]){
-        document.getElementById('empty-transcript').childNodes[counter].setAttribute("class", "basic_transcript");
+        document.getElementById('empty-transcript').childNodes[counter].className = "basic_transcript";
         counter = counter + 1;
-        document.getElementById('empty-transcript').childNodes[counter].setAttribute("class", "reading_transcript");
+        document.getElementById('empty-transcript').childNodes[counter].className = "reading_transcript";
     }
 }
 
@@ -216,6 +219,20 @@ function displayTranscriptWPM(data) {
         }
     }
 }
+
+// function ToneMethod(data){
+//     console.log('Tone Method Testing')
+//     console.log(data.AvgT);
+//     var tonetemp=(Math.max(AvgT));
+    
+//     if(AvgT[0]==tonetemp){
+
+
+//     }
+
+
+// }
+
 
 function displayGraphs(data) {
     var transcript_split = data.transcript.split("\"");

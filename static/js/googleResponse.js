@@ -220,6 +220,20 @@ function displayTranscriptWPM(data) {
     }
 }
 
+// function ToneMethod(data){
+//     console.log('Tone Method Testing')
+//     console.log(data.AvgT);
+//     var tonetemp=(Math.max(AvgT));
+    
+//     if(AvgT[0]==tonetemp){
+
+
+//     }
+
+
+// }
+
+
 function displayGraphs(data) {
     var transcript_split = data.transcript.split("\"");
     var corpusTranscript = transcript_split[1];

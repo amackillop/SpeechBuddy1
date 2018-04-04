@@ -80,11 +80,12 @@
 .left {
   left: 0;
   background-color: #111;
+  padding-top: 45px;
   
 }
 
 .right {
-  padding-top: 45px;
+  /* padding-top: 45px; */
   right: 0;
   background-color: white;
   position: absolute;
