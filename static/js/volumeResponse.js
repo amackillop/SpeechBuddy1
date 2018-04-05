@@ -36,6 +36,9 @@ function VolumeTabCreate(data){
     title: {
       display: true,
       text: 'Volume Analysis (s)'
+    },
+    legend: {
+        display: false
     }
   }
 }

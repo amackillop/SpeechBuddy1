@@ -1,4 +1,5 @@
-function EmotionTabCreate(data){
+function EmotionPieCreate(data){
+    wpmTranscript();
     var ctx = document.getElementById("EmotionTextPieChart");
     var config = {
     type: 'doughnut',
@@ -7,7 +8,7 @@ function EmotionTabCreate(data){
       datasets: [
         {
           label: "Population (millions)",
-          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          backgroundColor: ["#5dade2", "#FFC300 ","#C70039 ","#28b463 ","#af7ac5"],
           data: data.AvgT
         }
       ]
@@ -21,12 +22,9 @@ function EmotionTabCreate(data){
 					display: true,
 					text: 'Speech Emotional Context (Text)'
 				},
-				animation: {
-					animateScale: true,
-					animateRotate: true
-				}
 			}
 }
     var myChart = new Chart(ctx, config );
+
 
 }

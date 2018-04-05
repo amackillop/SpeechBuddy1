@@ -142,8 +142,8 @@ def mostCommon(strData):
         corpus = [];
         indexArray = {}
         # str=expand_contractions(str)
-        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','this', 'that','our','be']
-        fillerWords = {'well': 0, 'like': 0, 'actually': 0, 'basically': 0, 'seriously': 0, 'and': 0}
+        stopWords = ['the', 'a', 'an', "'s", 'they', 'with', 'to', 'of', 'should', 'every', 'and','this', 'that','our','be','us','we',"b'",'i']
+        fillerWords = {'well': 0, 'like': 0, 'actually': 0, 'basically': 0, 'seriously': 0, 'and': 0,'totally': 0,'temp':0,'so': 0 }
         tokenizer = nltk.RegexpTokenizer(r"\w+[']+\w+|\w+")
         tok = tokenizer.tokenize(strData)
         # print(tok)

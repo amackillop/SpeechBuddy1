@@ -9,7 +9,7 @@
 }
 
 #myNavbar{ /* Style navbar */
-  background: rgba(30,30,30,1);
+  background: #000000;
 /*   border-bottom: 0; */
 }
 #navbar { /* Format collapsed alignment */
@@ -80,11 +80,12 @@
 .left {
   left: 0;
   background-color: #111;
+  padding-top: 45px;
   
 }
 
 .right {
-  padding-top: 45px;
+  /* padding-top: 45px; */
   right: 0;
   background-color: white;
   position: absolute;
@@ -195,7 +196,7 @@
   left: 45%;
   border: 16px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 16px solid #3498db;
+  border-top: 16px solid #008a99;
   width: 120px;
   height: 120px;
   -webkit-animation: spin 2s linear infinite; /* Safari */

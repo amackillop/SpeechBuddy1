@@ -10,6 +10,7 @@ function googleResponse(data) {
     $("#myloader").hide();
     loadAnalyticsPage();
     $("#right-split").animate({ width: '100%' }, 1500);
+    displayTranscript(data)
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
@@ -114,10 +115,12 @@ var analytics_page = `
         <div class="row">  
             <br>
             <div class="col-sm-12">
-                <div class="well well-sm" style="padding:0px">
+                <div class="well well-sm " >
                     <div style="text-align:left">
                         <div>
                             <p style="font-size:16px; margin:0px" class="btn" >Record / <b>Transcript Analysis</b></p>
+
+                            <p id = "CurrentTime">sfbv</p>
                         </div>
                     </div>                      
                 </div>
@@ -142,6 +145,7 @@ var analytics_page = `
                             </div>
                         </div>
                     </div>   
+
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Score</b></h4>
@@ -169,13 +173,13 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Tone:</b></h4>
-                            <h4 style="font-size: 1.5vw" class="low">Neutral</h4>
+                            <h4 id="Tone" style="font-size: 1.5vw" class="low">Neutral</h4>
                         </div>
                     </div>
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Duration</b></h4>
-                            <h4 id="track-time" style="font-size: 1.5vw">2:49s</h4>
+                            <h4 id="track-time" style="font-size: 1.5vw" onload="this.">2:49s</h4>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -184,7 +188,9 @@ var analytics_page = `
                                 <li class="active"><a data-toggle="tab" href="#home"  onclick = "wpmTranscript()">Tone</a></li>
                                 <li><a data-toggle="tab" href="#menu1"  onclick = "wpmTranscript()">Volume</a></li>
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
-                                <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu3"  onclick = "EmotionPieCreate(global_data)">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu4"  onclick = "AudioTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu5"  onclick = "fillerTranscript()">Filler Content</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
@@ -212,6 +218,14 @@ var analytics_page = `
                                 </div>
                                 <div id="menu3" class="tab-pane fade">
                                     <canvas id="EmotionTextPieChart" width="42vw" height="20vw"></canvas>
+                                </div>
+                                <div id="menu4" class="tab-pane fade">
+                                    <canvas id="EmotionTextBarChart" width="42vw" height="20vw"></canvas>
+                                </div>
+                                <div id="menu5" class="tab-pane fade">
+                                    <div id="fillerDiv" width="42vw" height="20vw">
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
