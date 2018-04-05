@@ -149,23 +149,25 @@ def googleCall(request):
                                  threshold=0.1,
                                  timestep=0.25,
                                  Fc=1e3)
-        f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
-                                 freq_range=(40, 300),
-                                 threshold=0.1,
-                                 timestep=0.25,
-                                 Fc=1e3)
+        # f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
+        #                          freq_range=(40, 300),
+        #                          threshold=0.1,
+        #                          timestep=0.25,
+        #                          Fc=1e3)
 
 
         pitch = np.zeros((f0.shape[0], 3))
         for i in range(pitch.shape[0]):
-            pitch[i, :] = np.asarray([i, f0[i], f1[i]])
+            pitch[i, :] = np.asarray([i, f0[i], f0[i]])
 
-        # Adjust wpm
+        PVQ = cf.pitchVariationQuotient(pitch_vector = f0, time_step = 0.25, clip_length = 2)
+        # for i in range(pitch.shape[0]):
+        #     pitch[i, :] = np.asarray([i, f0[i], f1[i]])        # Adjust wpm
 
         # Filler word detection
 #        global graph
-       # with settings.GRAPH.as_default():
-        # str(cf.detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav"))
+       #with settings.GRAPH.as_default():
+            #str(cf.detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav"))
         filler_count = 0
 #            clear_session()
 
@@ -244,7 +246,7 @@ def googleCall(request):
             "corpus": corpus,
             "tok": tok,
             "listSyn": listSyn,
-            # "pitch": pitch,
+            "pitch": PVQ,
             "filler_count": filler_count,
             "volume": volume,
             "list_of_sentences": list_of_sentences,
@@ -298,4 +300,3 @@ def screenshotCall(request):
             settings.IMAGE_ROOT + "/" + str(number)+".png", ContentFile(decode))
 
     return Response({"message": "image saved"})
-

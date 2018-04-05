@@ -21,16 +21,16 @@ from librosa import stft, feature, power_to_db
 import librosa.display
 
 # Importing required libraries for training
-#from keras.models import Sequential
-#from keras.layers import Conv2D
-#from keras.layers import MaxPooling2D
-#from keras.layers import Flatten
-#from keras.layers import Dense
-#from keras.layers import Dropout
-#from keras.preprocessing.image import ImageDataGenerator
-#from keras.models import load_model
-#from keras.applications import mobilenet
-#from keras.callbacks import EarlyStopping
+# from keras.models import Sequential
+# from keras.layers import Conv2D
+# from keras.layers import MaxPooling2D
+# from keras.layers import Flatten
+# from keras.layers import Dense
+# from keras.layers import Dropout
+# from keras.preprocessing.image import ImageDataGenerator
+# from keras.models import load_model
+# from keras.applications import mobilenet
+# from keras.callbacks import EarlyStopping
 
 from scipy.stats import bernoulli
 from shutil import copyfile
@@ -539,7 +539,7 @@ def trimSamples(in_folder, out_folder, target_dir = None, target_Fs = 16e3):
         None
 
     """
-    if not path.exists(out_folder):
+    if not ospath.exists(out_folder):
         makedirs(out_folder)
         for folder in listdir(in_folder):
             makedirs(out_folder + folder)
@@ -859,7 +859,7 @@ def fitClassifier(classifier, model_name, epochs, img_shape, batch_size, data_fo
                                                 color_mode = "grayscale",
                                                 batch_size = batch_size,
                                                 class_mode = 'binary')
-    early_stopping = EarlyStopping(monitor = 'val_accuracy', patience = 3)
+    early_stopping = EarlyStopping(monitor = 'val_acc', patience = 5)
     classifier.fit_generator(training_set,
                              steps_per_epoch = train_samples//batch_size,
                              epochs = epochs,
@@ -963,10 +963,10 @@ def crossCorr(x, tau, W, auto = False):
         Each row corresponds to a sample.
     """
         
-    cross_corr_mat = np.zeros((x.size//W, W), np.float32)
+    cross_corr_mat = np.zeros((x.size//(2*W), W), np.float32)
     x_orig = list(x)
     for i in range(cross_corr_mat.shape[0]):
-        t = i*W
+        t = 2*i*W
         # Unbias the signals
         x = x_orig[t:W+t] - np.mean(x_orig[t:W+t])
         x_tau = x_orig[t+tau:t+tau+W] - np.mean(x_orig[t+tau:t+tau+W])
@@ -1030,7 +1030,7 @@ def cumMeanNormDiffEq(x, W):
             cum_diff_mat[t, j] = diff_eq_mat[t, j]/((1/j)*np.sum(diff_eq_mat[t, 1:j+1]))
     return cum_diff_mat
         
-def absoluteThresold(x, freq_range = (40, 300), threshold = 0.1, Fs = 16e3):
+def absoluteThresold(x, freq_range = (40, 300), threshold = 0.1, Fs = 16e3, W = 400):
     """
     Absolute Threshold Method, Step 4\n
     
@@ -1056,7 +1056,8 @@ def absoluteThresold(x, freq_range = (40, 300), threshold = 0.1, Fs = 16e3):
 
     tau_star = 0
     minimum = 1e9
-    cum_diff_mat = cumMeanNormDiffEq(x, tau_max+1)
+    cum_diff_mat = cumMeanNormDiffEq(x, W)
+    print("CDM:", cum_diff_mat.shape)
     taus = np.zeros(cum_diff_mat.shape[0], np.int32)
     for i in range(taus.size):
         cum_diff_eq = cum_diff_mat[i,:]
@@ -1114,7 +1115,7 @@ def parabolicInterpolation(diff_matrix, taus, freq_range, Fs):
         
     return local_min_abscissae
 
-def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 0.1, target_Fs = 8e3, Fc = 1e3):
+def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 0.1, target_Fs = 16e3, Fc = 1e3):
     """
     Putting it all together, this function is my implementation the the YIN pitch detection algorithm. 
     
@@ -1122,7 +1123,7 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
         fname: The name of a WAV file to be analyzed.
         freq-range: An integer tuple containing the search range ex. (min_freq, max_freq)
         threshold: A float specifying the threshold for step 4
-        timestep: Tracking period in milliseconds.
+        timestep: Tracking period in seconds.
         target_Fs: Target sampling rate after downsampling. Use Fs for no downsampling. Note that the original sampling rate must
         be a multiple of the target rate. For example, this cannot downsample 44.1k to 16k.
         Fc: Cutoff frequency of the lowpass filter used in downsampling the signal. Must be less than target_Fs/2.
@@ -1169,14 +1170,25 @@ def pitchTrackingYIN(fname, freq_range = (40, 300), threshold = 0.1, timestep = 
     
 
     # Now apply the algorithm, note that step 6 is still missing
-    taus = absoluteThresold(signal, freq_range, threshold, Fs)[0]
+    taus = absoluteThresold(signal, freq_range, threshold, Fs, W = W)[0]
     diff_mat = diffEquation(signal, W)
     periods = parabolicInterpolation(diff_mat, taus, freq_range, Fs)
     # Minues 2 because the interpolation throws away two estimates
-    f = np.zeros((int(signal.size/W-2), 1), np.int32)
-    for i in range(int(signal.size/W-2)):
+    f = np.zeros((int(signal.size/(2*W)-2), 1), np.int32)
+    for i in range(int(signal.size/(2*W)-2)):
         f[i] = Fs//periods[i]
     return f
+
+def pitchVariationQuotient(pitch_vector, time_step = 0.1, clip_length = 2):
+    W = int(clip_length//time_step)
+    PVQs = np.zeros(int(pitch_vector.size//W))
+    for i in range(PVQs.size):
+        t = i*W
+        sample = pitch_vector[t:t+W]
+        mean = np.mean(sample)
+        sd = np.sqrt(np.var(sample))
+        PVQs[i] = sd/mean
+    return PVQs
 
 def volumeAnalysis(fname, window  = 500, threshold = -10):
     """
@@ -1257,23 +1269,35 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 #                freq_shift = None,
 #                mel = True,
 #                use_negatives = True)
-#for i, file in enumerate(listdir("ds_recordings/")):
-#    file = "ds_recordings/" + file
-#    audio = AudioSegment.from_file(file, format = "wav")
-#    matchTargetAmplitude(audio, -30)
-#    audio.export(file, format = "wav")
-#    data, Fs = getData(file)
-#    data = data[:-32000]
-##    data = downSample(data, 4000, 16000, 2)
-#    samples = splitAudio(data, 2, 16000)
-#    for j, sample in enumerate(samples):
-#            sample_file = "16k_clips/0/add_" + str(i) + "_" + str(j) + ".wav"
-#            signalToWav(sample,  sample_file, 16000)
-#            data, Fs = getData(sample_file)
-#            data = spliceRandWord(data, "uhm's/", 2, Fs)
-#            sample_file = "16k_clips/1/add_" + str(i) + "_" + str(j) + ".wav"
-#            signalToWav(data, sample_file, Fs)
-#
+
+#### Convert 48k mp4's to 16k wavs
+#folder = "audio/"
+#for file in listdir(folder):
+#    convertToWav(folder + file, folder + file[:-4] + ".wav")
+#    file = folder + file[:-4] + ".wav"
+#    x, Fs = getData(file)
+#    x = x[:-160000]
+#    x = downSample(x, 8e3, Fs, 3)
+#    signalToWav(x, file, Fs/3)
+
+    
+#for i, file in enumerate(listdir("ds_recordings2/")):
+#     file = "ds_recordings2/" + file
+#     audio = AudioSegment.from_file(file, format = "wav")
+#     matchTargetAmplitude(audio, -30)
+#     audio.export(file, format = "wav")
+#     data, Fs = getData(file)
+##     data = data[:-80000]
+# #    data = downSample(data, 4000, 16000, 2)
+#     samples = splitAudio(data, 2, 16000)
+#     for j, sample in enumerate(samples):
+#             sample_file = "16k_clips/0/_add_" + str(i) + "_" + str(j) + "NEW.wav"
+#             signalToWav(sample,  sample_file, 16000)
+#             data, Fs = getData(sample_file)
+#             data = spliceRandWord(data, "uhm's/", 2, Fs)
+#             sample_file = "16k_clips/1/_add_" + str(i) + "_" + str(j) + "NEW.wav"
+#             signalToWav(data, sample_file, Fs)
+##
 #for folder in listdir("16k_clips/"):
 #    folder = "16k_clips/" + folder + "/"
 #    for file in listdir(folder):
@@ -1282,12 +1306,12 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 ##    
 #generateDataset(path, out_path, spectrograms, 10000, use_negatives = True, mel = True)
 #convertToWav()
-#classifier = buildClassifier("filler_detector_mel_0.h5", (256, 256))
-#fitClassifier(classifier, "filler_detector_mel_0.h5", 20, (256, 256), 32, BASE_DIR)
+#classifier = buildClassifier("filler_detector_mel_1.h5", (256, 256))
+#fitClassifier(classifier, "filler_detector_mel_1.h5", 20, (256, 256), 64, BASE_DIR)
 
 ### TESTING THE DETECTOR
-#file = "testing.wav"
-#recordToFile(file, 16000)
+# file = "testing.wav"
+# recordToFile(file, 16000)
 #signal, Fs = getData(file)
 #plt.figure()
 #plt.plot(signal[0:32000])
@@ -1298,8 +1322,8 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 #plt.figure()
 #plt.plot(np.linspace(0, 8000, 513), F)
 #librosa.display.specshow(librosa.amplitude_to_db(F, ref=np.max), y_axis='log', x_axis='time')
-#classifier = load_model("ConvNets/filler_detector_mel_0_20_epochs.h5")
-#detectFillers(classifier, "testing.wav", (256, 256), mel = True)
+# classifier = load_model("filler_detector_mel_1.h5")
+# detectFillers(classifier, "testing.wav", (256, 256), mel = True)
 
 ## Generating new uhms
 #folder = "uhm's/"
