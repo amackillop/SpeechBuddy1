@@ -105,7 +105,7 @@ def googleCall(request):
 
         # Get and format response from google cloud api
         res = googleApiCall(settings.MEDIA_ROOT +
-                            "/Simon_Sinek_30.flac", pauses)
+                            "/output_mono.flac", pauses)
 
         if not res == "Empty Response":
             transcript = str(res[0])
@@ -150,10 +150,12 @@ def googleCall(request):
                                  timestep=0.25,
                                  Fc=1e3)
         f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
-                                 freq_range=(300, 600),
+                                 freq_range=(40, 300),
                                  threshold=0.1,
                                  timestep=0.25,
                                  Fc=1e3)
+
+
         pitch = np.zeros((f0.shape[0], 3))
         for i in range(pitch.shape[0]):
             pitch[i, :] = np.asarray([i, f0[i], f1[i]])
@@ -242,7 +244,7 @@ def googleCall(request):
             "corpus": corpus,
             "tok": tok,
             "listSyn": listSyn,
-            "pitch": pitch,
+            # "pitch": pitch,
             "filler_count": filler_count,
             "volume": volume,
             "list_of_sentences": list_of_sentences,
@@ -262,7 +264,7 @@ def googleCall(request):
             "DisgustT": DisgustT,
             "FearT": FearT,
             "AvgT": AvgT,
-            "fillerCount": fillerCount,
+            # "fillerCount": fillerCount,
             "filler":  filler,
             "EndTime": sentencesEnd[len(sentencesEnd)-1],
             "sentencesEnd": sentencesEnd,

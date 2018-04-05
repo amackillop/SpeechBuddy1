@@ -77,15 +77,13 @@ function displayTranscriptWPM(data) {
 //this is a variable that contains the entire analytics page. It will be loaded once the google response returns
 var analytics_page = `
     <div class="container-fluid">
-        <div class="row">  
+        <div class="row" style="margin-top:45px">  
             <br>
             <div class="col-sm-12">
-                <div class="well well-sm " >
+                <div class="well well-sm" style="padding:0px" >
                     <div style="text-align:left">
                         <div>
-                            <p style="font-size:16px; margin:0px" class="btn" >Record / <b>Transcript Analysis</b></p>
-
-                            <p id = "CurrentTime">sfbv</p>
+                            <p style="font-size:16px; margin:0px" class="btn" >Record / <b>Transcript Analytics</b></p>
                         </div>
                     </div>                      
                 </div>
@@ -146,7 +144,7 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Duration</b></h4>
-                            <h4 id="track-time" style="font-size: 1.5vw" onload="this.">2:49s</h4>
+                            <h4 id="track-time" style="font-size: 1.5vw" >2:49s</h4>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -161,8 +159,8 @@ var analytics_page = `
                             </ul>
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
-                                    <div id="chart_div" style="height:20vw;width:42vw">
-                                    </div>
+                                <canvas id="PitchLineChart" width="42vw" height="20vw"></canvas>
+
                                 </div>
                                 <div id="menu1" class="tab-pane fade">
                                     <canvas id="VolumeLineChart" width="42vw" height="20vw"></canvas>
@@ -202,8 +200,9 @@ var analytics_page = `
         </div>
         <div class= "row">
             <div class="well well-sm" style="text-align:left; margin:15px;  margin-top:5px">
-                <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
-                ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
+                <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/output_mono.flac"
+                    onload="$("#track-time").text(audio_playback.duration + "s");"
+                    ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
                 </audio>
             </div>
         </div>
@@ -216,15 +215,14 @@ function loadAnalyticsPage() {
     var video_playback = document.getElementById("videoPlayback");
     var recorded_video = document.getElementById("videoElement");
     
-    console.log("rec_vid url:" + recorded_video.src);
-
     video_playback.src = recorded_video.src;
-
-    console.log("video_play url:" + video_playback.src);
     
     audio_playback.onplay = function(){
         video_playback.play();
+        // console.log(audio_playback.duration);
+        // $("#track-time").text(audio_playback.duration + "s");  //update duration card
     }    
+
 }
 
 var counter = 0;
@@ -236,7 +234,7 @@ function changeTimes(info, sentencesEnd){
             document.getElementById('Audio-transcript').childNodes[i].className = "basic_transcript";
          }
      }
-    document.getElementById('CurrentTime').innerHTML = info;
+    // document.getElementById('CurrentTime').innerHTML = info;
 
     if(info == 0){
     //    console.log(document.getElementById('empty-transcript').childNodes[0]);
@@ -259,7 +257,6 @@ function displayTranscript(data){
         sentenceDiv.appendChild(node);
         mainTranscript.appendChild(sentenceDiv);
     }
-
 }
 
 
@@ -416,7 +413,6 @@ function fillerScript(data){
             }
 
         }, ".result");
-
 
 }
 
