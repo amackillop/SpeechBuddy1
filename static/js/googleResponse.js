@@ -1,5 +1,6 @@
 
 var global_data;
+var recorded_video;
 
 function googleResponse(data) {
     console.log(data);
@@ -12,17 +13,97 @@ function googleResponse(data) {
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
-    EmotionTabCreate(data);    
+    EmotionTabCreate(data);  
+
+    
+    // var vidData = getVideoSrc();
+    // console.log(vidData);
+    // $("#videoPlayback").css("src",vidData);
+    
+    
+    
+    
 }
 
 function loadingTranscript() {
-
     $("#submit-btn").prop('disabled', true);
     $("#header-text").remove();
     $("#text-wrapper").hide();
 
     $('#right-split').prepend('<div class = "loader" id = "myloader" align="center" hidden = "true"></div>');
     $("#myloader").fadeIn("slow");
+}
+
+function displayGraphs(data) {
+    var transcript_split = data.transcript.split("\"");
+    var corpusTranscript = transcript_split[1];
+    $("#corpusTranscript").text(corpusTranscript);
+}
+
+function displayQuickData(data) {
+    //set confidence level
+    $("#score-data").text(data.confidence);
+    $("#WPM").text(data.average_wpm);
+    $("#Words").text(data.total_words);
+    $("#filler-count-val").text(data.fillerCount);
+    //set track duration
+    // var track_time = Math.floor($("#audioplayer").duration);
+    // $("#track-time").text(track_time);
+}
+
+function corpusTranscript(data) {
+    if (!$("#corpusTranscript").is(":visible")) {
+        $("#empty-transcript").hide();
+        $("#corpusTranscript").show();
+    }
+}
+
+function wpmTranscript() {
+    if ($("#corpusTranscript").is(":visible")) {
+        $("#corpusTranscript").hide();
+        $("#empty-transcript").show();
+    }
+}
+
+function displayTranscriptWPM(data) {
+    var temp1 = document.getElementById("empty-transcript");
+    for (i = 0; i < data.wordsperminute.length + 1; i++) {
+        if (data.wordsperminute[i] <= 120) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "too_slow");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+        else if (data.wordsperminute[i] > 120 && data.wordsperminute[i] <= 140) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "slow");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+        else if (data.wordsperminute[i] > 140 && data.wordsperminute[i] <= 170) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "good");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+        else if (data.wordsperminute[i] > 170 && data.wordsperminute[i] <= 190) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "fast");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+        else if (data.wordsperminute[i] > 190) {
+            var temp3 = document.createElement("div");
+            temp3.setAttribute("class", "too_fast");
+            var node = document.createTextNode(data.list_of_sentences[i]);
+            temp3.appendChild(node);
+            temp1.appendChild(temp3);
+        }
+    }
 }
 
 //this is a variable that contains the entire analytics page. It will be loaded once the google response returns
@@ -40,10 +121,23 @@ var analytics_page = `
                 </div>
                 <div class="row" style="height: 35vw">
                     <div class="col-sm-6" >
-                        <div id = "left-split" class="well" style="height: 34vw;overflow-y: scroll">
-                            <h2>Here's what you said:</h2>
-                            <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
-                            <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                        <div class="well" style="height: 37vw; padding: 0 ">
+                            <div class="well-sm" style="height: 18vw;background-color: black">
+                                <video id="videoPlayback" autoplay style="height: 17vw" class="center"></video>
+                            </div>
+                            <div style="overflow-y: scroll; height: 18vw">
+                                
+                                <ul class="legend" style="margin-top:10px">
+                                    <li><span class="legend too_slow"></span> Too Slow</li>
+                                    <li><span class="slow"></span> Slow</li>
+                                    <li><span class="good"></span> Good</li>
+                                    <li><span class="fast"></span> Fast</li>
+                                    <li><span class="too_fast"></span> Too Fast</li>
+                                </ul>
+                          
+                                <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
+                                <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                            </div>
                         </div>
                     </div>   
                     <div class="col-sm-1">
@@ -124,18 +218,7 @@ var analytics_page = `
             </div>
         </div> 
         <div class= "row">
-            <div class="well well-sm" style="text-align:left; margin:10px; margin-top:0px; height:2.2vw">
-                <ul class="legend">
-                    <li><span class="legend too_slow"></span> Too Slow(WPM ≤120)</li>
-                    <li><span class="slow"></span> Slow(>120 WPM ≤140)</li>
-                    <li><span class="good"></span> Good(>140 WPM ≤170)</li>
-                    <li><span class="fast"></span> Fast(>170 WPM ≤190)</li>
-                    <li><span class="too_fast"></span> Too Fast(WPM >190)</li>
-                </ul>
-            </div>
-        </div>
-        <div class= "row">
-            <div class="well well-sm" style="text-align:left; margin:10px">
+            <div class="well well-sm" style="text-align:left; margin:15px;  margin-top:5px">
                 <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
                     onloadedmetadata ="document.getElementById('track-time').innerHTML = Math.floor(this.duration) + 's';">
                 </audio>
@@ -148,74 +231,4 @@ function loadAnalyticsPage() {
     $("#right-split").append(analytics_page);
 }
 
-function displayTranscriptWPM(data) {
-    var temp1 = document.getElementById("empty-transcript");
-    for (i = 0; i < data.wordsperminute.length + 1; i++) {
-        if (data.wordsperminute[i] <= 120) {
-            var temp3 = document.createElement("div");
-            temp3.setAttribute("class", "too_slow");
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            temp1.appendChild(temp3);
-        }
-        else if (data.wordsperminute[i] > 120 && data.wordsperminute[i] <= 140) {
-            var temp3 = document.createElement("div");
-            temp3.setAttribute("class", "slow");
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            temp1.appendChild(temp3);
-        }
-        else if (data.wordsperminute[i] > 140 && data.wordsperminute[i] <= 170) {
-            var temp3 = document.createElement("div");
-            temp3.setAttribute("class", "good");
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            temp1.appendChild(temp3);
-        }
-        else if (data.wordsperminute[i] > 170 && data.wordsperminute[i] <= 190) {
-            var temp3 = document.createElement("div");
-            temp3.setAttribute("class", "fast");
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            temp1.appendChild(temp3);
-        }
-        else if (data.wordsperminute[i] > 190) {
-            var temp3 = document.createElement("div");
-            temp3.setAttribute("class", "too_fast");
-            var node = document.createTextNode(data.list_of_sentences[i]);
-            temp3.appendChild(node);
-            temp1.appendChild(temp3);
-        }
-    }
-}
 
-function displayGraphs(data) {
-    var transcript_split = data.transcript.split("\"");
-    var corpusTranscript = transcript_split[1];
-    $("#corpusTranscript").text(corpusTranscript);
-}
-
-function displayQuickData(data) {
-    //set confidence level
-    $("#score-data").text(data.confidence);
-    $("#WPM").text(data.average_wpm);
-    $("#Words").text(data.total_words);
-    $("#filler-count-val").text(data.fillerCount);
-    //set track duration
-    // var track_time = Math.floor($("#audioplayer").duration);
-    // $("#track-time").text(track_time);
-}
-
-function corpusTranscript(data) {
-    if (!$("#corpusTranscript").is(":visible")) {
-        $("#empty-transcript").hide();
-        $("#corpusTranscript").show();
-    }
-}
-
-function wpmTranscript() {
-    if ($("#corpusTranscript").is(":visible")) {
-        $("#corpusTranscript").hide();
-        $("#empty-transcript").show();
-    }
-}

@@ -266,3 +266,13 @@ def screenshotCall(request):
         number=0
 
     return Response({"message": "image saved"})
+
+
+# @api_view(['GET', 'POST'])
+# def saveVideoCall(request):
+#     if request.method == 'POST':
+#         dictData = request.data
+#         if(request.data['command'] == 'save'):
+#             print("User wants to save recording to drive.")
+#             saveFileInDrive()
+#     return Response({"message": "google post success"})

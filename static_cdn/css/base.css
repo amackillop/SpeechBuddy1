@@ -242,3 +242,11 @@
 .very-high{
   color: #E67E22;
 }
+
+/* to center video in div */
+#videoPlayback {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
