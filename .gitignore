@@ -15,7 +15,6 @@ api/capstoneModules/stores_records
 api/capstoneModules/test_set
 api/capstoneModules/training_set
 api/capstoneModules/wav_recordings
-api/capstoneModules/ConvNets
 env/Lib/encodings/__pycache__
 audio/output_mono.flac
 audio/output_mono.wav
