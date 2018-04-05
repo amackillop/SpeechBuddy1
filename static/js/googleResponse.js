@@ -106,7 +106,7 @@ var analytics_page = `
                                 </ul>
                           
                                 <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
-                                <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                                <h4 id = "corpus-Transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                                 <h4 id ="Audio-transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                                 <h4 id = "filler-Transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                             </div>
@@ -394,10 +394,10 @@ function fillerScript(data){
                 indices = data.indexArray;
                 indices = JSON.parse(indices);
                 tempString = "";
-                console.log(word);
+                // console.log(word);
                 for (i = 1; i < data.tok.length; i++) {
                     if(i==39){
-                        console.log(i,data.tok[i], word, word == String(data.tok[i]),typeof(word),typeof(data.tok[i]));
+                        // console.log(i,data.tok[i], word, word == String(data.tok[i]),typeof(word),typeof(data.tok[i]));
 
                     }
                     if (word == String(data.tok[i])) {
@@ -407,7 +407,7 @@ function fillerScript(data){
                         tempString = tempString + " " + data.tok[i];
                     }
                 }
-                console.log(tempString);
+                // console.log(tempString);
                 document.getElementById('filler-Transcript').innerHTML = tempString;
             },
             mouseleave: function () {
