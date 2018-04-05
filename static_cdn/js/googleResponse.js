@@ -13,7 +13,9 @@ function googleResponse(data) {
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
-    EmotionTabCreate(data);  
+    EmotionTabCreate(data);
+    
+    
 
     
     // var vidData = getVideoSrc();
@@ -123,7 +125,7 @@ var analytics_page = `
                     <div class="col-sm-6" >
                         <div class="well" style="height: 37vw; padding: 0 ">
                             <div class="well-sm" style="height: 18vw;background-color: black">
-                                <video id="videoPlayback" autoplay style="height: 17vw" class="center"></video>
+                                <video id="videoPlayback" style="height: 17vw; transform: rotateY(180deg);" class="center" muted></video>
                             </div>
                             <div style="overflow-y: scroll; height: 18vw">
                                 
@@ -229,6 +231,21 @@ var analytics_page = `
 
 function loadAnalyticsPage() {
     $("#right-split").append(analytics_page);
+    var audio_playback = document.getElementById("audioplayer");
+    var video_playback = document.getElementById("videoPlayback");
+    var recorded_video = document.getElementById("videoElement");
+    
+    console.log("rec_vid url:" + recorded_video.src);
+
+    video_playback.src = recorded_video.src;
+
+    console.log("video_play url:" + video_playback.src);
+    
+    audio_playback.onplay = function(){
+        video_playback.play();
+    }
+
+    
 }
 
 

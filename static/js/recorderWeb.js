@@ -201,13 +201,6 @@ window.onload = function () {
 				video.play();
 			}
 
-			// au.autoplay = true;
-			// au.setAttribute("id", "audio-id")
-			
-			// document.getElementById("audio-id").addEventListener("click", function () {
-			// 	video.play();
-			// });
-			
 			hf.href = url;
 			// Important:
 			// Change the format of the file according to the mimetype
@@ -218,18 +211,8 @@ window.onload = function () {
 			hf.innerHTML = hf.download;
 			recording_div = document.getElementById("recordingDiv");
 			recording_div.appendChild(au);
-			//li.appendChild(hf);
 			var file = audio_stream.getAudioTracks()[0];
-			//fileURL = AudioBLOB.createObjectURL(file);
-			//console.log(fileURL);
 
-			// var rlist = document.getElementById("recordingslist");
-			// if(rlist.hasChildNodes()){
-			//     rlist.removeChild(rlist.firstChild);
-			// }
-			// recordingslist.appendChild(li);
-			//  var x = document.getElementById("recordingtitle");
-			//  x.style.display = "block";
 		}, _AudioFormat);
 	}, false);
 
