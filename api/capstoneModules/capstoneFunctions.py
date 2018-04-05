@@ -47,11 +47,11 @@ This collection of functions is used for manipulating audio signal data and file
 """
 # Need to add these into the functions
 # GLOBAL VARIABLES
-VOLUME_THRESHOLD = 1000
-CHUNK_SIZE = 1024
-# FORMAT = pyaudio.paInt16
+#VOLUME_THRESHOLD = 1000
+#CHUNK_SIZE = 1024
+#FORMAT = pyaudio.paInt16
 #Fs = 16000
-SILENCE_THRESHOLD = 50
+#SILENCE_THRESHOLD = 50
 
 def is_silent(audio_data, threshold = 1000):
     """
@@ -127,7 +127,7 @@ def trim(audio_data, threshold = 1000):
     
     return audio_data
 
-def recordToFile(fname, Fs):
+def recordToFile(fname, Fs, FORMAT = pyaudio.paInt16, SILENCE_THRESHOLD = 50, CHUNK_SIZE = 1024):
     """
     This function is where the mic is turned on and sound is recorded then saved to a file
     
@@ -182,7 +182,7 @@ def recordToFile(fname, Fs):
         if snd_started and num_silent > SILENCE_THRESHOLD:
             break
 
-#    sample_width = mic.get_sample_size(FORMAT)
+    sample_width = mic.get_sample_size(FORMAT)
     stream.stop_stream()
     stream.close()
     mic.terminate()
@@ -698,7 +698,7 @@ def createMelSpectrogram(data, fname, img_shape = (256, 256)):
     # Key parameters of the spectrogram
     cmap = clr.LinearSegmentedColormap.from_list('mycmap', ['black', 'black', '#222222', 'white'])
     
-    spectrogram = np.abs(stft(data))**2
+    spectrogram = np.abs(stft(data, n_fft = 1024))**2
     S = feature.melspectrogram(S = spectrogram)
 
     fig, ax = plt.subplots(1, figsize = (img_shape[1]/256, img_shape[0]/256), dpi = 256)
@@ -720,11 +720,11 @@ TRAINING THE CLASSIFIER
 Not needed for the web version, these functions are used for training purposes
 ####################################################################################################################
 """
-PATH = "C:/Users/Austin/Desktop/School/Capstone/"
+
 Fs = 8000
 # Variables
 dataFolder = "clips/"
-split = 0.2
+split = 0.1
 categories = 2
 img_width = 256
 img_height = 512
@@ -877,9 +877,7 @@ These functions are used to detect filler words using pretrained models
 """
 
 # GLOBAL VARIABLES
-PATH = "C:/Users/Austin/Desktop/School/Capstone/"
-IMG_HEIGHT = 256
-IMG_WIDTH = 512
+
     # Generate the image data to be fed into the network from the spectrograms.
 def detectFillers(classifier, fname, img_shape, mel = False):
     """Detect filler words in an audio file with a conv-net classifier object.
@@ -1248,17 +1246,17 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 #path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/"
 ##out_path = BASE_DIR + "capstoneModules/recordings/"
 #spectrograms = BASE_DIR + "capstoneModules/16k_mel_spectrograms/"
-##generateDataset(path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/",
-##                out_path = BASE_DIR + "capstoneModules/16k_clips/",
-##                spectrograms = BASE_DIR + "capstoneModules/16k_mel_spectrograms/",
-##                size = 10000,
-##                clip_length = 2,
-##                set_Fs = 16000,
-##                image_shape = (256, 256),
-##                add_noise = None,
-##                freq_shift = None,
-##                mel = True,
-##                use_negatives = True)
+#generateDataset(path = "C:/Users/Austin/Desktop/School/Capstone/LibriSpeech/train-clean-100/",
+#                out_path = BASE_DIR + "capstoneModules/16k_clips/",
+#                spectrograms = BASE_DIR + "capstoneModules/16k_mel_spectrograms/",
+#                size = 10000,
+#                clip_length = 2,
+#                set_Fs = 16000,
+#                image_shape = (256, 256),
+#                add_noise = None,
+#                freq_shift = None,
+#                mel = True,
+#                use_negatives = True)
 #for i, file in enumerate(listdir("ds_recordings/")):
 #    file = "ds_recordings/" + file
 #    audio = AudioSegment.from_file(file, format = "wav")
@@ -1267,7 +1265,7 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 #    data, Fs = getData(file)
 #    data = data[:-32000]
 ##    data = downSample(data, 4000, 16000, 2)
-#    samples = splitAudio(data, 2, 8000)
+#    samples = splitAudio(data, 2, 16000)
 #    for j, sample in enumerate(samples):
 #            sample_file = "16k_clips/0/add_" + str(i) + "_" + str(j) + ".wav"
 #            signalToWav(sample,  sample_file, 16000)
@@ -1284,15 +1282,24 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 ##    
 #generateDataset(path, out_path, spectrograms, 10000, use_negatives = True, mel = True)
 #convertToWav()
-#classifier = buildClassifier("filler_detector_less_pool3.h5", (256, 256))
-#file = "audio2.wav"
+#classifier = buildClassifier("filler_detector_mel_0.h5", (256, 256))
+#fitClassifier(classifier, "filler_detector_mel_0.h5", 20, (256, 256), 32, BASE_DIR)
+
+### TESTING THE DETECTOR
+#file = "testing.wav"
 #recordToFile(file, 16000)
-#data, Fs = getData(file)
-#data = downSample(data, 4000, Fs, 2)
-#signalToWav(data, file, 8000)
-#classifier = load_model("filler_detector_less_pool.h5")
-#fitClassifier(classifier, "filler_detector_less_pool3.h5", 20, (256, 256), 32, BASE_DIR)
-#detectFillers(classifier, "audio.wav", (256, 256), mel = True)
+#signal, Fs = getData(file)
+#plt.figure()
+#plt.plot(signal[0:32000])
+#plt.figure()
+#plt.plot(signal[16000:17024])
+#F = np.abs(stft(signal[16000:17024]/1.0, n_fft = 1024))[:,0]
+#F = 255*F/max(F)
+#plt.figure()
+#plt.plot(np.linspace(0, 8000, 513), F)
+#librosa.display.specshow(librosa.amplitude_to_db(F, ref=np.max), y_axis='log', x_axis='time')
+#classifier = load_model("ConvNets/filler_detector_mel_0_20_epochs.h5")
+#detectFillers(classifier, "testing.wav", (256, 256), mel = True)
 
 ## Generating new uhms
 #folder = "uhm's/"
@@ -1301,3 +1308,16 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 #        freqShift(folder + file, folder + str(i) + file, 2*i)
 #        freqShift(folder + file, folder + "-" + str(i) + file, -1*i)
     
+
+### Pitch Stuff
+#file = "testing.wav"
+#recordToFile(file, 16000)
+#signal, Fs = getData(file)
+#signal = signal[:32000]
+#plt.figure()
+#plt.plot(signal[16000:16400])
+
+#cumulative = cumMeanNormDiffEq(signal[16000:17600], 400)
+#plt.figure()
+#plt.plot(cumulative[0])
+#plt.plot(np.linspace(0,1600, 1600), 0.1*np.ones(1600))
