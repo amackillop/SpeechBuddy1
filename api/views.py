@@ -105,7 +105,7 @@ def googleCall(request):
 
         # Get and format response from google cloud api
         res = googleApiCall(settings.MEDIA_ROOT +
-                            "/Simon_Sinek_30.flac", pauses)
+                            "/output_mono.flac", pauses)
 
         if not res == "Empty Response":
             transcript = str(res[0])
@@ -144,21 +144,15 @@ def googleCall(request):
             total_words = "rempty response"
 
         # Pitch Tracking
-        # f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
-        #                          freq_range=(40, 300),
-        #                          threshold=0.1,
-        #                          timestep=0.25,
-        #                          Fc=1e3)
-        # f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
-        #                          freq_range=(300, 600),
-        #                          threshold=0.1,
-        #                          timestep=0.25,
-        #                          Fc=1e3)
-        # pitch = np.zeros((f0.shape[0], 3))
-        # for i in range(pitch.shape[0]):
-        #     pitch[i, :] = np.asarray([i, f0[i], f1[i]])
+        f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
+                                 freq_range=(40, 300),
+                                 threshold=0.1,
+                                 timestep=0.25,
+                                 Fc=1e3)
 
-        # Adjust wpm
+        PVQ = cf.pitchVariationQuotient(pitch_vector = f0, time_step = 0.25, clip_length = 2)
+        # for i in range(pitch.shape[0]):
+        #     pitch[i, :] = np.asarray([i, f0[i], f1[i]])        # Adjust wpm
 
         # Filler word detection
 #        global graph
@@ -242,7 +236,7 @@ def googleCall(request):
             "corpus": corpus,
             "tok": tok,
             "listSyn": listSyn,
-            # "pitch": pitch,
+            "pitch": PVQ,
             "filler_count": filler_count,
             "volume": volume,
             "list_of_sentences": list_of_sentences,
