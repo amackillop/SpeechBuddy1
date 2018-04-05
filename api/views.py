@@ -156,8 +156,8 @@ def googleCall(request):
 
         # Filler word detection
 #        global graph
-       # with settings.GRAPH.as_default():
-        # str(cf.detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav"))
+       #with settings.GRAPH.as_default():
+            #str(cf.detectFillers(settings.MEDIA_ROOT, settings.MODEL, "/output_mono.wav"))
         filler_count = 0
 #            clear_session()
 
