@@ -93,7 +93,7 @@ var analytics_page = `
                                 <li><a data-toggle="tab" href="#menu1"  onclick = "wpmTranscript()">Volume</a></li>
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
                                 <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
-                                <li><a data-toggle="tab" href="#menu4"  onclick = "wpmTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu4"  onclick = "AudioTranscript()">Emotion</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
@@ -161,8 +161,12 @@ var counter = 0;
 function changeTimes(info, sentencesEnd){
      if (!$("#Audio-transcript").is(":visible")) {
         AudioTranscript();
+        for (i = 0; i < document.getElementById('Audio-transcript').childNodes.length; i++) {
+            document.getElementById('Audio-transcript').childNodes[i].className = "basic_transcript";
+         }
      }
     document.getElementById('CurrentTime').innerHTML = info;
+
     if(info == 0){
 //        console.log(document.getElementById('empty-transcript').childNodes[0]);
         document.getElementById('Audio-transcript').childNodes[0].className = "reading_transcript";
@@ -228,18 +232,6 @@ function displayTranscriptWPM(data) {
     }
 }
 
-// function ToneMethod(data){
-//     console.log('Tone Method Testing')
-//     console.log(data.AvgT);
-//     var tonetemp=(Math.max(AvgT));
-    
-//     if(AvgT[0]==tonetemp){
-
-
-//     }
-
-
-// }
 
 
 function displayGraphs(data) {

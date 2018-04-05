@@ -92,7 +92,7 @@ var analytics_page = `
                                 <li class="active"><a data-toggle="tab" href="#home"  onclick = "wpmTranscript()">Tone</a></li>
                                 <li><a data-toggle="tab" href="#menu1"  onclick = "wpmTranscript()">Volume</a></li>
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
-                                <li><a data-toggle="tab" href="#menu3"  onclick = "wpmTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu3"  onclick = "EmotionPieCreate(global_data)">Emotion</a></li>
                                 <li><a data-toggle="tab" href="#menu4"  onclick = "AudioTranscript()">Emotion</a></li>
                             </ul>
                             <div class="tab-content">
@@ -273,6 +273,7 @@ function AudioTranscript() {
         $("#empty-transcript").hide();
         $("#corpusTranscript").hide();
         $("#Audio-transcript").show();
+
     }
 }
 function ToneMethod(data){

@@ -1,4 +1,5 @@
 function EmotionPieCreate(data){
+    wpmTranscript();
     var ctx = document.getElementById("EmotionTextPieChart");
     var config = {
     type: 'doughnut',
@@ -21,12 +22,9 @@ function EmotionPieCreate(data){
 					display: true,
 					text: 'Speech Emotional Context (Text)'
 				},
-				animation: {
-					animateScale: true,
-					animateRotate: true
-				}
 			}
 }
     var myChart = new Chart(ctx, config );
+
 
 }

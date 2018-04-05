@@ -105,7 +105,7 @@ def googleCall(request):
 
         # Get and format response from google cloud api
         res = googleApiCall(settings.MEDIA_ROOT +
-                            "/Simon_Sinek_30.flac", pauses)
+                            "/output_mono_sample.flac", pauses)
 
         if not res == "Empty Response":
             transcript = str(res[0])

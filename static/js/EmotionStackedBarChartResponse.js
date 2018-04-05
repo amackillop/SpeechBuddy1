@@ -63,6 +63,7 @@ function EmotionStackedBarCreate(data){
 					}
 				}
 			}
+
     var myChart = new Chart(ctx, config );
 
 }
@@ -78,4 +79,7 @@ function changeEmotions(info, sentencesEnd){
      var value = sentencesEnd.indexOf(Number(info));
      console.log(value, typeof(sentencesEnd[0]), typeof(info));
     document.getElementById('Audio-transcript').childNodes[value].className = "reading_transcript";
+    if(value == sentencesEnd.length-1){
+        document.getElementById('Audio-transcript').childNodes[value+1].className = "reading_transcript";
+    }
 }

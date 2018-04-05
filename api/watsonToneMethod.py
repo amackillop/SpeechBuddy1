@@ -34,12 +34,12 @@ def watsontoneCall(sentencesLIST):
     emotions = arrayEmo['document_tone']['tone_categories'][0]['tones']
     print("LEN:  ", len(arrayEmo['sentences_tone']), arrayEmo)
 
-    EmotionalAVG = [0] * len(arrayEmo['sentences_tone'])
-    Sadness = [0] * len(arrayEmo['sentences_tone'])
-    Joy = [0] * len(arrayEmo['sentences_tone'])
-    Anger = [0] * len(arrayEmo['sentences_tone'])
-    Disgust = [0] * len(arrayEmo['sentences_tone'])
-    Fear = [0] * len(arrayEmo['sentences_tone'])
+    EmotionalAVG = [0] * len(emotions)
+    Sadness = [0] * len(emotions)
+    Joy = [0] * len(emotions)
+    Anger = [0] * len(emotions)
+    Disgust = [0] *len(emotions)
+    Fear = [0] * len(emotions)
 
     for i in range(len(emotions)):
         # print(emotions[i])

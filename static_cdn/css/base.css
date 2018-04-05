@@ -9,7 +9,7 @@
 }
 
 #myNavbar{ /* Style navbar */
-  background: rgba(30,30,30,1);
+  background: #008a99;
 /*   border-bottom: 0; */
 }
 #navbar { /* Format collapsed alignment */
@@ -81,7 +81,6 @@
   left: 0;
   background-color: #111;
   padding-top: 45px;
-
   
 }
 
@@ -195,7 +194,7 @@
   position: absolute;
   top: 35%;
   left: 45%;
-  border: 16px solid #f3f3f3;
+  border: 16px solid #008a99;
   border-radius: 50%;
   border-top: 16px solid #3498db;
   width: 120px;
