@@ -14,18 +14,8 @@ function googleResponse(data) {
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
-    EmotionTabCreate(data);
-    
-    
-
-    
-    // var vidData = getVideoSrc();
-    // console.log(vidData);
-    // $("#videoPlayback").css("src",vidData);
-    
-    
-    
-    
+    fillerScript(data);
+    wpmTranscript();
 }
 
 function loadingTranscript() {
@@ -41,31 +31,6 @@ function displayGraphs(data) {
     var transcript_split = data.transcript.split("\"");
     var corpusTranscript = transcript_split[1];
     $("#corpusTranscript").text(corpusTranscript);
-}
-
-function displayQuickData(data) {
-    //set confidence level
-    $("#score-data").text(data.confidence);
-    $("#WPM").text(data.average_wpm);
-    $("#Words").text(data.total_words);
-    $("#filler-count-val").text(data.fillerCount);
-    //set track duration
-    // var track_time = Math.floor($("#audioplayer").duration);
-    // $("#track-time").text(track_time);
-}
-
-function corpusTranscript(data) {
-    if (!$("#corpusTranscript").is(":visible")) {
-        $("#empty-transcript").hide();
-        $("#corpusTranscript").show();
-    }
-}
-
-function wpmTranscript() {
-    if ($("#corpusTranscript").is(":visible")) {
-        $("#corpusTranscript").hide();
-        $("#empty-transcript").show();
-    }
 }
 
 function displayTranscriptWPM(data) {
@@ -141,7 +106,9 @@ var analytics_page = `
                                 </ul>
                           
                                 <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
-                                <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                                <h4 id = "corpus-Transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                                <h4 id ="Audio-transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                                <h4 id = "filler-Transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
                             </div>
                         </div>
                     </div>   
@@ -232,15 +199,15 @@ var analytics_page = `
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
         <div class= "row">
             <div class="well well-sm" style="text-align:left; margin:15px;  margin-top:5px">
                 <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
-                    onloadedmetadata ="document.getElementById('track-time').innerHTML = Math.floor(this.duration) + 's';">
+                ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
                 </audio>
             </div>
-        </div>           
-    </div>            
+        </div>
+    </div>
     `;
 
 function loadAnalyticsPage() {
@@ -257,9 +224,201 @@ function loadAnalyticsPage() {
     
     audio_playback.onplay = function(){
         video_playback.play();
+    }    
+}
+
+var counter = 0;
+
+function changeTimes(info, sentencesEnd){
+     if (!$("#Audio-transcript").is(":visible")) {
+        AudioTranscript();
+        for (i = 0; i < document.getElementById('Audio-transcript').childNodes.length; i++) {
+            document.getElementById('Audio-transcript').childNodes[i].className = "basic_transcript";
+         }
+     }
+    document.getElementById('CurrentTime').innerHTML = info;
+
+    if(info == 0){
+    //    console.log(document.getElementById('empty-transcript').childNodes[0]);
+        document.getElementById('Audio-transcript').childNodes[0].className = "reading_transcript";
+    }
+    // console.log(info, sentencesEnd, counter);
+    if(info + 1 > sentencesEnd[counter]){
+        document.getElementById('Audio-transcript').childNodes[counter].className = "basic_transcript";
+        counter = counter + 1;
+        document.getElementById('Audio-transcript').childNodes[counter].className = "reading_transcript";
+    }
+}
+
+function displayTranscript(data){
+    var mainTranscript = document.getElementById("Audio-transcript");
+    for (i = 0; i < data.wordsperminute.length; i++) {
+        var sentenceDiv = document.createElement("div");
+        sentenceDiv.setAttribute("class", "basic_transcript");
+        var node = document.createTextNode(data.list_of_sentences[i]);
+        sentenceDiv.appendChild(node);
+        mainTranscript.appendChild(sentenceDiv);
     }
 
-    
 }
+
+
+function displayQuickData(data) {
+    //set confidence level
+    $("#score-data").text(data.confidence);
+    $("#WPM").text(data.average_wpm);
+    $("#Words").text(data.total_words);
+    $("#filler-count-val").text(data.fillerCount);
+    ToneMethod(data)
+    //set track duration
+    // var track_time = Math.floor($("#audioplayer").duration);
+    // $("#track-time").text(track_time);
+}
+
+function corpusTranscript() {
+    if (!$("#corpus-Transcript").is(":visible")) {
+        $("#empty-transcript").hide();
+        $("#Audio-transcript").hide();
+        $("#filler-Transcript").hide();
+        $("#corpus-Transcript").show();
+    }
+}
+
+function wpmTranscript() {
+    if (!$("#empty-transcript").is(":visible")) {
+        $("#corpus-Transcript").hide();
+        $("#Audio-transcript").hide();
+        $("#filler-Transcript").hide();
+        $("#empty-transcript").show();
+    }
+}
+
+function fillerTranscript() {
+    if (!$("#filler-Transcript").is(":visible")) {
+        $("#corpus-Transcript").hide();
+        $("#Audio-transcript").hide();
+        $("#empty-transcript").hide();
+        $("#filler-Transcript").show();
+    }
+}
+
+function AudioTranscript() {
+    if (!$("#Audio-transcript").is(":visible")) {
+        for (i = 0; i < document.getElementById('Audio-transcript').childNodes.length; i++) {
+            document.getElementById('Audio-transcript').childNodes[i].className = "basic_transcript";
+     }
+        $("#filler-Transcript").hide();
+        $("#empty-transcript").hide();
+        $("#corpus-Transcript").hide();
+        $("#Audio-transcript").show();
+
+    }
+}
+
+function ToneMethod(data){
+    console.log('Tone Method Testing')
+    console.log(data.AvgT, document.getElementById("Tone").innerHTML);
+    var tonetemp=Math.max.apply(Math, data.AvgT);
+    console.log(tonetemp);
+    for (i = 0; i < data.AvgT.length; i++) {
+        if(data.AvgT[i]==tonetemp){
+            console.log(i,data.AvgT[i])
+            if(i == 0){
+                $("#Tone").text("Sadness");
+            }
+            else if(i == 1){
+                $("#Tone").text("Joy");
+
+            }
+            else if(i == 2){
+                $("#Tone").text("Anger");
+
+            }
+            else if(i == 3){
+                $("#Tone").text("Disgust");
+
+            }
+            else if(i == 4){
+                $("#Tone").text("Fear");
+
+            }
+        }
+    }
+
+}
+
+function fillerScript(data){
+    fillerTranscript();
+
+    var res = (data.filler)
+
+    var x = document.createElement("table");
+    x.setAttribute("id", "myTableFiller");
+    x.setAttribute("class", "table");
+    var tb = document.createElement("tbody");
+    tb.setAttribute("id", "tbodyFiller")
+    var y, t, z;
+    var index = 0;
+    keys = Object.keys(res);
+    console.log(keys)
+    for (row = 0; row < 3; row++) {
+        y = document.createElement("TR");
+        y.setAttribute("id", "rowF" + row);
+        for (col = 0; col < 3; col++) {
+            z = document.createElement("TD");
+            z.setAttribute("idF", "child" + index);
+            z.setAttribute("class", "result");
+            var t = document.createTextNode(keys[index] + ":  " + res[keys[index]]);
+            index = index + 1;
+            z.appendChild(t);
+            y.appendChild(z);
+        }
+        tb.appendChild(y);
+    }
+
+    x.appendChild(tb);
+
+    $("#fillerDiv").prepend(x);
+
+    tempString = ""
+    for (i = 1; i < data.tok.length; i++) {
+        tempString = tempString + " " + data.tok[i];
+    }
+    $('#filler-Transcript').html(tempString);
+
+    $(document).on(
+        {
+            mouseenter: function () {
+                var word = $(this).text()
+                word = word.slice(0, word.indexOf(":"));
+                indices = data.indexArray;
+                indices = JSON.parse(indices);
+                tempString = "";
+                // console.log(word);
+                for (i = 1; i < data.tok.length; i++) {
+                    if(i==39){
+                        // console.log(i,data.tok[i], word, word == String(data.tok[i]),typeof(word),typeof(data.tok[i]));
+
+                    }
+                    if (word == String(data.tok[i])) {
+                        tempString = tempString + " <mark class = 'too_fast'> " + data.tok[i] + " </mark> ";
+                    }
+                    else {
+                        tempString = tempString + " " + data.tok[i];
+                    }
+                }
+                // console.log(tempString);
+                document.getElementById('filler-Transcript').innerHTML = tempString;
+            },
+            mouseleave: function () {
+                $(this).css("background", "white");
+                // $("#results").children().css("opacity", 1);
+            }
+
+        }, ".result");
+
+
+}
+
 
 

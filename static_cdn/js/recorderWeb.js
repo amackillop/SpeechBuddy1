@@ -132,7 +132,7 @@ function stopRecording(callback, AudioFormat) {
 						googleResponse(data);
 						nltkCorpus(data);
 						pitchResponse(data);
-						volumeResponse(data);
+						VolumeTabCreate(data);
 						fillerCountResponse(data);
 						//EmotionPieCreate(data);
 						EmotionStackedBarCreate(data);
