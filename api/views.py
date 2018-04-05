@@ -263,6 +263,7 @@ def googleCall(request):
             "FearT": FearT,
             "AvgT": AvgT,
             "fillerCount": fillerCount,
+            "filler":  filler,
             "EndTime": sentencesEnd[len(sentencesEnd)-1],
             "sentencesEnd": sentencesEnd,
             "V": V

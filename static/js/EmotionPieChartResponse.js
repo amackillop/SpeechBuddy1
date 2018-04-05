@@ -8,7 +8,7 @@ function EmotionPieCreate(data){
       datasets: [
         {
           label: "Population (millions)",
-          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          backgroundColor: ["#5dade2", "#FFC300 ","#C70039 ","#28b463 ","#af7ac5"],
           data: data.AvgT
         }
       ]

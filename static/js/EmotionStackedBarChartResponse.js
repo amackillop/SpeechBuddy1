@@ -1,8 +1,5 @@
 function EmotionStackedBarCreate(data){
     var sentencesEnd = data.sentencesEnd;
-    var numberWithCommas = function(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    };
     sentencesEnd[sentencesEnd.length-2] = sentencesEnd[sentencesEnd.length-1];
     sentencesEnd.splice(-1,sentencesEnd.length-1);
     console.log(sentencesEnd);

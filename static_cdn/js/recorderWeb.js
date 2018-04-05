@@ -134,7 +134,7 @@ function stopRecording(callback, AudioFormat) {
 						pitchResponse(data);
 						VolumeTabCreate(data);
 						fillerCountResponse(data);
-						EmotionPieCreate(data);
+						//EmotionPieCreate(data);
 						EmotionStackedBarCreate(data);
 
 						//SentenceSpeed(data);

@@ -13,6 +13,8 @@ function googleResponse(data) {
     displayTranscriptWPM(data);
     displayGraphs(data);
     displayQuickData(data);
+    fillerScript(data);
+    wpmTranscript();
 }
 
 function loadingTranscript() {
@@ -46,7 +48,9 @@ var analytics_page = `
                             <h2>Here's what you said:</h2>
                             <h4 id ="empty-transcript" style="line-height: 2.4; margin: 40px"></h4>
                             <h4 id ="Audio-transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
-                            <h4 id = "corpusTranscript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                            <h4 id = "corpus-Transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+                            <h4 id = "filler-Transcript" style="line-height: 2.4; margin: 40px;display:none"></h4>
+
                         </div>
                     </div>   
 
@@ -83,7 +87,7 @@ var analytics_page = `
                     <div class="col-sm-1">
                         <div class="well well-sm">
                             <h4 style="font-size: 1vw"><b>Duration</b></h4>
-                            <h4 id="track-time" style="font-size: 1.5vw">2:49s</h4>
+                            <h4 id="track-time" style="font-size: 1.5vw" onload="this.">2:49s</h4>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -94,6 +98,7 @@ var analytics_page = `
                                 <li><a data-toggle="tab" href="#menu2"  onclick = "corpusTranscript()">Corpus</a></li>
                                 <li><a data-toggle="tab" href="#menu3"  onclick = "EmotionPieCreate(global_data)">Emotion</a></li>
                                 <li><a data-toggle="tab" href="#menu4"  onclick = "AudioTranscript()">Emotion</a></li>
+                                <li><a data-toggle="tab" href="#menu5"  onclick = "fillerTranscript()">Filler Content</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="home" class="tab-pane fade in active">
@@ -124,6 +129,11 @@ var analytics_page = `
                                 </div>
                                 <div id="menu4" class="tab-pane fade">
                                     <canvas id="EmotionTextBarChart" width="42vw" height="20vw"></canvas>
+                                </div>
+                                <div id="menu5" class="tab-pane fade">
+                                    <div id="fillerDiv" width="42vw" height="20vw">
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -237,7 +247,7 @@ function displayTranscriptWPM(data) {
 function displayGraphs(data) {
     var transcript_split = data.transcript.split("\"");
     var corpusTranscript = transcript_split[1];
-    $("#corpusTranscript").text(corpusTranscript);
+    $("#corpus-Transcript").text(corpusTranscript);
 }
 
 function displayQuickData(data) {
@@ -252,26 +262,40 @@ function displayQuickData(data) {
     // $("#track-time").text(track_time);
 }
 
-function corpusTranscript(data) {
-    if (!$("#corpusTranscript").is(":visible")) {
+function corpusTranscript() {
+    if (!$("#corpus-Transcript").is(":visible")) {
         $("#empty-transcript").hide();
         $("#Audio-transcript").hide();
-        $("#corpusTranscript").show();
+        $("#filler-Transcript").hide();
+        $("#corpus-Transcript").show();
     }
 }
 
 function wpmTranscript() {
-    if ($("#corpusTranscript").is(":visible")) {
-        $("#corpusTranscript").hide();
+    if (!$("#empty-transcript").is(":visible")) {
+        $("#corpus-Transcript").hide();
         $("#Audio-transcript").hide();
+        $("#filler-Transcript").hide();
         $("#empty-transcript").show();
     }
 }
 
+function fillerTranscript() {
+    if (!$("#filler-Transcript").is(":visible")) {
+        $("#corpus-Transcript").hide();
+        $("#Audio-transcript").hide();
+        $("#empty-transcript").hide();
+        $("#filler-Transcript").show();
+    }
+}
 function AudioTranscript() {
     if (!$("#Audio-transcript").is(":visible")) {
+        for (i = 0; i < document.getElementById('Audio-transcript').childNodes.length; i++) {
+            document.getElementById('Audio-transcript').childNodes[i].className = "basic_transcript";
+     }
+        $("#filler-Transcript").hide();
         $("#empty-transcript").hide();
-        $("#corpusTranscript").hide();
+        $("#corpus-Transcript").hide();
         $("#Audio-transcript").show();
 
     }
@@ -305,5 +329,78 @@ function ToneMethod(data){
             }
         }
     }
+
+}
+
+function fillerScript(data){
+    fillerTranscript();
+
+    var res = (data.filler)
+
+    var x = document.createElement("table");
+    x.setAttribute("id", "myTableFiller");
+    x.setAttribute("class", "table");
+    var tb = document.createElement("tbody");
+    tb.setAttribute("id", "tbodyFiller")
+    var y, t, z;
+    var index = 0;
+    keys = Object.keys(res);
+    console.log(keys)
+    for (row = 0; row < 3; row++) {
+        y = document.createElement("TR");
+        y.setAttribute("id", "rowF" + row);
+        for (col = 0; col < 3; col++) {
+            z = document.createElement("TD");
+            z.setAttribute("idF", "child" + index);
+            z.setAttribute("class", "result");
+            var t = document.createTextNode(keys[index] + ":  " + res[keys[index]]);
+            index = index + 1;
+            z.appendChild(t);
+            y.appendChild(z);
+        }
+        tb.appendChild(y);
+    }
+
+    x.appendChild(tb);
+
+    $("#fillerDiv").prepend(x);
+
+    tempString = ""
+    for (i = 1; i < data.tok.length; i++) {
+        tempString = tempString + " " + data.tok[i];
+    }
+    $('#filler-Transcript').html(tempString);
+
+    $(document).on(
+        {
+            mouseenter: function () {
+                var word = $(this).text()
+                word = word.slice(0, word.indexOf(":"));
+                indices = data.indexArray;
+                indices = JSON.parse(indices);
+                tempString = "";
+                console.log(word);
+                for (i = 1; i < data.tok.length; i++) {
+                    if(i==39){
+                        console.log(i,data.tok[i], word, word == String(data.tok[i]),typeof(word),typeof(data.tok[i]));
+
+                    }
+                    if (word == String(data.tok[i])) {
+                        tempString = tempString + " <mark class = 'too_fast'> " + data.tok[i] + " </mark> ";
+                    }
+                    else {
+                        tempString = tempString + " " + data.tok[i];
+                    }
+                }
+                console.log(tempString);
+                document.getElementById('filler-Transcript').innerHTML = tempString;
+            },
+            mouseleave: function () {
+                $(this).css("background", "white");
+                // $("#results").children().css("opacity", 1);
+            }
+
+        }, ".result");
+
 
 }

@@ -127,7 +127,7 @@ def trim(audio_data, threshold = 1000):
     
     return audio_data
 
-def recordToFile(fname, Fs, FORMAT = pyaudio.paInt16, SILENCE_THRESHOLD = 50, CHUNK_SIZE = 1024):
+def recordToFile(fname, Fs, FORMAT, SILENCE_THRESHOLD = 50, CHUNK_SIZE = 1024):
     """
     This function is where the mic is turned on and sound is recorded then saved to a file
     
