@@ -1,8 +1,5 @@
 function EmotionStackedBarCreate(data){
     var sentencesEnd = data.sentencesEnd;
-    var numberWithCommas = function(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    };
     sentencesEnd[sentencesEnd.length-2] = sentencesEnd[sentencesEnd.length-1];
     sentencesEnd.splice(-1,sentencesEnd.length-1);
     console.log(sentencesEnd);
@@ -63,6 +60,7 @@ function EmotionStackedBarCreate(data){
 					}
 				}
 			}
+
     var myChart = new Chart(ctx, config );
 
 }
@@ -78,4 +76,7 @@ function changeEmotions(info, sentencesEnd){
      var value = sentencesEnd.indexOf(Number(info));
      console.log(value, typeof(sentencesEnd[0]), typeof(info));
     document.getElementById('Audio-transcript').childNodes[value].className = "reading_transcript";
+    if(value == sentencesEnd.length-1){
+        document.getElementById('Audio-transcript').childNodes[value+1].className = "reading_transcript";
+    }
 }

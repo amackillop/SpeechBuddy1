@@ -67,6 +67,11 @@ function nltkCorpus(data) {
     x.appendChild(tb);
 
     $("#data-wrapper").prepend(x);
+    tempString = ""
+    for (i = 1; i < data.tok.length; i++) {
+        tempString = tempString + " " + data.tok[i];
+    }
+    $('#corpus-Transcript').html(tempString);
 
     $(document).on(
         {
@@ -84,11 +89,16 @@ function nltkCorpus(data) {
                         tempString = tempString + " " + data.tok[i];
                     }
                 }
-                $('#corpusTranscript').html(tempString);
+                $('#corpus-Transcript').html(tempString);
             },
             mouseleave: function () {
+//                tempString = document.getElementById("corpus-Transcript").innerHTML;
+//                console.log
+//                tempString = tempString.replace(" <mark class = 'too_fast'>","");
+//                tempString = tempString.replace("</mark> ","")
+//                $('#corpus-Transcript').html(tempString);
                 $(this).css("background", "white");
-                // $("#results").children().css("opacity", 1);
+                $("#results").children().css("opacity", 1);
             },
             click: function () {
                 var modal = document.getElementById('myModal');

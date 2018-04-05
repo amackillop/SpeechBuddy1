@@ -26,7 +26,7 @@ function VolumeTabCreate(data){
     labels: linspace(0,data.EndTime,data.V.length),
     datasets: [{
         data: data.V,
-        label: "Africa",
+        label: "Volume:",
         borderColor: "#3e95cd",
         fill: false
       }
@@ -36,6 +36,9 @@ function VolumeTabCreate(data){
     title: {
       display: true,
       text: 'Volume Analysis (s)'
+    },
+    legend: {
+        display: false
     }
   }
 }

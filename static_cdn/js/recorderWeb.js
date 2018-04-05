@@ -1,6 +1,6 @@
 // Expose globally your audio_context, the recorder instance and audio_stream
 var audio_context;
-var recorder;
+var video = document.querySelector('#videoElement');
 var audio_stream;
 
 /**
@@ -81,8 +81,8 @@ function stopRecording(callback, AudioFormat) {
 	// submit_btn.style.display = "inline";
 	// var gDrive_button = document.getElementById("upload-btn");
 	// gDrive_button.style.display = "inline";
-	$("#submit-btn").fadeIn( "slow" );
-	$("#upload-btn").fadeIn( "slow" );
+	$("#submit-btn").fadeIn("slow");
+	$("#upload-btn").fadeIn("slow");
 
 	// Use the Recorder Library to export the recorder Audio as a .wav file
 	// The callback providen in the stop recording method receives the blob
@@ -134,7 +134,7 @@ function stopRecording(callback, AudioFormat) {
 						pitchResponse(data);
 						VolumeTabCreate(data);
 						fillerCountResponse(data);
-						EmotionPieCreate(data);
+						//EmotionPieCreate(data);
 						EmotionStackedBarCreate(data);
 
 						//SentenceSpeed(data);
@@ -155,17 +155,31 @@ function stopRecording(callback, AudioFormat) {
 
 // Initialize everything once the window loads
 window.onload = function () {
+	var recorder;
 	// Prepare and check if requirements are filled
 	Initialize();
 
 	// Handle on start recording button
 	document.getElementById("start-btn").addEventListener("click", function () {
+		this.disabled = true;
+		captureCamera(function (camera) {
+			setSrcObject(camera, video);
+			video.play();
+			recorder = RecordRTC(camera, {
+				type: 'video'
+			});
+			recorder.startRecording();
+			// release camera on stopRecording
+			recorder.camera = camera;
+			// document.getElementById('btn-stop-recording').disabled = false;
+		});
 		startRecording();
 	}, false);
 
 	// Handle on stop recording button
 	document.getElementById("stop-btn").addEventListener("click", function () {
 		// Use wav format
+		recorder.stopRecording(stopRecordingCallback);
 		var _AudioFormat = "audio/wav";
 		// You can use mp3 to using the correct mimetype
 		//var AudioFormat = "audio/mpeg";
@@ -186,6 +200,10 @@ window.onload = function () {
 
 			au.controls = true;
 			au.src = url;
+			au.onplay = function(){
+				video.play();
+			}
+
 			hf.href = url;
 			// Important:
 			// Change the format of the file according to the mimetype
@@ -196,21 +214,29 @@ window.onload = function () {
 			hf.innerHTML = hf.download;
 			recording_div = document.getElementById("recordingDiv");
 			recording_div.appendChild(au);
-			//li.appendChild(hf);
 			var file = audio_stream.getAudioTracks()[0];
-			//fileURL = AudioBLOB.createObjectURL(file);
-			//console.log(fileURL);
 
-			// var rlist = document.getElementById("recordingslist");
-			// if(rlist.hasChildNodes()){
-			//     rlist.removeChild(rlist.firstChild);
-			// }
-			// recordingslist.appendChild(li);
-			//  var x = document.getElementById("recordingtitle");
-			//  x.style.display = "block";
 		}, _AudioFormat);
 	}, false);
+
+	function captureCamera(callback) {
+		navigator.mediaDevices.getUserMedia({audio: true, video: true }).then(function (camera) {
+			callback(camera);
+		}).catch(function (error) {
+			alert('Unable to capture your camera. Please check console logs.');
+			console.error(error);
+		});
+	}
+	function stopRecordingCallback() {
+		video.src = video.srcObject = null;
+		console.log("stopping recording..");
+		console.log(recorder.getBlob());
+		video.src = URL.createObjectURL(recorder.getBlob());
+		// video.play();
+		recorder.camera.stop();
+		recorder.destroy();
+		recorder = null;
+	}
+
 };
-
-
 

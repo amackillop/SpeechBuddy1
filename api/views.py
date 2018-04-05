@@ -257,6 +257,7 @@ def googleCall(request):
             "FearT": FearT,
             "AvgT": AvgT,
             "fillerCount": fillerCount,
+            "filler":  filler,
             "EndTime": sentencesEnd[len(sentencesEnd)-1],
             "sentencesEnd": sentencesEnd,
             "V": V
@@ -289,4 +290,3 @@ def screenshotCall(request):
             settings.IMAGE_ROOT + "/" + str(number)+".png", ContentFile(decode))
 
     return Response({"message": "image saved"})
-
