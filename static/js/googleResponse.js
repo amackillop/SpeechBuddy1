@@ -202,7 +202,7 @@ var analytics_page = `
         </div>
         <div class= "row">
             <div class="well well-sm" style="text-align:left; margin:15px;  margin-top:5px">
-                <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/Simon_Sinek_30.flac"
+                <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/output_mono.flac"
                 ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
                 </audio>
             </div>

@@ -21,16 +21,16 @@ from librosa import stft, feature, power_to_db
 import librosa.display
 
 # Importing required libraries for training
-# from keras.models import Sequential
-# from keras.layers import Conv2D
-# from keras.layers import MaxPooling2D
-# from keras.layers import Flatten
-# from keras.layers import Dense
-# from keras.layers import Dropout
-# from keras.preprocessing.image import ImageDataGenerator
-# from keras.models import load_model
-# from keras.applications import mobilenet
-# from keras.callbacks import EarlyStopping
+from keras.models import Sequential
+from keras.layers import Conv2D
+from keras.layers import MaxPooling2D
+from keras.layers import Flatten
+from keras.layers import Dense
+from keras.layers import Dropout
+from keras.preprocessing.image import ImageDataGenerator
+from keras.models import load_model
+from keras.applications import mobilenet
+from keras.callbacks import EarlyStopping
 
 from scipy.stats import bernoulli
 from shutil import copyfile
@@ -49,7 +49,7 @@ This collection of functions is used for manipulating audio signal data and file
 # GLOBAL VARIABLES
 #VOLUME_THRESHOLD = 1000
 #CHUNK_SIZE = 1024
-#FORMAT = pyaudio.paInt16
+FORMAT = pyaudio.paInt16
 #Fs = 16000
 #SILENCE_THRESHOLD = 50
 
@@ -127,7 +127,7 @@ def trim(audio_data, threshold = 1000):
     
     return audio_data
 
-def recordToFile(fname, Fs, FORMAT, SILENCE_THRESHOLD = 50, CHUNK_SIZE = 1024):
+def recordToFile(fname, Fs, SILENCE_THRESHOLD = 50, CHUNK_SIZE = 1024):
     """
     This function is where the mic is turned on and sound is recorded then saved to a file
     
@@ -1310,20 +1310,20 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 #fitClassifier(classifier, "filler_detector_mel_1.h5", 20, (256, 256), 64, BASE_DIR)
 
 ### TESTING THE DETECTOR
-# file = "testing.wav"
-# recordToFile(file, 16000)
-#signal, Fs = getData(file)
-#plt.figure()
-#plt.plot(signal[0:32000])
-#plt.figure()
-#plt.plot(signal[16000:17024])
-#F = np.abs(stft(signal[16000:17024]/1.0, n_fft = 1024))[:,0]
-#F = 255*F/max(F)
-#plt.figure()
-#plt.plot(np.linspace(0, 8000, 513), F)
-#librosa.display.specshow(librosa.amplitude_to_db(F, ref=np.max), y_axis='log', x_axis='time')
-# classifier = load_model("filler_detector_mel_1.h5")
-# detectFillers(classifier, "testing.wav", (256, 256), mel = True)
+#file = "testing.wav"
+#recordToFile(file, 16000)
+##signal, Fs = getData(file)
+##plt.figure()
+##plt.plot(signal[0:32000])
+##plt.figure()
+##plt.plot(signal[16000:17024])
+##F = np.abs(stft(signal[16000:17024]/1.0, n_fft = 1024))[:,0]
+##F = 255*F/max(F)
+##plt.figure()
+##plt.plot(np.linspace(0, 8000, 513), F)
+##librosa.display.specshow(librosa.amplitude_to_db(F, ref=np.max), y_axis='log', x_axis='time')
+#classifier = load_model("ConvNets/Uhm_Detector.h5")
+#detectFillers(classifier, "testing.wav", (256, 256), mel = True)
 
 ## Generating new uhms
 #folder = "uhm's/"
@@ -1345,3 +1345,72 @@ DON'T FORGET TO COMMENT STUFF OUT BEFORE PUSHING
 #plt.figure()
 #plt.plot(cumulative[0])
 #plt.plot(np.linspace(0,1600, 1600), 0.1*np.ones(1600))
+
+
+
+### TESTING THE DETECTOR
+# file = "testing.wav"
+# recordToFile(file, 16000)
+#classifier = load_model("ConvNets/Uhm_Detector.h5")
+#detectFillers(classifier, "testing.wav", (256, 256), mel = True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
