@@ -149,6 +149,16 @@ def googleCall(request):
                                  threshold=0.1,
                                  timestep=0.25,
                                  Fc=1e3)
+        # f1 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
+        #                          freq_range=(40, 300),
+        #                          threshold=0.1,
+        #                          timestep=0.25,
+        #                          Fc=1e3)
+
+
+        pitch = np.zeros((f0.shape[0], 3))
+        for i in range(pitch.shape[0]):
+            pitch[i, :] = np.asarray([i, f0[i], f0[i]])
 
         PVQ = cf.pitchVariationQuotient(pitch_vector = f0, time_step = 0.25, clip_length = 2)
         # for i in range(pitch.shape[0]):
@@ -256,7 +266,7 @@ def googleCall(request):
             "DisgustT": DisgustT,
             "FearT": FearT,
             "AvgT": AvgT,
-            "fillerCount": fillerCount,
+            # "fillerCount": fillerCount,
             "filler":  filler,
             "EndTime": sentencesEnd[len(sentencesEnd)-1],
             "sentencesEnd": sentencesEnd,

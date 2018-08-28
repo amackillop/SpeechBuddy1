@@ -131,7 +131,7 @@ function stopRecording(callback, AudioFormat) {
 						console.log("SUCCESS");
 						googleResponse(data);
 						nltkCorpus(data);
-						pitchResponse(data);
+						PitchTabCreate(data);
 						VolumeTabCreate(data);
 						fillerCountResponse(data);
 						//EmotionPieCreate(data);
