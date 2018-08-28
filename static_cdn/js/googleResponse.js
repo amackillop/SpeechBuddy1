@@ -201,12 +201,7 @@ var analytics_page = `
         <div class= "row">
             <div class="well well-sm" style="text-align:left; margin:15px;  margin-top:5px">
                 <audio id="audioplayer" controls style="width: 100%; margin-top: 0px" src="audio/output_mono.flac"
-<<<<<<< HEAD
                 ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
-=======
-                    onload="$("#track-time").text(audio_playback.duration + "s");"
-                    ontimeupdate="changeTimes(Math.floor(this.currentTime), global_data.sentencesEnd);">
->>>>>>> 4f1fde97f1009b52eb5026b94193624e4248ae0d
                 </audio>
             </div>
         </div>
