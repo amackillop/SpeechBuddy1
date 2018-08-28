@@ -1,2 +1,0 @@
-gcloud auth activate-service-account --key-file=C:\Users\ABDULMuhammad\AppData\Local\Programs\Python\Python36-32\Scripts\Capstone\JSON_api.json
-gcloud auth application-default print-access-token
