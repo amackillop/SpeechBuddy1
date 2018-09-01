@@ -1,12 +1,12 @@
 from __future__ import print_function
 import json
-from watson_developer_cloud import ToneAnalyzerV3
+#from watson_developer_cloud import ToneAnalyzerV3
 from api.keys import ApiKeys
 
-tone_analyzer = ToneAnalyzerV3(
-    username=ApiKeys['username'],
-    password=ApiKeys['password'],
-    version=ApiKeys['version'])
+#tone_analyzer = ToneAnalyzerV3(
+#    username=ApiKeys['username'],
+#    password=ApiKeys['password'],
+#    version=ApiKeys['version'])
 
 
 # print("\ntone() example 1:\n")

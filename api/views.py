@@ -105,7 +105,8 @@ def googleCall(request):
 
         # Get and format response from google cloud api
         res = googleApiCall(settings.MEDIA_ROOT +
-                            "/output_mono.flac", pauses)
+                            "/Simon_Sinek_30.flac", pauses)
+        print(res)
 
         if not res == "Empty Response":
             transcript = str(res[0])
@@ -142,6 +143,7 @@ def googleCall(request):
             wordsperminute = "empty response"
             average_wpm = "empty response"
             total_words = "rempty response"
+            filler = 0
 
         # Pitch Tracking
         f0 = cf.pitchTrackingYIN(settings.MEDIA_ROOT + "/output_mono.wav",
@@ -192,14 +194,14 @@ def googleCall(request):
         # AvgI = emotionImages[5]
 
         print(list_of_sentences)
-        emotionText = watsontoneCall(list_of_sentences)
+#        emotionText = watsontoneCall(list_of_sentences)
 
-        SadnessT = emotionText[0]
-        JoyT = emotionText[1]
-        AngerT = emotionText[2]
-        DisgustT = emotionText[3]
-        FearT = emotionText[4]
-        AvgT = emotionText[5]
+#        SadnessT = emotionText[0]
+#        JoyT = emotionText[1]
+#        AngerT = emotionText[2]
+#        DisgustT = emotionText[3]
+#        FearT = emotionText[4]
+#        AvgT = emotionText[5]
 
 
         # print(len(SadnessT), len(SadnessI))
@@ -260,12 +262,12 @@ def googleCall(request):
             # "DisgustI": DisgustI,
             # "FearI": FearI,
             # "AvgI": AvgI,
-            "SadnessT": SadnessT,
-            "JoyT": JoyT,
-            "AngerT": AngerT,
-            "DisgustT": DisgustT,
-            "FearT": FearT,
-            "AvgT": AvgT,
+#            "SadnessT": SadnessT,
+#            "JoyT": JoyT,
+#            "AngerT": AngerT,
+#            "DisgustT": DisgustT,
+#            "FearT": FearT,
+#            "AvgT": AvgT,
             # "fillerCount": fillerCount,
             "filler":  filler,
             "EndTime": sentencesEnd[len(sentencesEnd)-1],
